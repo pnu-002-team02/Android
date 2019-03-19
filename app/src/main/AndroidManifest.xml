@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
         <activity android:name=".Main.MainActivity.Controller.MainActivity"></activity>
         <activity android:name=".WelcomeLoading.WelcomeLoading">
             <intent-filter>
