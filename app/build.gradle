@@ -1,4 +1,17 @@
 apply plugin: 'com.android.application'
+apply plugin: "org.sonarqube"
+
+sonarqube  {
+    properties  {
+        property "sonar.host.url", "http://164.125.34.143:9000"
+        property "sonar.sources", "src/main/java"
+        property "sonar.java.binaries", "build/intermediates/classes/release"
+
+        property "sonar.login", "deb37cb6b6c46a2c18e1e099088a39fa0146d91e"
+        property "sonar.projectKey", "TravelLog"
+        property "sonar.projectName", "TravelLog"
+    }
+}
 
 android {
     compileSdkVersion 27
