@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".WelcomeLoading.WelcomeLoading"
+    tools:context=".WelcomeLoading.Controller.WelcomeLoadingActivity"
     android:background="#3f3f3f">
     <View
         android:layout_width="match_parent"
