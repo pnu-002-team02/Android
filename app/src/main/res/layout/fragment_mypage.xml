@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#9f9f9f">
 
     <TextView
         android:layout_width="match_parent"
@@ -13,14 +14,13 @@
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="15dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:background="#ffffff"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#9f9f9f" />
 
     <LinearLayout
+        android:layout_marginTop="1dp"
+        android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -39,26 +39,22 @@
             android:textSize="15dp" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="15dp"
-        android:background="#9f9f9f" />
-
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="15dp"
         android:text="Travel Log"
         android:textColor="#3f3f3f"
+        android:textAlignment="center"
         android:textSize="17dp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#9f9f9f" />
 
     <LinearLayout
+        android:layout_marginTop="1dp"
+        android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
@@ -139,32 +135,53 @@
         </LinearLayout>
 
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="15dp"
-        android:background="#9f9f9f" />
+
     <TextView
+        android:layout_marginTop="10dp"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="회원가입"
+        android:textColor="#3f3f3f"
+        android:textSize="14dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        />
+
+    <TextView
+        android:layout_marginTop="1dp"
+        android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text="회원정보 수정"
         android:textColor="#3f3f3f"
         android:textSize="14dp"
         android:gravity="center_vertical"
-        android:layout_marginLeft="15dp"
+        android:paddingLeft="15dp"
         />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#9f9f9f" />
     <TextView
+        android:layout_marginTop="1dp"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="버전정보"
+        android:textColor="#3f3f3f"
+        android:textSize="14dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+    />
+    <TextView
+        android:layout_marginTop="1dp"
+        android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text="로그아웃"
         android:textColor="#3f3f3f"
         android:textSize="14dp"
         android:gravity="center_vertical"
-        android:layout_marginLeft="15dp"
+        android:paddingLeft="15dp"
         />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
