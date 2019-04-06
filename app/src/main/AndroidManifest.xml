@@ -24,6 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".Main.MapFragment.Controller.Dialog"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
