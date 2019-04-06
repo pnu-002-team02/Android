@@ -35,8 +35,7 @@ public class MapFragment extends Fragment
 
         MapLayout mapLayout = new MapLayout(getActivity());
         mMapView = mapLayout.getMapView();
-
-        mMapView.setDaumMapApiKey("e617e56195858d0ef3bf81ade21b855c");
+        mMapView.setDaumMapApiKey(getString(R.string.kakao_map_key));
         mMapView.setOpenAPIKeyAuthenticationResultListener(this);
         mMapView.setMapViewEventListener(this);
         mMapView.setMapType(MapView.MapType.Standard);

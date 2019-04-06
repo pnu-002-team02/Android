@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">TravelLog</string>
-
+    <string name="kakao_map_key">e617e56195858d0ef3bf81ade21b855c</string>
 </resources>
