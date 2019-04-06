@@ -11,4 +11,5 @@
     <string name="signup_cancleButton">취소</string>
     <string name="login">로그인</string>
     <string name="login_OKButton">로그인</string>
+    <string name="kakao_map_key">e617e56195858d0ef3bf81ade21b855c</string>
 </resources>

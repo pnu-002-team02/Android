@@ -26,11 +26,23 @@ public class BackPressCloseHandler {
             activity.finish();
             toast.cancel();
         }
+
+        /*
+        long currentTimeMillis =  System.currentTimeMillis();
+        if (currentTimeMillis > backKeyPressedTime + 2000) {
+            backKeyPressedTime = currentTimeMillis;
+            showGuide();
+            return;
+        } else {
+            activity.finish();
+            toast.cancel();
+        }
+        */
+
     }
 
     public void showGuide() {
         toast = Toast.makeText(activity, "\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT);
         toast.show();
     }
-
 }
