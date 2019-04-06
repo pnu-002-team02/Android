@@ -12,4 +12,9 @@
     <string name="login">로그인</string>
     <string name="login_OKButton">로그인</string>
     <string name="kakao_map_key">e617e56195858d0ef3bf81ade21b855c</string>
+    <string name="mypage_edit">회원정보 수정</string>
+    <string name="mypage_edit_OKButton">수정하기</string>
+    <string name="mypage_edit_cancleButton">취소</string>
+    <string name="mypage_edit_usrName">이름(DB에서 받음)</string>
+    <string name="mypage_edit_DOB">생년월일(DB에서 받음)</string>
 </resources>

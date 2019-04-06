@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: "org.sonarqube"
 
-sonarqube  {
-    properties  {
+sonarqube {
+    properties {
         property "sonar.host.url", "http://164.125.34.143:9000"
         property "sonar.sources", "src/main/java"
         property "sonar.java.binaries", "build/intermediates/classes/release"
