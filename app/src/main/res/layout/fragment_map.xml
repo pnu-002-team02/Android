@@ -6,6 +6,25 @@
     tools:context=".Main.MapFragment.Controller.MapFragment">
 
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/search_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="장소검색"/>
+
+        <Button
+            android:id="@+id/search_btn"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="검색"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/map_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
