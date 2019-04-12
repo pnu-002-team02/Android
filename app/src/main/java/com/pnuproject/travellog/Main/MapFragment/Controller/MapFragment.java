@@ -10,6 +10,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
 import com.pnuproject.travellog.R;
 
 import net.daum.mf.map.api.MapLayout;
@@ -20,6 +24,8 @@ public class MapFragment extends Fragment
         implements MapView.OpenAPIKeyAuthenticationResultListener, MapView.MapViewEventListener {
 
     private MapView mMapView;
+    private EditText edit_search;
+    private Button btn_search;
 
     public MapFragment() {
     }
@@ -27,7 +33,7 @@ public class MapFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_map, container, false);
-    }
+}
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -42,6 +48,24 @@ public class MapFragment extends Fragment
 
         ViewGroup mapViewContainer = (ViewGroup) getView().findViewById(R.id.map_view);
         mapViewContainer.addView(mapLayout);
+
+        edit_search = (EditText) view.findViewById(R.id.edit_search);
+        btn_search = (Button) view.findViewById(R.id.btn_search);
+
+        btn_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String str = edit_search.getText().toString();
+
+                if(str == null || str.length() == 0){
+                    Toast.makeText(getContext(), "장소를 입력하세요.", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
+                    //리스트뷰로 넘어감
+                }
+            }
+        });
     }
 
     @Override

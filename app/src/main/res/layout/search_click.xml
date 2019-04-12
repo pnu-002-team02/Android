@@ -4,17 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    //검색결과 나타낼 리스트뷰
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="명소 검색 결과"/>
+        android:text="선택한 아이템"  />
 
-    //리스트 아이템 누르면 길찾기 버튼 뜨게
-    <ListView
-        android:id="@+id/search_list_place"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="길찾기" />
 </LinearLayout>

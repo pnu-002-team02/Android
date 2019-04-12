@@ -5,28 +5,45 @@
     android:layout_height="match_parent"
     tools:context=".Main.MapFragment.Controller.MapFragment">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/search_place"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="장소검색"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!--
+            검색창 배경 색깔 처리
+            android:background="#"
+            -->
 
-        <Button
-            android:id="@+id/search_btn"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="검색"/>
+            <EditText
+                android:id="@+id/edit_search"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:hint="장소검색" />
 
-    </RelativeLayout>
+            <Button
+                android:id="@+id/btn_search"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="검색"/>
 
-    <RelativeLayout
-        android:id="@+id/map_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+
+
 
 </FrameLayout>
