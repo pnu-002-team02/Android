@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.1"
-        android:background="#3f3f3f"/>
+        android:background="#9f9f9f"/>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout_main"
