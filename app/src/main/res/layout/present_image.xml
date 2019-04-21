@@ -2,13 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#3f3f3f">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:text="해당 화면과 같은 구도로 사진을 촬영해주십시오."
-        android:textSize="20dp"/>
+        android:textSize="20dp"
+        android:textColor="#FFFFFF"/>
+
 
     <ImageView
         android:layout_width="match_parent"
@@ -16,10 +23,18 @@
         android:layout_weight="0.56"
         android:src="@drawable/sea"/>
 
-    <Button
-        android:id="@+id/ok_button"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:text="촬영"/>
+    <ImageButton
 
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:id="@+id/ok_button"
+        android:src="@drawable/camera"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="@android:color/transparent"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"/>
 </LinearLayout>
