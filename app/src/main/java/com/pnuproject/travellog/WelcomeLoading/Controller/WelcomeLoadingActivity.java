@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.pnuproject.travellog.Main.MainActivity.Controller.MainActivity;
 import com.pnuproject.travellog.R;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
