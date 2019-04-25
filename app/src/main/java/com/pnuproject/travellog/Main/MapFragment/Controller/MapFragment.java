@@ -5,6 +5,9 @@ package com.pnuproject.travellog.Main.MapFragment.Controller;
  */
 
 import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,9 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pnuproject.travellog.R;
+import com.pnuproject.travellog.etc.LocationClass;
 
 import net.daum.mf.map.api.MapLayout;
 import net.daum.mf.map.api.MapPoint;
@@ -28,6 +33,10 @@ public class MapFragment extends Fragment
     private MapView mMapView;
     private EditText edit_search;
     private Button btn_search;
+
+    private TextView gps;
+    private LocationClass locationClass;
+    private static String location;
 
     public MapFragment() {
     }
@@ -54,6 +63,13 @@ public class MapFragment extends Fragment
         edit_search = (EditText) view.findViewById(R.id.edit_search);
         btn_search = (Button) view.findViewById(R.id.btn_search);
 
+        locationClass = new LocationClass(getActivity());
+        locationClass.initLoc();
+        location = locationClass.getLoc();
+
+        gps = (TextView) view.findViewById(R.id.gpsvalue);
+        gps.setText(location);
+
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,6 +85,12 @@ public class MapFragment extends Fragment
             }
         });
 
+    }
+
+    public String findGPS(){
+        String result = "";
+
+        return result;
     }
 
     @Override

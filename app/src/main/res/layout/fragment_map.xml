@@ -36,6 +36,12 @@
 
         </RelativeLayout>
 
+        <!--GPS값 확인용, 추후 삭제 예정-->
+        <TextView
+            android:id="gpsvalue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <RelativeLayout
             android:id="@+id/map_view"
             android:layout_width="match_parent"
