@@ -11,6 +11,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.pnuproject.travellog.R;
+
 public class SearchFragment extends Fragment {
 
     private ListViewAdapter adapter;
@@ -29,7 +31,7 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ListView listView = (ListView) view.findViewById(R.id.search_list);
+        ListView listView = (ListView) getView().findViewById(R.id.search_list_public);
         adapter = new ListViewAdapter();
 
         adapter.addItem("place1", "time1", "weather3");

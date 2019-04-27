@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.pnuproject.travellog.R;
+
 import java.util.ArrayList;
 
 public class ListViewAdapter extends BaseAdapter{
@@ -46,7 +48,7 @@ public class ListViewAdapter extends BaseAdapter{
 
         place.setText(searchResultListItem.getPlace());
         time.setText(searchResultListItem.getTime());
-        weather.getText(searchResultListItem.getWeather());
+        weather.setText(searchResultListItem.getWeather());
 
         return view;
     }
