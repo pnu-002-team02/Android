@@ -42,4 +42,6 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     //for use TableLayout, tablayout
     implementation files('src/libs/libDaumMapAndroid.jar')
+    //network 통신
+    implementation 'com.android.volley:volley:1.1.0'
 }
