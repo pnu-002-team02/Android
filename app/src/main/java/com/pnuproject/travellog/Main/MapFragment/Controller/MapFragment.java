@@ -7,6 +7,7 @@ package com.pnuproject.travellog.Main.MapFragment.Controller;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -32,6 +33,7 @@ import com.pnuproject.travellog.etc.LocationClass;
 
 import net.daum.mf.map.api.CalloutBalloonAdapter;
 import net.daum.mf.map.api.CameraUpdateFactory;
+import net.daum.mf.map.api.MapCircle;
 import net.daum.mf.map.api.MapLayout;
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
@@ -125,9 +127,7 @@ public class MapFragment extends Fragment
             }
         });
 
-        gps = (TextView) getView().findViewById(R.id.gpsvalue);
-        //gps.setText(location);
-        gps.setText(latitude + " " + longitude);
+      
     }
 
     public String findGPS(){
@@ -226,6 +226,17 @@ public class MapFragment extends Fragment
 //        mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(bounds, padding, minZoomLevel, maxZoomLevel));
 //    }
 
+    private void addCurrentLocationCircle(double latitude, double longitude) {
+        MapCircle circle1 = new MapCircle(
+                MapPoint.mapPointWithGeoCoord(latitude, longitude), // center
+                27, // radius
+                Color.argb(150, 250, 100, 120), // strokeColor
+                Color.argb(150, 250, 100, 120) // fillColor
+        );
+        circle1.setTag(1234);
+        mMapView.addCircle(circle1);
+    }
+
     @Override
     public void onMapViewInitialized(MapView mapView) {
         //mMapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
@@ -238,6 +249,7 @@ public class MapFragment extends Fragment
             //System.out.println("check location initialize : " + latitude + " " + longitude);
         }
         mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude,longitude), 2, true);
+        addCurrentLocationCircle(latitude, longitude);
     }
 
     @Override
