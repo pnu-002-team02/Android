@@ -1,52 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Main.MapFragment.Controller.MapFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/edit_search"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:maxLines="1"
+            android:hint="장소검색"
+            android:layout_toLeftOf="@+id/btn_search"/>
+
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="검색"/>
+
+    </RelativeLayout>
+
+    <!--GPS값 확인용, 추후 삭제 예정-->
+    <TextView
+        android:id="@+id/gpsvalue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!--
+    <RelativeLayout
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    -->
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <!--
-            검색창 배경 색깔 처리
-            android:background="#"
-            -->
-
-            <EditText
-                android:id="@+id/edit_search"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:imeOptions="actionSearch"
-                android:inputType="text"
-                android:maxLines="1"
-                android:hint="장소검색" />
-
-            <Button
-                android:id="@+id/btn_search"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="검색"/>
-
-        </RelativeLayout>
-
-        <!--GPS값 확인용, 추후 삭제 예정-->
-        <TextView
-            android:id="@+id/gpsvalue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <RelativeLayout
+            android:layout_height="match_parent"
             android:id="@+id/map_view"
+            android:visibility="visible"/>
+
+        <ListView
+            android:background="#ffffff"
+            android:id="@+id/search_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:visibility="invisible"/>
 
-    </LinearLayout>
+    </FrameLayout>
 
-</FrameLayout>
+</LinearLayout>
