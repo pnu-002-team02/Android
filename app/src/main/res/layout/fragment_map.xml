@@ -38,7 +38,7 @@
 
         <!--GPS값 확인용, 추후 삭제 예정-->
         <TextView
-            android:id="gpsvalue"
+            android:id="@+id/gpsvalue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
