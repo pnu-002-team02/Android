@@ -29,7 +29,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pnuproject.travellog.R;
-import com.pnuproject.travellog.etc.LocationClass;
 
 import net.daum.mf.map.api.CalloutBalloonAdapter;
 import net.daum.mf.map.api.CameraUpdateFactory;
@@ -55,7 +54,6 @@ public class MapFragment extends Fragment
 
     private TextView gps;
     private LocationManager locationManager;
-    private LocationClass locationClass;
     private LocationListener locationListener;
 
     public static String location;
@@ -93,12 +91,6 @@ public class MapFragment extends Fragment
 
         edit_search = (EditText) view.findViewById(R.id.edit_search);
         btn_search = (Button) view.findViewById(R.id.btn_search);
-
-//        locationClass = new LocationClass(getActivity());
-//        locationClass.initLoc();
-//        location = locationClass.getLoc();
-//        System.out.println("check location : " + location);
-//        locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
 
         settingGPS();
         Location userLocation = getMyLocation();
