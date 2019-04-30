@@ -11,6 +11,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.pnuproject.travellog.R;
+
 public class SearchFragment extends Fragment {
 
     private ListViewAdapter adapter;

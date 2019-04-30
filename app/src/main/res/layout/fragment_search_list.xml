@@ -20,7 +20,7 @@
         //검색결과 나타낼 리스트뷰
         //SubItem : 경로, 대기시간, 날씨
         <ListView
-            android:id="@+id/search_list_public"
+            android:id="@+id/search_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
