@@ -5,21 +5,14 @@ package com.pnuproject.travellog.Main.MapFragment.Controller;
  */
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,19 +24,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pnuproject.travellog.Main.MapFragment.Controller.Search.ListViewAdapter;
+import com.pnuproject.travellog.Main.MapFragment.Controller.Search.SearchDialog;
 import com.pnuproject.travellog.R;
 import com.pnuproject.travellog.etc.GpsTracker;
 
 import net.daum.mf.map.api.CalloutBalloonAdapter;
-import net.daum.mf.map.api.CameraUpdateFactory;
 import net.daum.mf.map.api.MapCircle;
 import net.daum.mf.map.api.MapLayout;
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
-import net.daum.mf.map.api.MapPointBounds;
 import net.daum.mf.map.api.MapView;
-
-import java.util.Map;
 
 public class MapFragment extends Fragment
         implements MapView.OpenAPIKeyAuthenticationResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener{
@@ -108,6 +99,11 @@ public class MapFragment extends Fragment
 
         gps.setText(latitude + " " + longitude);
 
+        /*
+        * GPS로 받아온 위도, 경도 값을 실제 주소로 변환하는 작업 필요
+        * geocoding 사용
+        */
+
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,25 +115,46 @@ public class MapFragment extends Fragment
                 else{
                     Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
 
+                    //searchPlace(str);
+
                     listView.setVisibility(View.VISIBLE);
                     adapter = new ListViewAdapter();
 
-                    adapter.addItem("place1", "time1", "weather1");
-                    adapter.addItem("place2", "time2", "weather2");
-                    adapter.addItem("place3", "time3", "weather3");
+                    adapter.addItem("place1", "time/address1", "weather1");
+                    adapter.addItem("place2", "time/address2", "weather2");
+                    adapter.addItem("place3", "time/address3", "weather3");
 
                     listView.setAdapter(adapter);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             //리스트뷰 아이템 클릭했을 때
-                            Toast.makeText(getContext(), "아이템 " + i +" 터치", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), adapter.getItemPlace(i) + " 터치", Toast.LENGTH_SHORT).show();
+                            edit_search.setText(null);
+                            listView.setVisibility(View.INVISIBLE);
+                            /*
+                             * Dialog 형태로 띄워줌
+                             */
+
+                            Bundle bundle = new Bundle();
+                            bundle.putStringArray("info", adapter.getItemInfo(i));
+
+                            SearchDialog dialog = new SearchDialog();
+
+                            dialog.setArguments(bundle);
+                            dialog.show(getActivity().getSupportFragmentManager(), "tag");
                         }
                     });
-                    //리스트뷰로 넘어감
                 }
             }
         });
+    }
+
+    /*
+     검색 버튼 클릭 시 다음 REST API 로컬 검색을 이용해 장소 검색
+     */
+    public void searchPlace(String str){
+
     }
 
     public String findGPS(){
