@@ -6,7 +6,9 @@ package com.pnuproject.travellog.Main.MapFragment.Controller;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -15,6 +17,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -32,6 +35,7 @@ import com.pnuproject.travellog.etc.LocationClass;
 
 import net.daum.mf.map.api.CalloutBalloonAdapter;
 import net.daum.mf.map.api.CameraUpdateFactory;
+import net.daum.mf.map.api.MapCircle;
 import net.daum.mf.map.api.MapLayout;
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
@@ -105,10 +109,9 @@ public class MapFragment extends Fragment
             longitude = userLocation.getLongitude();
             System.out.println("check location : " + latitude + " " + longitude);
         }
-
         gps = (TextView) getView().findViewById(R.id.gpsvalue);
-        //gps.setText(location);
         gps.setText(latitude + " " + longitude);
+
 
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,9 +128,6 @@ public class MapFragment extends Fragment
             }
         });
 
-        gps = (TextView) getView().findViewById(R.id.gpsvalue);
-        //gps.setText(location);
-        gps.setText(latitude + " " + longitude);
     }
 
     public String findGPS(){
@@ -153,7 +153,7 @@ public class MapFragment extends Fragment
             if(currentLocation != null) {
                 lng = currentLocation.getLongitude();
                 lat = currentLocation.getLatitude();
-                //System.out.println("in function : " + lng + " " + lat);
+                System.out.println("in function : " + lng + " " + lat);
             }
         }
         return currentLocation;
@@ -167,7 +167,6 @@ public class MapFragment extends Fragment
             public void onLocationChanged(Location location) {
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
-                // TODO 위도, 경도로 하고 싶은 것
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -218,13 +217,24 @@ public class MapFragment extends Fragment
         mapView.setMapCenterPoint(DEFAULT_MARKER_POINT, false);
     }
 
-//    private void showAll() {
+    //    private void showAll() {
 //        int padding = 20;
 //        float minZoomLevel = 7;
 //        float maxZoomLevel = 10;
 //        MapPointBounds bounds = new MapPointBounds(CUSTOM_MARKER_POINT, DEFAULT_MARKER_POINT);
 //        mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(bounds, padding, minZoomLevel, maxZoomLevel));
 //    }
+
+    private void addCurrentLocationCircle(double latitude, double longitude) {
+        MapCircle circle1 = new MapCircle(
+                MapPoint.mapPointWithGeoCoord(latitude, longitude), // center
+                27, // radius
+                Color.argb(150, 250, 100, 120), // strokeColor
+                Color.argb(150, 250, 100, 120) // fillColor
+        );
+        circle1.setTag(1234);
+        mMapView.addCircle(circle1);
+    }
 
     @Override
     public void onMapViewInitialized(MapView mapView) {
@@ -235,9 +245,10 @@ public class MapFragment extends Fragment
         if(userLocation != null) {
             latitude = userLocation.getLatitude();
             longitude = userLocation.getLongitude();
-            //System.out.println("check location initialize : " + latitude + " " + longitude);
+            System.out.println("check location initialize : " + latitude + " " + longitude);
         }
         mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude,longitude), 2, true);
+        addCurrentLocationCircle(latitude, longitude);
     }
 
     @Override
@@ -292,7 +303,14 @@ public class MapFragment extends Fragment
 
     @Override
     public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem) {
+//        Toast.makeText(getContext(), "push balloon", Toast.LENGTH_LONG).show();
+//        FragmentManager fm = getSupportFragmentManager();
+//        ClickedMarkerDialogFragment dialogFragment = new ClickedMarkerDialogFragment();
+//        dialogFragment.show(fm, "fragment_dialog_test");
 
+        Intent intent = new Intent(getContext(), ClickedMarkerDialog.class);
+        intent.putExtra("name",mapPOIItem.getItemName());
+        getContext().startActivity(intent);
     }
 
     @Override

@@ -30,6 +30,10 @@
             android:screenOrientation="portrait"
             />
         <activity
+            android:name=".Main.MapFragment.Controller.ClickedMarkerDialog"
+            android:theme="@android:style/Theme.Dialog"
+            />
+        <activity
             android:name=".WelcomeLoading.Controller.WelcomeLoadingActivity"
             android:screenOrientation="portrait">
             <intent-filter>
