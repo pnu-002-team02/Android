@@ -17,6 +17,7 @@ public class SearchDialog extends DialogFragment {
 
     TextView place, address, weather;
     Button btn_find, btn_close;
+    SearchClass searchClass;
 
     private Fragment fragment;
 

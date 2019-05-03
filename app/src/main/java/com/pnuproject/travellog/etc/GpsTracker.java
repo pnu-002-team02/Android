@@ -5,6 +5,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -12,6 +14,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 
 public class GpsTracker extends Service implements LocationListener {
@@ -109,6 +115,26 @@ public class GpsTracker extends Service implements LocationListener {
         }
 
         return longitude;
+    }
+
+    public String getAddress(double latitude, double longitude){
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+        List<Address> addressList;
+
+        try {
+            addressList = geocoder.getFromLocation(latitude, longitude, 7);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "주소변환 불가";
+        }
+
+        if (addressList == null || addressList.size() == 0) {
+            return "주소없음";
+        }
+
+        Address address = addressList.get(0);
+        return address.getAddressLine(0).toString() + "\n";
     }
 
     @Override

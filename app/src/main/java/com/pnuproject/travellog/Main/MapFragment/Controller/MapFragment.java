@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.ListViewAdapter;
+import com.pnuproject.travellog.Main.MapFragment.Controller.Search.SearchClass;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.SearchDialog;
 import com.pnuproject.travellog.R;
 import com.pnuproject.travellog.etc.GpsTracker;
@@ -99,6 +100,8 @@ public class MapFragment extends Fragment
 
         gps.setText(latitude + " " + longitude);
 
+        final SearchClass searchClass = new SearchClass();
+
         /*
         * GPS로 받아온 위도, 경도 값을 실제 주소로 변환하는 작업 필요
         * geocoding 사용
@@ -115,7 +118,7 @@ public class MapFragment extends Fragment
                 else{
                     Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
 
-                    //searchPlace(str);
+                    searchClass.findPlace(str);
 
                     listView.setVisibility(View.VISIBLE);
                     adapter = new ListViewAdapter();
