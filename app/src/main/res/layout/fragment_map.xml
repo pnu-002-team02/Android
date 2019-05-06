@@ -5,9 +5,48 @@
     android:layout_height="match_parent"
     tools:context=".Main.MapFragment.Controller.MapFragment">
 
-    <RelativeLayout
-        android:id="@+id/map_view"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!--
+            검색창 배경 색깔 처리
+            android:background="#"
+            -->
+
+            <EditText
+                android:id="@+id/edit_search"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:hint="장소검색" />
+
+            <Button
+                android:id="@+id/btn_search"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="검색"/>
+
+        </RelativeLayout>
+
+        <!--GPS값 확인용, 추후 삭제 예정-->
+        <TextView
+            android:id="@+id/gpsvalue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:id="@+id/map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 
 </FrameLayout>

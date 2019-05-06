@@ -8,6 +8,7 @@ import android.os.Build;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.pnuproject.travellog.Main.HomeFragment.Controller.HomeFragment;
 import com.pnuproject.travellog.Main.MapFragment.Controller.MapFragment;
+import com.pnuproject.travellog.Main.MapFragment.Controller.SearchFragment;
 import com.pnuproject.travellog.Main.MypageFragment.Controller.MypageFragment;
 import com.pnuproject.travellog.R;
 import com.pnuproject.travellog.etc.BackPressCloseHandler;
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         if(savedInstanceState == null) {
             vFragments.add(new HomeFragment());
             vFragments.add(new MapFragment());
+            //vFragments.add(new SearchFragment());
             vFragments.add(new MypageFragment());
         }
         LinearLayout homeTabView = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.tab_main, null);
@@ -123,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
 
     @Override
     public void onBackPressed() {

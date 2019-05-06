@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  
     <application
         android:name=".Login.Controller.GlobalApplication"
         android:allowBackup="true"
@@ -28,6 +29,10 @@
         <activity
             android:name=".Main.MainActivity.Controller.MainActivity"
             android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".Main.MapFragment.Controller.ClickedMarkerDialog"
+            android:theme="@android:style/Theme.Dialog"
             />
         <activity
             android:name=".WelcomeLoading.Controller.WelcomeLoadingActivity"
