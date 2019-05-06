@@ -6,6 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.pnuproject.travellog.R;
 
@@ -14,6 +17,7 @@ import com.pnuproject.travellog.R;
  */
 public class HomeFragment extends Fragment {
 
+    public WebView mWebView;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -24,7 +28,18 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View v = inflater.inflate(R.layout.fragment_home, container, false);
+        mWebView = (WebView) v.findViewById(R.id.webview);
+        mWebView.loadUrl("file:///android_asset/home.html");
+
+        WebSettings webSettings = mWebView.getSettings();
+        webSettings.setBuiltInZoomControls(true);
+        webSettings.setSupportZoom(true);
+        webSettings.setJavaScriptEnabled(true);
+
+        mWebView.setWebViewClient(new WebViewClient());
+
+        return v;
     }
 
 }
