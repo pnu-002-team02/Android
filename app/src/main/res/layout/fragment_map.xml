@@ -1,52 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Main.MapFragment.Controller.MapFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <EditText
+            android:id="@+id/edit_search"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <!--
-            검색창 배경 색깔 처리
-            android:background="#"
-            -->
+            android:layout_height="50dp"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:maxLines="1"
+            android:hint="장소검색"
+            android:layout_toLeftOf="@+id/btn_search"/>
 
-            <EditText
-                android:id="@+id/edit_search"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:imeOptions="actionSearch"
-                android:inputType="text"
-                android:maxLines="1"
-                android:hint="장소검색" />
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="검색"/>
 
-            <Button
-                android:id="@+id/btn_search"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="검색"/>
+    </RelativeLayout>
 
-        </RelativeLayout>
+    <!--GPS값 확인용, 추후 삭제 예정-->
+    <TextView
+        android:id="@+id/gpsvalue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <!--GPS값 확인용, 추후 삭제 예정-->
-        <TextView
-            android:id="@+id/gpsvalue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <!--
+    <RelativeLayout
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    -->
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <RelativeLayout
             android:id="@+id/map_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="visible" />
 
-    </LinearLayout>
+        <ListView
+            android:id="@+id/search_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:visibility="invisible" />
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/gps_tracker"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="fitCenter"
+                android:layout_gravity="right"
+                android:background="@android:color/transparent"
+                android:src="@drawable/gps_tracker"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="20dp"/>
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+</LinearLayout>
