@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">TravelLog</string>
     <string name="signup">회원가입</string>
-    <string name="ID">아이디(이메일)</string>
-    <string name="PW">비밀번호</string>
+    <string name="ID">이메일은 아이디로 사용됩니다.</string>
+    <string name="PW"> 8 - 20자로 입력해 주세요</string>
     <string name="signup_IDcheck">중복확인</string>
     <string name="signup_PWcheck">비밀번호확인</string>
-    <string name="signup_usrName">이름</string>
-    <string name="signup_DOB">생년월일</string>
+    <string name="signup_usrName">이름을 입력해주세요</string>
+    <string name="signup_DOB">ex) 990101</string>
     <string name="signup_OKButton">회원가입</string>
     <string name="signup_cancleButton">취소</string>
     <string name="login">로그인</string>
