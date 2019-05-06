@@ -1,6 +1,5 @@
 package com.pnuproject.travellog.Main.HomeFragment.Controller;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -23,7 +22,6 @@ public class HomeFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -34,8 +32,11 @@ public class HomeFragment extends Fragment {
 
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setBuiltInZoomControls(true);
+        webSettings.setDisplayZoomControls(false);
         webSettings.setSupportZoom(true);
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setUseWideViewPort(true);
+        mWebView.zoomBy((float)1.3);
 
         mWebView.setWebViewClient(new WebViewClient());
 
