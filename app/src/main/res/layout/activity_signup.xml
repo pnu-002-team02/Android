@@ -27,7 +27,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:weightSum="30"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:focusable="true"
@@ -35,68 +34,62 @@
         <TextView
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:text="이름"
             android:textColor="#000000"/>
-            <android.support.design.widget.TextInputEditText
+        <android.support.design.widget.TextInputEditText
                 android:id="@+id/signup_te_Name"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="4"
+                android:layout_height="wrap_content"
                 android:hint="@string/signup_usrName_hint"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"/>
 
         <TextView
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="25dp"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:text="아이디(이메일)"
             android:textColor="#000000"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="4"
-            android:weightSum="4"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/signup_ti_ID"
                 android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
                 app:hintEnabled="false"
                 app:errorEnabled="true">
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/signup_te_ID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/ID_hint"
-                    android:importantForAutofill="no"
-                    android:inputType="textEmailAddress" />
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/signup_te_ID"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/ID_hint"
+                        android:importantForAutofill="no"
+                        android:inputType="textEmailAddress" />
+
             </android.support.design.widget.TextInputLayout>
             <Button
                 android:id="@+id/btn_IDcheck"
-                android:layout_width="0dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:background="@drawable/bg_button_green"
-                android:text="@string/signup_IDcheck" />
+                android:text="@string/signup_IDcheck"
+                android:textSize="10dp"/>
+
         </LinearLayout>
 
         <TextView
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:text="비밀번호"
-            android:layout_weight="1"
             android:textColor="#000000"/>
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/signup_ti_PW"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="4"
+                android:layout_height="wrap_content"
                 app:hintEnabled="false"
                 app:errorEnabled="true"
                 app:passwordToggleEnabled="true">
@@ -110,17 +103,14 @@
             </android.support.design.widget.TextInputLayout>
 
         <TextView
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:text="비밀번호 확인"
             android:textColor="#000000"/>
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/signup_ti_PW_check"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="4"
+                android:layout_height="wrap_content"
                 app:hintEnabled="false"
                 app:errorEnabled="true">
                 <android.support.design.widget.TextInputEditText
@@ -133,17 +123,14 @@
             </android.support.design.widget.TextInputLayout>
 
         <TextView
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:text="생년월일"
             android:textColor="#000000"/>
             <android.support.design.widget.TextInputEditText
                     android:id="@+id/signup_te_DOB"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="4"
+                    android:layout_height="wrap_content"
                     android:hint="@string/signup_DOB_hint"
                     android:importantForAutofill="no"
                     android:inputType="date" />
@@ -151,7 +138,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3"
+            android:layout_weight="1"
             android:gravity="center"
             android:orientation="horizontal">
             <Button

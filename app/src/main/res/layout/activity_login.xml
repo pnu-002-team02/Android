@@ -33,8 +33,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="60dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:layout_weight="1.2"
             android:background="@drawable/bg_login_edittext"
             android:hint="@string/ID"
@@ -47,8 +47,8 @@
             android:layout_height="0dp"
             android:layout_marginTop="20dp"
             android:layout_weight="1.2"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:background="@drawable/bg_login_edittext"
             android:hint="@string/PW"
             android:importantForAutofill="no"
@@ -61,11 +61,13 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bg_button_write"
             android:text="@string/login_OKButton"
-            android:textColor="#ffffff"/>
+            android:textSize="18dp"
+            android:textColor="#ffffff"
+            android:textStyle="bold"/>
 
         <LinearLayout
             android:id="@+id/btn_goto_signup"
-            android:layout_marginTop="10dp"
+            android:padding="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -76,6 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="아직 회원이 아니신가요?"
+                android:textSize="11dp"
                 android:textStyle="bold"
 
                 />

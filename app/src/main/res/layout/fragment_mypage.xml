@@ -16,148 +16,157 @@
         android:textSize="15dp"
         android:textStyle="bold"
         android:background="#ffffff"/>
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/layout_userinfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <LinearLayout
+            android:layout_marginTop="1dp"
+            android:background="#ffffff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_noimage" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="홍길동"
+                android:textColor="#000000"
+                android:textSize="15dp" />
+        </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_marginTop="1dp"
-        android:background="#ffffff"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/ic_noimage" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#afafaf"
+            />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_marginTop="7dp"
+            android:padding="15dp"
+            android:text="나의 여행 Log"
+            android:background="#008577"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="홍길동"
-            android:textColor="#000000"
-            android:textSize="15dp" />
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:textAlignment="center"
+            android:textSize="17dp" />
+
+
+        <LinearLayout
+            android:background="#ffffff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="방문 명소 갯수"
+                    android:textSize="11dp"
+                    android:textColor="#3f3f3f"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:textSize="20dp"
+                    android:textColor="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0개"
+                    android:textAlignment="center"/>
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#efefef"
+                />
+            <LinearLayout
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="전체 중"
+                    android:textSize="11dp"
+                    android:textColor="#3f3f3f"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:textSize="20dp"
+                    android:textColor="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0%"
+                    android:textAlignment="center"/>
+            </LinearLayout>
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#efefef"
+                />
+            <LinearLayout
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="힐링안한지"
+                    android:textSize="11dp"
+                    android:textColor="#3f3f3f"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:textSize="20dp"
+                    android:textColor="#000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0 일째"
+                    android:textAlignment="center"/>
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#afafaf"
-        />
-    <TextView
-        android:layout_marginTop="7dp"
-        android:padding="15dp"
-        android:text="나의 여행 Log"
-        android:background="#008577"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textStyle="bold"
-        android:textColor="#ffffff"
-        android:textAlignment="center"
-        android:textSize="17dp" />
 
-
-    <LinearLayout
-        android:background="#ffffff"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="방문 명소 갯수"
-                android:textSize="11dp"
-                android:textColor="#3f3f3f"
-                android:layout_gravity="center"/>
-            <TextView
-                android:textSize="20dp"
-                android:textColor="#000000"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="0개"
-                android:textAlignment="center"/>
-        </LinearLayout>
-
-        <View
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#efefef"
-            />
-        <LinearLayout
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="전체 중"
-                android:textSize="11dp"
-                android:textColor="#3f3f3f"
-                android:layout_gravity="center"/>
-            <TextView
-                android:textSize="20dp"
-                android:textColor="#000000"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="0%"
-                android:textAlignment="center"/>
-        </LinearLayout>
-        <View
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#efefef"
-            />
-        <LinearLayout
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="힐링안한지"
-                android:textSize="11dp"
-                android:textColor="#3f3f3f"
-                android:layout_gravity="center"/>
-            <TextView
-                android:textSize="20dp"
-                android:textColor="#000000"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="0 일째"
-                android:textAlignment="center"/>
-        </LinearLayout>
-
-    </LinearLayout>
-    <TextView
+    <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="#afafaf"
         />
 
     <TextView
-        android:id="@+id/tvSingup_mypage"
+        android:id="@+id/tvLogin_mypage"
         android:layout_marginTop="7dp"
         android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="회원가입"
+        android:text="로그인"
         android:textColor="#3f3f3f"
         android:textSize="14dp"
         android:gravity="center_vertical"
@@ -174,6 +183,8 @@
         android:textSize="14dp"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
+        android:id="@+id/btn_modifyUserInfo_mypage"
+        android:visibility="gone"
         />
     <TextView
         android:layout_marginTop="1dp"
@@ -187,6 +198,8 @@
         android:paddingLeft="15dp"
         />
     <TextView
+        android:id="@+id/btn_logout_mypage"
+        android:visibility="gone"
         android:layout_marginTop="1dp"
         android:background="#ffffff"
         android:layout_width="match_parent"

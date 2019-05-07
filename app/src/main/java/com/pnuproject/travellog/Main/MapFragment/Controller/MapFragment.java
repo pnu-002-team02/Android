@@ -128,9 +128,7 @@ public class MapFragment extends Fragment
                 }
                 else{
                     Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
-
                     searchClass.findPlace(str);
-
                     listView.setVisibility(View.VISIBLE);
                     adapter = new ListViewAdapter();
 
