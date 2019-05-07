@@ -6,7 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-  
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-feature android:name="android.hardware.Camera"/>
+
     <application
         android:name=".Login.Controller.GlobalApplication"
         android:allowBackup="true"
@@ -42,7 +45,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Main.MapFragment.Controller.AuthenticationDialog"
+            android:screenOrientation="portrait"/>
 
+        <activity android:name=".Main.MapFragment.Controller.CameraFunction"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Main.MapFragment.Controller.CameraResult"
+            android:screenOrientation="portrait"/>
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_map_key"/>

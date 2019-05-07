@@ -29,6 +29,7 @@ import com.pnuproject.travellog.etc.SwipeViewPager;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,10 +38,13 @@ public class MainActivity extends AppCompatActivity {
 
     private BackPressCloseHandler backPressCloseHandler;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         // 카카오 key hash 획득
         try {
@@ -59,10 +63,16 @@ public class MainActivity extends AppCompatActivity {
         //뒤로가기 2번 누를 때 앱 종료
         backPressCloseHandler = new BackPressCloseHandler(this);
 
-        //위치 permission 획득
-        if ( Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
-            ActivityCompat.requestPermissions( this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION  }, 1 );
+
+        String[] permissions = new String[] {Manifest.permission.ACCESS_FINE_LOCATION ,Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+        boolean total_permission = ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission( this, Manifest.permission.CAMERA ) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission( this, Manifest.permission.WRITE_EXTERNAL_STORAGE ) == PackageManager.PERMISSION_GRANTED;
+
+        //위치, 카메라 , 파일 접근 permission 획득
+        if ( Build.VERSION.SDK_INT >= 23 && !total_permission) {
+            ActivityCompat.requestPermissions( this, permissions, 1 );
         }
 
 
@@ -130,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         backPressCloseHandler.onBackPressed();
     }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
