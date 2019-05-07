@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="장소"
+        android:text="장소명"
         android:id="@+id/place"
         android:textSize="24dp" />
 
@@ -19,8 +19,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="대기시간"
-            android:id="@+id/time"
+            android:text="대기시간/주소"
+            android:id="@+id/text2"
             android:layout_gravity="left"/>
 
         <View

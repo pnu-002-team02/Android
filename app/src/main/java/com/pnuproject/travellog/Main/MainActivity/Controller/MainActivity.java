@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.pnuproject.travellog.Main.HomeFragment.Controller.HomeFragment;
 import com.pnuproject.travellog.Main.MapFragment.Controller.MapFragment;
-import com.pnuproject.travellog.Main.MapFragment.Controller.SearchFragment;
 import com.pnuproject.travellog.Main.MypageFragment.Controller.MypageFragment;
 import com.pnuproject.travellog.R;
 import com.pnuproject.travellog.etc.BackPressCloseHandler;

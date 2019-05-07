@@ -20,12 +20,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.ListViewAdapter;
+import com.pnuproject.travellog.Main.MapFragment.Controller.Search.SearchClass;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.SearchDialog;
 import com.pnuproject.travellog.R;
 import com.pnuproject.travellog.etc.GpsTracker;
@@ -104,6 +106,12 @@ public class MapFragment extends Fragment
         longitude = gpsTracker.getLongitude();
 
         gps.setText(latitude + " " + longitude);
+        final SearchClass searchClass = new SearchClass();
+
+        /*
+        * GPS로 받아온 위도, 경도 값을 실제 주소로 변환하는 작업 필요
+        * geocoding 사용
+        */
 
         /*
          * GPS로 받아온 위도, 경도 값을 실제 주소로 변환하는 작업 필요
@@ -121,7 +129,7 @@ public class MapFragment extends Fragment
                 else{
                     Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
 
-                    //searchPlace(str);
+                    searchClass.findPlace(str);
 
                     listView.setVisibility(View.VISIBLE);
                     adapter = new ListViewAdapter();
@@ -154,7 +162,7 @@ public class MapFragment extends Fragment
                 }
             }
         });
-
+        
         btn_gps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -163,13 +171,17 @@ public class MapFragment extends Fragment
         });
     }
 
+    public String findGPS(){
+        String result = "";
+
+        return result;
+    }
     /*
      검색 버튼 클릭 시 다음 REST API 로컬 검색을 이용해 장소 검색
      */
     public void searchPlace(String str){
 
     }
-
 
     // CalloutBalloonAdapter 인터페이스 구현
     class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
@@ -248,6 +260,14 @@ public class MapFragment extends Fragment
     @Override
     public void onMapViewInitialized(MapView mapView) {
         //mMapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
+      
+//        settingGPS();
+//        Location userLocation = getMyLocation();
+//        if(userLocation != null) {
+//            latitude = userLocation.getLatitude();
+//            longitude = userLocation.getLongitude();
+//            //System.out.println("check location initialize : " + latitude + " " + longitude);
+//        }
         mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude,longitude), 2, true);
         addCurrentLocationCircle(latitude, longitude);
     }

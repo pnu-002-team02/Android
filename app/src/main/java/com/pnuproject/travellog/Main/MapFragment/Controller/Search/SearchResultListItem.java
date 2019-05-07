@@ -1,18 +1,18 @@
-package com.pnuproject.travellog.Main.MapFragment.Controller;
+package com.pnuproject.travellog.Main.MapFragment.Controller.Search;
 
 public class SearchResultListItem {
     //커스텀리스트뷰
     //대중교통 경로 검색 결과
     private String place;
-    private String time;
+    private String text2;
     private String weather;
 
     public String getPlace(){
         return place;
     }
 
-    public String getTime(){
-        return time;
+    public String getText2(){
+        return text2;
     }
 
     public String getWeather(){
@@ -23,8 +23,8 @@ public class SearchResultListItem {
         this.place = t;
     }
 
-    public void setTime(String t){
-        this.time = t;
+    public void setText2(String t){
+        this.text2 = t;
     }
 
     public void setWeather(String t){
