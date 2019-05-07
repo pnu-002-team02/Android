@@ -1,7 +1,13 @@
 package com.pnuproject.travellog.Main.MapFragment.Controller;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -30,7 +36,20 @@ public class ClickedMarkerDialog extends Activity {
             btn_photo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(getApplicationContext(), "사진 찍을 수 있도록 연결", Toast.LENGTH_SHORT).show();
+
+                    boolean camera = ContextCompat.checkSelfPermission(view.getContext(), Manifest.permission.CAMERA)== PackageManager.PERMISSION_GRANTED;
+
+                    boolean write = ContextCompat.checkSelfPermission
+                            (view.getContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+                    if(camera && write){
+                        //사진 찍는 인텐트 코드 넣기
+                        authenticationMessageBox();
+                    }
+                    else{
+                        Toast.makeText(ClickedMarkerDialog.this, "카메라 권한 및 쓰기 권한을 주지 않았습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                    //Toast.makeText(getApplicationContext(), "사진 찍을 수 있도록 연결", Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
@@ -63,5 +82,24 @@ public class ClickedMarkerDialog extends Activity {
         return true;
     }
 
+    void authenticationMessageBox(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("인증여부 확인");
+        builder.setMessage("인증하시겠습니까?");
+        builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getApplicationContext(),AuthenticationDialog.class);
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+    }
 
 }
