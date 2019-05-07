@@ -5,64 +5,62 @@ package com.pnuproject.travellog.Main.MapFragment.Controller;
  */
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pnuproject.travellog.Main.MapFragment.Controller.Search.ListViewAdapter;
+import com.pnuproject.travellog.Main.MapFragment.Controller.Search.SearchDialog;
 import com.pnuproject.travellog.R;
-import com.pnuproject.travellog.etc.LocationClass;
+import com.pnuproject.travellog.etc.GpsTracker;
 
 import net.daum.mf.map.api.CalloutBalloonAdapter;
-import net.daum.mf.map.api.CameraUpdateFactory;
 import net.daum.mf.map.api.MapCircle;
 import net.daum.mf.map.api.MapLayout;
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
-import net.daum.mf.map.api.MapPointBounds;
 import net.daum.mf.map.api.MapView;
-
-import java.util.Map;
 
 public class MapFragment extends Fragment
         implements MapView.OpenAPIKeyAuthenticationResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener{
 
     private MapView mMapView;
 
-    private MapPOIItem mDefaultMarker;
+    private MapPOIItem mVisitedMarker;
+    private MapPOIItem mUnvisitedMarker;
     private static final MapPoint DEFAULT_MARKER_POINT = MapPoint.mapPointWithGeoCoord(35.2295239,129.0881219);
+    private static final MapPoint DEFAULT_MARKER_POINT1 = MapPoint.mapPointWithGeoCoord(35.2336123,129.078816);
 
     private EditText edit_search;
     private Button btn_search;
+    private ImageButton btn_gps;
 
     private TextView gps;
-    private LocationManager locationManager;
-    private LocationClass locationClass;
-    private LocationListener locationListener;
+    private GpsTracker gpsTracker;
+    private static final int GPS_ENABLE_REQUEST_CODE = 2001;
+    private static final int PERMISSIONS_REQUEST_CODE = 100;
+    String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+    double latitude;
+    double longitude;
 
-    public static String location;
-    double latitude, lat;
-    double longitude, lng;
+    private ListViewAdapter adapter;
+    private ListView listView;
 
     public MapFragment() {
     }
@@ -88,30 +86,29 @@ public class MapFragment extends Fragment
         mapViewContainer.addView(mapLayout);
 
         mMapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter());
-        createDefaultMarker(mMapView);
+        createVisitedMarker(mMapView, "임시 방문 명소", DEFAULT_MARKER_POINT);
+        createUnvisitedMarker(mMapView, "임시 미방문 명소", DEFAULT_MARKER_POINT1);
         //createCustomMarker(mMapView);
         //createCustomBitmapMarker(mMapView);
         //showAll();
 
         edit_search = (EditText) view.findViewById(R.id.edit_search);
         btn_search = (Button) view.findViewById(R.id.btn_search);
+        btn_gps = (ImageButton) view.findViewById(R.id.gps_tracker);
 
-//        locationClass = new LocationClass(getActivity());
-//        locationClass.initLoc();
-//        location = locationClass.getLoc();
-//        System.out.println("check location : " + location);
-//        locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
-
-        settingGPS();
-        Location userLocation = getMyLocation();
-        if(userLocation != null) {
-            latitude = userLocation.getLatitude();
-            longitude = userLocation.getLongitude();
-            System.out.println("check location : " + latitude + " " + longitude);
-        }
+        listView = (ListView) getView().findViewById(R.id.search_list);
         gps = (TextView) getView().findViewById(R.id.gpsvalue);
+
+        gpsTracker = new GpsTracker(getContext());
+        latitude = gpsTracker.getLatitude();
+        longitude = gpsTracker.getLongitude();
+
         gps.setText(latitude + " " + longitude);
 
+        /*
+         * GPS로 받아온 위도, 경도 값을 실제 주소로 변환하는 작업 필요
+         * geocoding 사용
+         */
 
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,61 +120,54 @@ public class MapFragment extends Fragment
                 }
                 else{
                     Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
-                    //리스트뷰로 넘어감
+
+                    //searchPlace(str);
+
+                    listView.setVisibility(View.VISIBLE);
+                    adapter = new ListViewAdapter();
+
+                    adapter.addItem("place1", "time/address1", "weather1");
+                    adapter.addItem("place2", "time/address2", "weather2");
+                    adapter.addItem("place3", "time/address3", "weather3");
+
+                    listView.setAdapter(adapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            //리스트뷰 아이템 클릭했을 때
+                            Toast.makeText(getContext(), adapter.getItemPlace(i) + " 터치", Toast.LENGTH_SHORT).show();
+                            edit_search.setText(null);
+                            listView.setVisibility(View.INVISIBLE);
+                            /*
+                             * Dialog 형태로 띄워줌
+                             */
+
+                            Bundle bundle = new Bundle();
+                            bundle.putStringArray("info", adapter.getItemInfo(i));
+
+                            SearchDialog dialog = new SearchDialog();
+
+                            dialog.setArguments(bundle);
+                            dialog.show(getActivity().getSupportFragmentManager(), "tag");
+                        }
+                    });
                 }
             }
         });
 
+        btn_gps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mMapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude,longitude), 2,true);
+            }
+        });
     }
 
-    public String findGPS(){
-        String result = "";
+    /*
+     검색 버튼 클릭 시 다음 REST API 로컬 검색을 이용해 장소 검색
+     */
+    public void searchPlace(String str){
 
-        return result;
-    }
-
-    private Location getMyLocation() {
-        Location currentLocation = null;
-        if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 2);
-            getMyLocation();
-        }
-        else {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,locationListener);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
-
-            String locationProvider = LocationManager.GPS_PROVIDER;
-            currentLocation = locationManager.getLastKnownLocation(locationProvider);
-
-            if(currentLocation != null) {
-                lng = currentLocation.getLongitude();
-                lat = currentLocation.getLatitude();
-                System.out.println("in function : " + lng + " " + lat);
-            }
-        }
-        return currentLocation;
-    }
-
-    private void settingGPS() {
-        // Acquire a reference to the system Location Manager
-        locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-
-        locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-            }
-
-            public void onProviderEnabled(String provider) {
-            }
-
-            public void onProviderDisabled(String provider) {
-            }
-        };
     }
 
 
@@ -191,9 +181,14 @@ public class MapFragment extends Fragment
 
         @Override
         public View getCalloutBalloon(MapPOIItem poiItem) {
-            ((ImageView) mCalloutBalloon.findViewById(R.id.badge)).setImageResource(R.mipmap.ic_launcher);
+            //((ImageView) mCalloutBalloon.findViewById(R.id.badge)).setImageResource(R.mipmap.ic_launcher);
             ((TextView) mCalloutBalloon.findViewById(R.id.title)).setText(poiItem.getItemName());
-            ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("Custom CalloutBalloon");
+            if(poiItem.getTag()==1) {
+                ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("이전에 방문한 명소입니다.");
+            } else {
+                ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("방문하지 않은 명소입니다.");
+            }
+
             return mCalloutBalloon;
         }
 
@@ -203,21 +198,35 @@ public class MapFragment extends Fragment
         }
     }
 
-    private void createDefaultMarker(MapView mapView) {
-        mDefaultMarker = new MapPOIItem();
-        String name = "Default Marker";
-        mDefaultMarker.setItemName(name);
-        mDefaultMarker.setTag(0);
-        mDefaultMarker.setMapPoint(DEFAULT_MARKER_POINT);
-        mDefaultMarker.setMarkerType(MapPOIItem.MarkerType.BluePin);
-        mDefaultMarker.setSelectedMarkerType(MapPOIItem.MarkerType.BluePin);
+    private void createVisitedMarker(MapView mapView, String placeName, MapPoint VISITED_MARKER_POINT) {
+        mVisitedMarker = new MapPOIItem();
+        String name = placeName;
+        mVisitedMarker.setItemName(name);
+        mVisitedMarker.setTag(1);
+        mVisitedMarker.setMapPoint(VISITED_MARKER_POINT);
+        mVisitedMarker.setMarkerType(MapPOIItem.MarkerType.BluePin);
+        mVisitedMarker.setSelectedMarkerType(MapPOIItem.MarkerType.BluePin);
 
-        mapView.addPOIItem(mDefaultMarker);
-        mapView.selectPOIItem(mDefaultMarker, false);
-        mapView.setMapCenterPoint(DEFAULT_MARKER_POINT, false);
+        mapView.addPOIItem(mVisitedMarker);
+        mapView.selectPOIItem(mVisitedMarker, false);
+        //mapView.setMapCenterPoint(DEFAULT_MARKER_POINT, false);
     }
 
-    //    private void showAll() {
+    private void createUnvisitedMarker(MapView mapView, String placeName, MapPoint UNVISITED_MARKER_POINT) {
+        mUnvisitedMarker = new MapPOIItem();
+        String name = placeName;
+        mUnvisitedMarker.setItemName(name);
+        mUnvisitedMarker.setTag(0);
+        mUnvisitedMarker.setMapPoint(UNVISITED_MARKER_POINT);
+        mUnvisitedMarker.setMarkerType(MapPOIItem.MarkerType.RedPin);
+        mUnvisitedMarker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin);
+
+        mapView.addPOIItem(mUnvisitedMarker);
+        mapView.selectPOIItem(mUnvisitedMarker, false);
+        //mapView.setMapCenterPoint(DEFAULT_MARKER_POINT, false);
+    }
+
+//    private void showAll() {
 //        int padding = 20;
 //        float minZoomLevel = 7;
 //        float maxZoomLevel = 10;
@@ -239,14 +248,6 @@ public class MapFragment extends Fragment
     @Override
     public void onMapViewInitialized(MapView mapView) {
         //mMapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
-
-        settingGPS();
-        Location userLocation = getMyLocation();
-        if(userLocation != null) {
-            latitude = userLocation.getLatitude();
-            longitude = userLocation.getLongitude();
-            System.out.println("check location initialize : " + latitude + " " + longitude);
-        }
         mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude,longitude), 2, true);
         addCurrentLocationCircle(latitude, longitude);
     }
@@ -258,7 +259,12 @@ public class MapFragment extends Fragment
 
     @Override
     public void onMapViewZoomLevelChanged(MapView mapView, int i) {
-
+//        if(i > 3) {
+//            mapView.removeAllPOIItems();
+//        } else {
+//            createVisitedMarker(mMapView, "임시 방문 명소", DEFAULT_MARKER_POINT);
+//            createUnvisitedMarker(mMapView, "임시 미방문 명소", DEFAULT_MARKER_POINT1);
+//        }
     }
 
     @Override
@@ -298,18 +304,14 @@ public class MapFragment extends Fragment
 
     @Override
     public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
-        System.out.println("marker clicked");
+
     }
 
     @Override
     public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem) {
-//        Toast.makeText(getContext(), "push balloon", Toast.LENGTH_LONG).show();
-//        FragmentManager fm = getSupportFragmentManager();
-//        ClickedMarkerDialogFragment dialogFragment = new ClickedMarkerDialogFragment();
-//        dialogFragment.show(fm, "fragment_dialog_test");
-
         Intent intent = new Intent(getContext(), ClickedMarkerDialog.class);
         intent.putExtra("name",mapPOIItem.getItemName());
+        intent.putExtra("visited", mapPOIItem.getTag());
         getContext().startActivity(intent);
     }
 
@@ -320,6 +322,52 @@ public class MapFragment extends Fragment
 
     @Override
     public void onDraggablePOIItemMoved(MapView mapView, MapPOIItem mapPOIItem, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int permsRequestCode, @NonNull String[] permissions, @NonNull int[] grandResults) {
+        if ( permsRequestCode == PERMISSIONS_REQUEST_CODE && grandResults.length == REQUIRED_PERMISSIONS.length) {
+            boolean check_result = true;
+
+            for (int result : grandResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    check_result = false;
+                    break;
+                }
+            }
+
+            if ( check_result ) {
+                ;
+            }
+            else {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), REQUIRED_PERMISSIONS[0])
+                        || ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), REQUIRED_PERMISSIONS[1])) {
+                    Toast.makeText(getContext(), "퍼미션을 허용해주세요.", Toast.LENGTH_LONG).show();
+                    return;
+                }else {
+                    Toast.makeText(getContext(), "퍼미션을 허용해야 합니다. ", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
+    void checkRunTimePermission(){
+        int hasFineLocationPermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+        int hasCoarseLocationPermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
+                hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED) {
+        } else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), REQUIRED_PERMISSIONS[0])) {
+                Toast.makeText(getContext(), "위치 접근 권한이 필요합니다.", Toast.LENGTH_LONG).show();
+
+                ActivityCompat.requestPermissions(getActivity(), REQUIRED_PERMISSIONS, PERMISSIONS_REQUEST_CODE);
+            } else {
+                ActivityCompat.requestPermissions(getActivity(), REQUIRED_PERMISSIONS, PERMISSIONS_REQUEST_CODE);
+            }
+
+        }
 
     }
 }
