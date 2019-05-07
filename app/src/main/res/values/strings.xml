@@ -17,11 +17,17 @@
     <string name="login">로그인</string>
     <string name="login_OKButton">로그인</string>
     <string name="kakao_map_key">e617e56195858d0ef3bf81ade21b855c</string>
-
+    <string name="edit_password_PWcheck_hint">비밀번호를 한번 더 입력해주세요.</string>
+    <string name="edit_password">비밀번호 수정</string>
+    <string name="edit_password_OKButton">수정하기</string>
+    <string name="edit_password_cancleButton">취소</string>
+    <string name="title_activity_place_edit">PlaceEdit</string>
+    <string name="edit_attraction_OKButton">수정하기</string>
+    <string name="edit_attraction_cancleButton">취소</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="errmsg_retrofitbefore_ownernetwork">인터넷 연결상태를 확인해주세요.</string>
     <string name="errmsg_retrofitbefore_servernetwork">서버에서 응답이 없습니다.</string>
     <string name="errmsg_retrofit_unknown">알 수 없는 통신에러</string>
     <string name="server_address">http://59.22.33.241</string>
-
 
 </resources>
