@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#008577">
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        android:layout_height="30dp"
+        android:text=" 해당 화면과 같은 구도로 사진을 촬영해주십시오."/>
+    <TextView
+        android:layout_width="match_parent"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        android:layout_height="30dp"
+        android:text=" 아래의 버튼을 누르면 촬영이 시작됩니다."/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_weight="0.56"
+        android:src="@drawable/sea"/>
+
+
+    <ImageButton
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:id="@+id/start_camera"
+        android:src="@drawable/gotocamera"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="@android:color/transparent"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"/>
+</LinearLayout>
