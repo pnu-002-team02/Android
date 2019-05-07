@@ -5,6 +5,7 @@ package com.pnuproject.travellog.Main.MapFragment.Controller;
  */
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,11 +44,14 @@ public class MapFragment extends Fragment
 
     private MapView mMapView;
 
-    private MapPOIItem mDefaultMarker;
+    private MapPOIItem mVisitedMarker;
+    private MapPOIItem mUnvisitedMarker;
     private static final MapPoint DEFAULT_MARKER_POINT = MapPoint.mapPointWithGeoCoord(35.2295239,129.0881219);
+    private static final MapPoint DEFAULT_MARKER_POINT1 = MapPoint.mapPointWithGeoCoord(35.2336123,129.078816);
 
     private EditText edit_search;
     private Button btn_search;
+    private ImageButton btn_gps;
 
     private TextView gps;
     private GpsTracker gpsTracker;
@@ -83,13 +88,15 @@ public class MapFragment extends Fragment
         mapViewContainer.addView(mapLayout);
 
         mMapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter());
-        createDefaultMarker(mMapView);
+        createVisitedMarker(mMapView, "임시 방문 명소", DEFAULT_MARKER_POINT);
+        createUnvisitedMarker(mMapView, "임시 미방문 명소", DEFAULT_MARKER_POINT1);
         //createCustomMarker(mMapView);
         //createCustomBitmapMarker(mMapView);
         //showAll();
 
         edit_search = (EditText) view.findViewById(R.id.edit_search);
         btn_search = (Button) view.findViewById(R.id.btn_search);
+        btn_gps = (ImageButton) view.findViewById(R.id.gps_tracker);
 
         listView = (ListView) getView().findViewById(R.id.search_list);
         gps = (TextView) getView().findViewById(R.id.gpsvalue);
@@ -99,13 +106,17 @@ public class MapFragment extends Fragment
         longitude = gpsTracker.getLongitude();
 
         gps.setText(latitude + " " + longitude);
-
         final SearchClass searchClass = new SearchClass();
 
         /*
         * GPS로 받아온 위도, 경도 값을 실제 주소로 변환하는 작업 필요
         * geocoding 사용
         */
+
+        /*
+         * GPS로 받아온 위도, 경도 값을 실제 주소로 변환하는 작업 필요
+         * geocoding 사용
+         */
 
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,19 +162,25 @@ public class MapFragment extends Fragment
                 }
             }
         });
-    }
-
-    /*
-     검색 버튼 클릭 시 다음 REST API 로컬 검색을 이용해 장소 검색
-     */
-    public void searchPlace(String str){
-
+        
+        btn_gps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mMapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude,longitude), 2,true);
+            }
+        });
     }
 
     public String findGPS(){
         String result = "";
 
         return result;
+    }
+    /*
+     검색 버튼 클릭 시 다음 REST API 로컬 검색을 이용해 장소 검색
+     */
+    public void searchPlace(String str){
+
     }
 
     // CalloutBalloonAdapter 인터페이스 구현
@@ -176,9 +193,14 @@ public class MapFragment extends Fragment
 
         @Override
         public View getCalloutBalloon(MapPOIItem poiItem) {
-            ((ImageView) mCalloutBalloon.findViewById(R.id.badge)).setImageResource(R.mipmap.ic_launcher);
+            //((ImageView) mCalloutBalloon.findViewById(R.id.badge)).setImageResource(R.mipmap.ic_launcher);
             ((TextView) mCalloutBalloon.findViewById(R.id.title)).setText(poiItem.getItemName());
-            ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("Custom CalloutBalloon");
+            if(poiItem.getTag()==1) {
+                ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("이전에 방문한 명소입니다.");
+            } else {
+                ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("방문하지 않은 명소입니다.");
+            }
+
             return mCalloutBalloon;
         }
 
@@ -188,18 +210,32 @@ public class MapFragment extends Fragment
         }
     }
 
-    private void createDefaultMarker(MapView mapView) {
-        mDefaultMarker = new MapPOIItem();
-        String name = "Default Marker";
-        mDefaultMarker.setItemName(name);
-        mDefaultMarker.setTag(0);
-        mDefaultMarker.setMapPoint(DEFAULT_MARKER_POINT);
-        mDefaultMarker.setMarkerType(MapPOIItem.MarkerType.BluePin);
-        mDefaultMarker.setSelectedMarkerType(MapPOIItem.MarkerType.BluePin);
+    private void createVisitedMarker(MapView mapView, String placeName, MapPoint VISITED_MARKER_POINT) {
+        mVisitedMarker = new MapPOIItem();
+        String name = placeName;
+        mVisitedMarker.setItemName(name);
+        mVisitedMarker.setTag(1);
+        mVisitedMarker.setMapPoint(VISITED_MARKER_POINT);
+        mVisitedMarker.setMarkerType(MapPOIItem.MarkerType.BluePin);
+        mVisitedMarker.setSelectedMarkerType(MapPOIItem.MarkerType.BluePin);
 
-        mapView.addPOIItem(mDefaultMarker);
-        mapView.selectPOIItem(mDefaultMarker, false);
-        mapView.setMapCenterPoint(DEFAULT_MARKER_POINT, false);
+        mapView.addPOIItem(mVisitedMarker);
+        mapView.selectPOIItem(mVisitedMarker, false);
+        //mapView.setMapCenterPoint(DEFAULT_MARKER_POINT, false);
+    }
+
+    private void createUnvisitedMarker(MapView mapView, String placeName, MapPoint UNVISITED_MARKER_POINT) {
+        mUnvisitedMarker = new MapPOIItem();
+        String name = placeName;
+        mUnvisitedMarker.setItemName(name);
+        mUnvisitedMarker.setTag(0);
+        mUnvisitedMarker.setMapPoint(UNVISITED_MARKER_POINT);
+        mUnvisitedMarker.setMarkerType(MapPOIItem.MarkerType.RedPin);
+        mUnvisitedMarker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin);
+
+        mapView.addPOIItem(mUnvisitedMarker);
+        mapView.selectPOIItem(mUnvisitedMarker, false);
+        //mapView.setMapCenterPoint(DEFAULT_MARKER_POINT, false);
     }
 
 //    private void showAll() {
@@ -224,7 +260,7 @@ public class MapFragment extends Fragment
     @Override
     public void onMapViewInitialized(MapView mapView) {
         //mMapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
-
+      
 //        settingGPS();
 //        Location userLocation = getMyLocation();
 //        if(userLocation != null) {
@@ -243,7 +279,12 @@ public class MapFragment extends Fragment
 
     @Override
     public void onMapViewZoomLevelChanged(MapView mapView, int i) {
-
+//        if(i > 3) {
+//            mapView.removeAllPOIItems();
+//        } else {
+//            createVisitedMarker(mMapView, "임시 방문 명소", DEFAULT_MARKER_POINT);
+//            createUnvisitedMarker(mMapView, "임시 미방문 명소", DEFAULT_MARKER_POINT1);
+//        }
     }
 
     @Override
@@ -283,12 +324,15 @@ public class MapFragment extends Fragment
 
     @Override
     public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
-        System.out.println("marker clicked");
+
     }
 
     @Override
     public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem) {
-
+        Intent intent = new Intent(getContext(), ClickedMarkerDialog.class);
+        intent.putExtra("name",mapPOIItem.getItemName());
+        intent.putExtra("visited", mapPOIItem.getTag());
+        getContext().startActivity(intent);
     }
 
     @Override

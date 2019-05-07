@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#9f9f9f">
+    android:background="#efefef">
 
     <TextView
         android:layout_width="match_parent"
@@ -40,20 +40,25 @@
     </LinearLayout>
 
     <TextView
-        android:layout_marginTop="1dp"
-        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#afafaf"
+        />
+    <TextView
+        android:layout_marginTop="7dp"
+        android:padding="15dp"
+        android:text="나의 여행 Log"
+        android:background="#008577"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:padding="15dp"
-        android:text="Travel Log"
-        android:textColor="#3f3f3f"
+        android:textStyle="bold"
+        android:textColor="#ffffff"
         android:textAlignment="center"
         android:textSize="17dp" />
 
 
     <LinearLayout
-        android:layout_marginTop="1dp"
         android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -79,10 +84,13 @@
                 android:text="0개"
                 android:textAlignment="center"/>
         </LinearLayout>
+
         <View
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="#9f9f9f"
+            android:background="#efefef"
             />
         <LinearLayout
             android:paddingTop="20dp"
@@ -107,9 +115,11 @@
                 android:textAlignment="center"/>
         </LinearLayout>
         <View
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="#9f9f9f"
+            android:background="#efefef"
             />
         <LinearLayout
             android:paddingTop="20dp"
@@ -135,9 +145,15 @@
         </LinearLayout>
 
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#afafaf"
+        />
 
     <TextView
-        android:layout_marginTop="10dp"
+        android:id="@+id/tvSingup_mypage"
+        android:layout_marginTop="7dp"
         android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -169,7 +185,7 @@
         android:textSize="14dp"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
-    />
+        />
     <TextView
         android:layout_marginTop="1dp"
         android:background="#ffffff"
@@ -182,9 +198,4 @@
         android:paddingLeft="15dp"
         />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#9f9f9f" />
 </LinearLayout>

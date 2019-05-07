@@ -16,7 +16,7 @@
         android:layout_marginRight="20dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:weightSum="9">
+        android:weightSum="11">
 
         <TextView
             android:layout_width="match_parent"
@@ -32,8 +32,10 @@
             android:id="@+id/login_te_ID"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="20dp"
-            android:layout_weight="1"
+            android:layout_marginTop="60dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1.2"
             android:background="@drawable/bg_login_edittext"
             android:hint="@string/ID"
             android:importantForAutofill="no"
@@ -44,45 +46,55 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="20dp"
-            android:layout_weight="1"
+            android:layout_weight="1.2"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:background="@drawable/bg_login_edittext"
             android:hint="@string/PW"
             android:importantForAutofill="no"
             android:inputType="textPassword" />
 
+        <Button
+            android:layout_marginTop="50dp"
+            android:id="@+id/btn_login_ok"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_button_write"
+            android:text="@string/login_OKButton"
+            android:textColor="#ffffff"/>
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btn_login_ok"
-                android:layout_width="110dp"
+            android:id="@+id/btn_goto_signup"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:gravity="center"
+                android:textColor="#ffffff"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/bg_button_write"
-                android:text="@string/login_OKButton"
-                android:textColor="#ffffff"/>
+                android:text="아직 회원이 아니신가요?"
+                android:textStyle="bold"
 
-            <Button
-                android:id="@+id/btn_goto_signup"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/bg_button_write"
-                android:text="@string/signup"
-                android:textColor="#ffffff" />
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ffffff"
+                />
         </LinearLayout>
 
+
         <com.kakao.usermgmt.LoginButton
+            android:layout_marginTop="50dp"
             android:id="@+id/btn_kakao_login"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:layout_weight="1" />
+            android:layout_weight="2" />
     </LinearLayout>
 
 </LinearLayout>
