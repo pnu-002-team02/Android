@@ -23,11 +23,6 @@
         android:textSize="35dp"
         android:textStyle="bold"
       />
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
@@ -36,14 +31,9 @@
             android:text="한국, 어디까지 가봤니?"
             android:textColor="#ffffff"
             android:textSize="13dp"
-            />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#ffffff"
+            android:layout_gravity="center"
             />
 
-    </LinearLayout>
 
 
     <View

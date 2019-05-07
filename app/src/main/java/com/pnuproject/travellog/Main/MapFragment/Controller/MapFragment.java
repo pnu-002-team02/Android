@@ -50,7 +50,7 @@ public class MapFragment extends Fragment
     private static final MapPoint DEFAULT_MARKER_POINT1 = MapPoint.mapPointWithGeoCoord(35.2336123,129.078816);
 
     private EditText edit_search;
-    private Button btn_search;
+    private ImageButton btn_search;
     private ImageButton btn_gps;
 
     private TextView gps;
@@ -95,7 +95,7 @@ public class MapFragment extends Fragment
         //showAll();
 
         edit_search = (EditText) view.findViewById(R.id.edit_search);
-        btn_search = (Button) view.findViewById(R.id.btn_search);
+        btn_search = (ImageButton) view.findViewById(R.id.btn_search);
         btn_gps = (ImageButton) view.findViewById(R.id.gps_tracker);
 
         listView = (ListView) getView().findViewById(R.id.search_list);

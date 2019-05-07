@@ -16,7 +16,7 @@ public class GlobalApplication extends Application {
             throw new IllegalStateException("this application does not inherit com.kakao.GlobalApplication");
         return instance;
     }
-    protected static class KakaoSDKAdapter extends KakaoAdapter {
+    public static class KakaoSDKAdapter extends KakaoAdapter {
 
         @Override
         public ISessionConfig getSessionConfig() {

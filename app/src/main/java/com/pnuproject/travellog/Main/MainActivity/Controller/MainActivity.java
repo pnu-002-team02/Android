@@ -26,6 +26,7 @@ import com.pnuproject.travellog.Main.MypageFragment.Controller.MypageFragment;
 import com.pnuproject.travellog.R;
 import com.pnuproject.travellog.etc.BackPressCloseHandler;
 import com.pnuproject.travellog.etc.SwipeViewPager;
+import com.pnuproject.travellog.etc.TLApp;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -44,7 +45,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        TLApp.UserInfo userinfo = TLApp.getUserInfo();
+        if(userinfo != null ) {
 
+        }
 
         // 카카오 key hash 획득
         try {

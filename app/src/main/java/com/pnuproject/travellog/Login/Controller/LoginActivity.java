@@ -8,24 +8,45 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.KakaoSDK;
 import com.kakao.auth.Session;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
+import com.pnuproject.travellog.Login.Model.LoginRetrofitInterface;
+import com.pnuproject.travellog.Login.Model.RequestDataLogin;
+import com.pnuproject.travellog.Login.Model.ResponseDataLogin;
 import com.pnuproject.travellog.Main.MainActivity.Controller.MainActivity;
 import com.pnuproject.travellog.R;
 import com.pnuproject.travellog.Signup.Controller.SignupActivity;
+import com.pnuproject.travellog.Signup.Model.RequestDataSignup;
+import com.pnuproject.travellog.Signup.Model.ResponseDataCheckID;
+import com.pnuproject.travellog.Signup.Model.ResponseDataSignup;
+import com.pnuproject.travellog.Signup.Model.SignupRetrofitInterface;
+import com.pnuproject.travellog.etc.RetrofitTask;
+import com.pnuproject.travellog.etc.TLApp;
 
 import org.json.JSONObject;
 
-public class LoginActivity extends Activity {
-    private ISessionCallback callback;
+import java.net.ConnectException;
+import java.net.UnknownHostException;
 
+import retrofit2.Retrofit;
+
+import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
+
+public class LoginActivity extends Activity  implements RetrofitTask.RetrofitExecutionHandler{
+    private ISessionCallback callback;
+    private RetrofitTask retrofitTask;
+
+    private final int RETROFIT_TASK_ERROR = 0x00;
+    private final int RETROFIT_TASK_LOGIN = 0x01;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        retrofitTask = new RetrofitTask(this, getResources().getString(R.string.server_address));
         setContentView(R.layout.activity_login);
 
         final EditText inputID = (EditText) findViewById(R.id.login_te_ID);
@@ -38,7 +59,8 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent signupIntent = new Intent(LoginActivity.this, SignupActivity.class);
-                LoginActivity.this.startActivity(signupIntent);
+                signupIntent.addFlags(FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(signupIntent);
             }
         });
 
@@ -48,46 +70,11 @@ public class LoginActivity extends Activity {
             public void onClick(View view) {
                 final String usrID = inputID.getText().toString();
                 final String usrPW = inputPW.getText().toString();
-/*
-                Response.Listener<String> responseListener = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try
-                        {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getBoolean("success");
-                            if(success) {
-                                String usrID = jsonResponse.getString("userID");
-                                String usrPW = jsonResponse.getString("userPW");
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.putExtra("userID", usrID);
-                                intent.putExtra("userPW", usrPW);
-                                LoginActivity.this.startActivity(intent);
-                            }
-                            else
-                            {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                                builder.setMessage("로그인에 실패하였습니다.")
-                                        .setNegativeButton("다시 시도", null)
-                                        .create()
-                                        .show();
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-
-                LoginRequest loginRequest = new LoginRequest(usrID, usrPW, responseListener);
-                RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
-                queue.add(loginRequest);
-*/
+                RequestDataLogin dataSignup = new RequestDataLogin(usrID, usrPW);
+                RetrofitTask.RetrofitRequestParam requestParam = new RetrofitTask.RetrofitRequestParam(RETROFIT_TASK_LOGIN, dataSignup);
+                retrofitTask.execute(requestParam);
             }
         });
-        //카카오 연동 구현
-        KakaoSDK.init(new GlobalApplication.KakaoSDKAdapter());
 
         callback = new SessionCallback();
         Session.getCurrentSession().addCallback(callback);
@@ -106,6 +93,85 @@ public class LoginActivity extends Activity {
         super.onDestroy();
         Session.getCurrentSession().removeCallback(callback);
     }
+
+    @Override
+    public void onAfterAyncExcute(RetrofitTask.RetrofitResponseParam response) {
+        if (response == null || response.getResponse() == null) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.errmsg_retrofit_unknown), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            return;
+        } else if( response.getTaskNum() == RETROFIT_TASK_ERROR) {
+            final String errMsg = (String)response.getResponse();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getBaseContext(), errMsg, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            return;
+        }
+
+        int taskNum = response.getTaskNum();
+        Object responseData = response.getResponse();
+
+        switch (taskNum) {
+            case RETROFIT_TASK_LOGIN: {
+                final ResponseDataLogin res = (ResponseDataLogin) responseData;
+                if (res.getSuccess() != 0) {
+                    Toast.makeText(getBaseContext(), res.getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getBaseContext(), res.getUsername() + "님 반갑습니다", Toast.LENGTH_SHORT).show();
+                    TLApp.setUserInfo(new TLApp.UserInfo(res.getUsername()));
+
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public Object onBeforeAyncExcute(Retrofit retrofit, RetrofitTask.RetrofitRequestParam paramRequest) {
+        Object response = null;
+        int taskNum = paramRequest.getTaskNum();
+        Object requestParam = paramRequest.getParamRequest();
+        LoginRetrofitInterface loginRetrofit = retrofit.create(LoginRetrofitInterface.class);
+
+        try {
+            switch (taskNum) {
+                case RETROFIT_TASK_LOGIN:
+                    response = loginRetrofit.doLogin((RequestDataLogin)requestParam).execute().body();
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch (UnknownHostException ex) {
+            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            response = new String(getResources().getString(R.string.errmsg_retrofitbefore_ownernetwork));
+        }
+        catch (ConnectException ex) {
+            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            response = new String(getResources().getString(R.string.errmsg_retrofitbefore_servernetwork));
+        }
+        catch (Exception ex) {
+            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            response = new String(getResources().getString(R.string.errmsg_retrofit_unknown));
+        }
+
+        return response;
+    }
+
     private class SessionCallback implements ISessionCallback {
         @Override
         public void onSessionOpened() {

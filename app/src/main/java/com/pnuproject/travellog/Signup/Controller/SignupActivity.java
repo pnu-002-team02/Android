@@ -24,6 +24,8 @@ import java.net.UnknownHostException;
 
 import retrofit2.Retrofit;
 
+import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
+
 public class SignupActivity extends AppCompatActivity implements RetrofitTask.RetrofitExecutionHandler {
     TextInputLayout inputID;
     TextInputLayout inputPW;
@@ -60,6 +62,7 @@ public class SignupActivity extends AppCompatActivity implements RetrofitTask.Re
         final Button btn_ID_check = (Button) findViewById(R.id.btn_IDcheck);
         final Button btn_signup_OK = (Button) findViewById(R.id.btn_signup_OK);
         final Button btn_signup_cancle = (Button) findViewById(R.id.btn_signup_cancle);
+
 
         //ID 이메일 형식 체크
         editID.addTextChangedListener(new TextWatcher() {
@@ -211,8 +214,12 @@ public class SignupActivity extends AppCompatActivity implements RetrofitTask.Re
                     Toast.makeText(getBaseContext(), res.getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getBaseContext(), res.getMessage(), Toast.LENGTH_SHORT).show();
+
+
                     Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                    intent.addFlags(FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
+
                 }
             }
                 break;
@@ -247,7 +254,6 @@ public class SignupActivity extends AppCompatActivity implements RetrofitTask.Re
 
     @Override
     public Object onBeforeAyncExcute(Retrofit retrofit, RetrofitTask.RetrofitRequestParam paramRequest) {
-
         Object response = null;
         int taskNum = paramRequest.getTaskNum();
         Object requestParam = paramRequest.getParamRequest();

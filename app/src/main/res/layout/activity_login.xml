@@ -63,7 +63,8 @@
             android:text="@string/login_OKButton"
             android:textSize="18dp"
             android:textColor="#ffffff"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            />
 
         <LinearLayout
             android:id="@+id/btn_goto_signup"
