@@ -61,7 +61,6 @@ public class SearchClass {
                 }
 
                 Log.i(TAG, "결과 : " + result.toString());
-                //return result.toString();
             }
         };
         thread.start();

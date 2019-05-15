@@ -14,9 +14,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -113,10 +115,19 @@ public class MapFragment extends Fragment
         * geocoding 사용
         */
 
-        /*
-         * GPS로 받아온 위도, 경도 값을 실제 주소로 변환하는 작업 필요
-         * geocoding 사용
-         */
+        edit_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                switch (actionId){
+                    case EditorInfo.IME_ACTION_SEARCH:
+                        break;
+
+                        default:
+                        return false;
+                }
+                return true;
+            }
+        });
 
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,9 +155,6 @@ public class MapFragment extends Fragment
                             Toast.makeText(getContext(), adapter.getItemPlace(i) + " 터치", Toast.LENGTH_SHORT).show();
                             edit_search.setText(null);
                             listView.setVisibility(View.INVISIBLE);
-                            /*
-                             * Dialog 형태로 띄워줌
-                             */
 
                             Bundle bundle = new Bundle();
                             bundle.putStringArray("info", adapter.getItemInfo(i));
@@ -167,18 +175,6 @@ public class MapFragment extends Fragment
                 mMapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude,longitude), 2,true);
             }
         });
-    }
-
-    public String findGPS(){
-        String result = "";
-
-        return result;
-    }
-    /*
-     검색 버튼 클릭 시 다음 REST API 로컬 검색을 이용해 장소 검색
-     */
-    public void searchPlace(String str){
-
     }
 
     // CalloutBalloonAdapter 인터페이스 구현
@@ -258,14 +254,7 @@ public class MapFragment extends Fragment
     @Override
     public void onMapViewInitialized(MapView mapView) {
         //mMapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
-      
-//        settingGPS();
-//        Location userLocation = getMyLocation();
-//        if(userLocation != null) {
-//            latitude = userLocation.getLatitude();
-//            longitude = userLocation.getLongitude();
-//            //System.out.println("check location initialize : " + latitude + " " + longitude);
-//        }
+
         mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude,longitude), 2, true);
         addCurrentLocationCircle(latitude, longitude);
     }
