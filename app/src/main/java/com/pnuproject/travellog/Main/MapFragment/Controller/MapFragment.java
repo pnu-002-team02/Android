@@ -65,6 +65,7 @@ public class MapFragment extends Fragment
 
     private ListViewAdapter adapter;
     private ListView listView;
+    SearchClass searchClass;
 
     public MapFragment() {
     }
@@ -108,64 +109,26 @@ public class MapFragment extends Fragment
         longitude = gpsTracker.getLongitude();
 
         gps.setText(latitude + " " + longitude);
-        final SearchClass searchClass = new SearchClass();
-
-        /*
-        * GPS로 받아온 위도, 경도 값을 실제 주소로 변환하는 작업 필요
-        * geocoding 사용
-        */
+        searchClass = new SearchClass();
 
         edit_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 switch (actionId){
                     case EditorInfo.IME_ACTION_SEARCH:
-                        break;
+                        searchEvent();
+                        return true;
 
-                        default:
+                    default:
                         return false;
                 }
-                return true;
             }
         });
 
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String str = edit_search.getText().toString();
-
-                if(str == null || str.length() == 0){
-                    Toast.makeText(getContext(), "장소를 입력하세요.", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
-                    searchClass.findPlace(str);
-                    listView.setVisibility(View.VISIBLE);
-                    adapter = new ListViewAdapter();
-
-                    adapter.addItem("place1", "time/address1", "weather1");
-                    adapter.addItem("place2", "time/address2", "weather2");
-                    adapter.addItem("place3", "time/address3", "weather3");
-
-                    listView.setAdapter(adapter);
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            //리스트뷰 아이템 클릭했을 때
-                            Toast.makeText(getContext(), adapter.getItemPlace(i) + " 터치", Toast.LENGTH_SHORT).show();
-                            edit_search.setText(null);
-                            listView.setVisibility(View.INVISIBLE);
-
-                            Bundle bundle = new Bundle();
-                            bundle.putStringArray("info", adapter.getItemInfo(i));
-
-                            SearchDialog dialog = new SearchDialog();
-
-                            dialog.setArguments(bundle);
-                            dialog.show(getActivity().getSupportFragmentManager(), "tag");
-                        }
-                    });
-                }
+                searchEvent();
             }
         });
         
@@ -177,6 +140,44 @@ public class MapFragment extends Fragment
         });
     }
 
+    public void searchEvent(){
+        String str = edit_search.getText().toString();
+        String tmp[];
+
+        if(str == null || str.length() == 0){
+            Toast.makeText(getContext(), "장소를 입력하세요.", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
+            tmp = searchClass.findPlace(str);
+
+            listView.setVisibility(View.VISIBLE);
+            adapter = new ListViewAdapter();
+
+            adapter.addItem("place1", "time/address1", "weather1");
+            adapter.addItem("place2", "time/address2", "weather2");
+            adapter.addItem("place3", "time/address3", "weather3");
+
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    //리스트뷰 아이템 클릭했을 때
+                    Toast.makeText(getContext(), adapter.getItemPlace(i) + " 터치", Toast.LENGTH_SHORT).show();
+                    edit_search.setText(null);
+                    listView.setVisibility(View.INVISIBLE);
+
+                    Bundle bundle = new Bundle();
+                    bundle.putStringArray("info", adapter.getItemInfo(i));
+
+                    SearchDialog dialog = new SearchDialog();
+
+                    dialog.setArguments(bundle);
+                    dialog.show(getActivity().getSupportFragmentManager(), "tag");
+                }
+            });
+        }
+    }
     // CalloutBalloonAdapter 인터페이스 구현
     class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
         private final View mCalloutBalloon;
