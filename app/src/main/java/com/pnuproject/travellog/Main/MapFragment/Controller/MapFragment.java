@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,8 @@ import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
+import java.util.ArrayList;
+
 public class MapFragment extends Fragment
         implements MapView.OpenAPIKeyAuthenticationResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener{
 
@@ -65,7 +68,6 @@ public class MapFragment extends Fragment
 
     private ListViewAdapter adapter;
     private ListView listView;
-    SearchClass searchClass;
 
     public MapFragment() {
     }
@@ -109,7 +111,6 @@ public class MapFragment extends Fragment
         longitude = gpsTracker.getLongitude();
 
         gps.setText(latitude + " " + longitude);
-        searchClass = new SearchClass();
 
         edit_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -142,28 +143,34 @@ public class MapFragment extends Fragment
 
     public void searchEvent(){
         String str = edit_search.getText().toString();
-        String tmp[];
+        SearchClass searchClass = new SearchClass();
+        String[][] tmp;
+        ArrayList<String[]> result;
 
         if(str == null || str.length() == 0){
             Toast.makeText(getContext(), "장소를 입력하세요.", Toast.LENGTH_SHORT).show();
         }
         else{
-            Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
-            tmp = searchClass.findPlace(str);
+            searchClass.findPlace(str);
+            if(searchClass.getIsnormal() == false){
+                Toast.makeText(getContext(), "장소를 다시 입력해 주세요", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            result = searchClass.getResult();
+            int arrsize = result.size();
 
             listView.setVisibility(View.VISIBLE);
             adapter = new ListViewAdapter();
 
-            adapter.addItem("place1", "time/address1", "weather1");
-            adapter.addItem("place2", "time/address2", "weather2");
-            adapter.addItem("place3", "time/address3", "weather3");
+            for(int i = 0; i < arrsize; i++){
+                adapter.addItem(result.get(i)[0], result.get(i)[1], "weather" + i );
+            }
 
             listView.setAdapter(adapter);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     //리스트뷰 아이템 클릭했을 때
-                    Toast.makeText(getContext(), adapter.getItemPlace(i) + " 터치", Toast.LENGTH_SHORT).show();
                     edit_search.setText(null);
                     listView.setVisibility(View.INVISIBLE);
 

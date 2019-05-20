@@ -42,6 +42,14 @@
             android:layout_height="1dp"
             android:background="#008577"/>
     </LinearLayout>
+
+    <!--GPS값 확인용, 추후 삭제 예정-->
+    <TextView
+        android:layout_marginTop="5dp"
+        android:id="@+id/gpsvalue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -77,13 +85,6 @@
                 android:layout_marginRight="20dp"/>
         </LinearLayout>
 
-
-        <!--GPS값 확인용, 추후 삭제 예정-->
-        <TextView
-            android:layout_marginTop="5dp"
-            android:id="@+id/gpsvalue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
     </FrameLayout>
 
 </LinearLayout>
