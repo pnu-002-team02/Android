@@ -105,12 +105,13 @@ public class MapFragment extends Fragment
 
         listView = (ListView) getView().findViewById(R.id.search_list);
         gps = (TextView) getView().findViewById(R.id.gpsvalue);
-
         gpsTracker = new GpsTracker(getContext());
-        latitude = gpsTracker.getLatitude();
-        longitude = gpsTracker.getLongitude();
 
-        gps.setText(latitude + " " + longitude);
+        //longitude : 위도(y / 0 ~ 180), latitude : 경도(x / 0 ~ 90)
+        longitude = gpsTracker.getLongitude();
+        latitude = gpsTracker.getLatitude();
+
+        gps.setText("위도 : " + longitude + " 경도 : " + latitude);
 
         edit_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -151,19 +152,23 @@ public class MapFragment extends Fragment
             Toast.makeText(getContext(), "장소를 입력하세요.", Toast.LENGTH_SHORT).show();
         }
         else{
+            final String[] user = new String[2];
+            user[0] = Double.toString(longitude);
+            user[1] = Double.toString(latitude);
+
             searchClass.findPlace(str);
             if(searchClass.getIsnormal() == false){
                 Toast.makeText(getContext(), "장소를 다시 입력해 주세요", Toast.LENGTH_SHORT).show();
                 return;
             }
-            result = searchClass.getResult();
+            result = searchClass.getPlaceResult();
             int arrsize = result.size();
 
             listView.setVisibility(View.VISIBLE);
             adapter = new ListViewAdapter();
 
             for(int i = 0; i < arrsize; i++){
-                adapter.addItem(result.get(i)[0], result.get(i)[1], "weather" + i );
+                adapter.addItem(result.get(i)[0], result.get(i)[1], "weather" + i, result.get(i)[3], result.get(i)[4] );
             }
 
             listView.setAdapter(adapter);
@@ -175,7 +180,8 @@ public class MapFragment extends Fragment
                     listView.setVisibility(View.INVISIBLE);
 
                     Bundle bundle = new Bundle();
-                    bundle.putStringArray("info", adapter.getItemInfo(i));
+                    bundle.putStringArray("user", user);
+                    bundle.putStringArray("search", adapter.getItemInfo(i));
 
                     SearchDialog dialog = new SearchDialog();
 

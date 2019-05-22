@@ -53,11 +53,13 @@ public class ListViewAdapter extends BaseAdapter{
         return view;
     }
 
-    public void addItem(String t1, String t2, String t3){
+    public void addItem(String t1, String t2, String t3, String t4, String t5){
         SearchResultListItem item = new SearchResultListItem();
         item.setPlace(t1);
         item.setText2(t2);
         item.setWeather(t3);
+        item.setX(t4);
+        item.setY(t5);
 
         searchResultListItemsList.add(item);
     }
@@ -68,11 +70,13 @@ public class ListViewAdapter extends BaseAdapter{
     }
 
     public String[] getItemInfo(int i){
-        String[] info = new String[3];
+        String[] info = new String[5];
 
         info[0] = searchResultListItemsList.get(i).getPlace();
         info[1] = searchResultListItemsList.get(i).getText2();
         info[2] = searchResultListItemsList.get(i).getWeather();
+        info[3] = searchResultListItemsList.get(i).getX();
+        info[4] = searchResultListItemsList.get(i).getY();
 
         return info;
     }

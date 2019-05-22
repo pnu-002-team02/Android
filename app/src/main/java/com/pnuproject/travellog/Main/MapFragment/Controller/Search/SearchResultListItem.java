@@ -6,6 +6,8 @@ public class SearchResultListItem {
     private String place;
     private String text2;
     private String weather;
+    private String x;
+    private String y;
 
     public String getPlace(){
         return place;
@@ -19,6 +21,14 @@ public class SearchResultListItem {
         return weather;
     }
 
+    public String getX(){
+        return x;
+    }
+
+    public String getY(){
+        return y;
+    }
+
     public void setPlace(String t){
         this.place = t;
     }
@@ -29,5 +39,13 @@ public class SearchResultListItem {
 
     public void setWeather(String t){
         this.weather = t;
+    }
+
+    public void setX(String t){
+        this.x = t;
+    }
+
+    public void setY(String t){
+        this.y = t;
     }
 }
