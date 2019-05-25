@@ -94,13 +94,13 @@ public class SearchClass {
             if(thread.getState() == Thread.State.TERMINATED){
                 System.out.println("쓰레드 종료");
                 System.out.println("s: " + s);
-                parse(s);
+                parsePlace(s);
                 break;
             }
         }
     }
 
-    public void parse(String s){
+    public void parsePlace(String s){
         String name = null;
         String add1 = null;
         String add2 = null;
@@ -167,12 +167,12 @@ public class SearchClass {
         OnResultCallbackListener callbackListener = new OnResultCallbackListener() {
             @Override
             public void onSuccess(ODsayData oDsayData, API api) {
-
                 if(api == API.SEARCH_PUB_TRANS_PATH) {
                     Log.i(TAG, "길찾기 api 호출 성공");
-                    System.out.println("json : " + oDsayData.getJson().toString());
+                    String json = oDsayData.getJson().toString();
+                    //System.out.println("json : " + json);
+                    parsePath(json);
                 }
-
             }
 
             @Override
@@ -185,7 +185,61 @@ public class SearchClass {
 
         odsay.requestSearchPubTransPath(x1, y1, x2, y2, "0","0","0", callbackListener);
 
-}
+    }
+
+    public void parsePath(String s){
+        try {
+            JSONObject jobject = new JSONObject(s).getJSONObject("result");
+            JSONArray jarray = jobject.getJSONArray("path");
+            int size1 = jarray.length();
+
+            for(int i = 0; i < size1; i++){
+                JSONObject jo = jarray.getJSONObject(i);
+                //System.out.println("테스트 : " + jo.toString());
+
+                //pathType 1 : 지하철 / 2 : 버스 / 3 : 버스+지하철
+                String type = jo.getString("pathType");
+
+                JSONObject info = jo.getJSONObject("info");
+                String time = info.getString("totalTime");
+
+                System.out.println("교통수단 : " + type + " / 소요 시간 : " + time + "분");
+
+                JSONArray subpath = jo.getJSONArray("subPath");
+                JSONObject jb = subpath.getJSONObject(1);
+
+                /*
+                JSONArray lane = jb.getJSONArray("lane");
+
+                String name = "", busNo = "";
+                if(type == "1"){
+                    name = lane.getJSONObject(0).getString("name");
+                }
+                else if(type == "2"){
+                    busNo = lane.getJSONObject(0).getString("busNo");
+                }
+                else if(type == "3"){
+                    name = lane.getJSONObject(0).getString("name");
+                    busNo = lane.getJSONObject(0).getString("busNo");
+                }
+
+                System.out.println("pathType : " + type + " / 시간 : " + time + " / 지하철 : " + name + " / 버스 : " + busNo);
+                */
+
+                String stoplist = jb.getString("passStopList");
+                JSONArray stations = new JSONObject(stoplist).getJSONArray("stations");
+
+                int size2 = stations.length();
+                for(int j = 0; j < size2; j++){
+                    System.out.println("경로 " + i + "의 "+j+"번째 : " + stations.getJSONObject(j));
+                }
+                System.out.println("\n");
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void initODsay(Context context){
         odsay = ODsayService.init(context, od_key);
