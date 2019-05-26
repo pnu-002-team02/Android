@@ -12,6 +12,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,9 +30,10 @@ public class ClickedMarkerDialog extends Activity {
 
         final TextView placeName = (TextView)findViewById(R.id.placeName);
         final TextView placeLocation = (TextView)findViewById(R.id.placeLocation);
+        final ImageView placePicture = (ImageView)findViewById(R.id.viewPicture);
         final Button btn_photo = (Button)findViewById(R.id.photo);
 
-        System.out.println("방문 여부 확인 : " + getIntent().getIntExtra("visited", 1));
+        //System.out.println("방문 여부 확인 : " + getIntent().getIntExtra("visited", 1));
         //방문하지 않았을 때만 photo button 생성
         if(getIntent().getIntExtra("visited", 1) == 0) {
             btn_photo.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +67,7 @@ public class ClickedMarkerDialog extends Activity {
         name = getIntent().getStringExtra("name");
         placeName.setText(name);
         placeLocation.setText("임시 주소");
-
+        //placePicture.setImageBitmap();
     }
 
     //확인 버튼 클릭
