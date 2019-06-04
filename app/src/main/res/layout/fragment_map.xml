@@ -60,12 +60,28 @@
             android:id="@+id/map_view"
             android:visibility="visible"/>
 
-      <ListView
-            android:id="@+id/search_list"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#ffffff"
-            android:visibility="invisible" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="목록 닫기  "
+                android:background="#ffffff"
+                android:textAlignment="textEnd"
+                android:id="@+id/btn_close"
+                android:visibility="invisible"/>
+            <ListView
+                android:id="@+id/search_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:visibility="invisible" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

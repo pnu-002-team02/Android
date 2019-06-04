@@ -1,5 +1,6 @@
 package com.pnuproject.travellog.Main.MapFragment.Controller.Search;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -33,10 +34,12 @@ public class SearchClass {
     private String od_key =  "ckC8bK7AFt2P9CPFHNGWZpglYArGuTGpYaa/RtLLYPI";
     private String rest_key = "cf326dcc411729ebc208b22c43b83e0c";
 
-    private ArrayList<String[]> place, path;
+    private ArrayList<String[]> place;
+    private ArrayList<TransPath> path;
     private String s;
     private int arrsize;
     private boolean isnormal;
+    private String json;
 
     private ODsayService odsay;
 
@@ -84,7 +87,7 @@ public class SearchClass {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Log.i(TAG, "결과 : " + sb.toString());
+                //Log.i(TAG, "결과 : " + sb.toString());
                 s = sb.toString();
             }
         };
@@ -92,8 +95,8 @@ public class SearchClass {
 
         while(true){
             if(thread.getState() == Thread.State.TERMINATED){
-                System.out.println("쓰레드 종료");
-                System.out.println("s: " + s);
+                /*System.out.println("쓰레드 종료");
+                System.out.println("s: " + s);*/
                 parsePlace(s);
                 break;
             }
@@ -156,22 +159,25 @@ public class SearchClass {
      * 길찾기 버튼 클릭시 동작
      * SearchDialog
      */
-    public void findPath(String s[], Context context){
-        String x1 = s[0];
-        String y1 = s[1];
-        String x2 = s[2];
-        String y2 = s[3];
+    public void findPath(String[] s, Context context){
+        final String x1 = s[0];
+        final String y1 = s[1];
+        final String x2 = s[2];
+        final String y2 = s[3];
+
+        path = new ArrayList<TransPath>();
+        path.clear();
 
         initODsay(context);
 
-        OnResultCallbackListener callbackListener = new OnResultCallbackListener() {
+        final OnResultCallbackListener callbackListener = new OnResultCallbackListener() {
             @Override
             public void onSuccess(ODsayData oDsayData, API api) {
                 if(api == API.SEARCH_PUB_TRANS_PATH) {
                     Log.i(TAG, "길찾기 api 호출 성공");
-                    String json = oDsayData.getJson().toString();
-                    //System.out.println("json : " + json);
+                    json = oDsayData.getJson().toString();
                     parsePath(json);
+                    //printPathTest();
                 }
             }
 
@@ -184,7 +190,6 @@ public class SearchClass {
         };
 
         odsay.requestSearchPubTransPath(x1, y1, x2, y2, "0","0","0", callbackListener);
-
     }
 
     public void parsePath(String s){
@@ -195,46 +200,54 @@ public class SearchClass {
 
             for(int i = 0; i < size1; i++){
                 JSONObject jo = jarray.getJSONObject(i);
-                //System.out.println("테스트 : " + jo.toString());
 
                 //pathType 1 : 지하철 / 2 : 버스 / 3 : 버스+지하철
-                String type = jo.getString("pathType");
+                int type = jo.getInt("pathType");
 
                 JSONObject info = jo.getJSONObject("info");
-                String time = info.getString("totalTime");
-
-                System.out.println("교통수단 : " + type + " / 소요 시간 : " + time + "분");
+                int time = info.getInt("totalTime");
 
                 JSONArray subpath = jo.getJSONArray("subPath");
-                JSONObject jb = subpath.getJSONObject(1);
+                int sublength = subpath.length();
 
-                /*
-                JSONArray lane = jb.getJSONArray("lane");
+                String pathName = "", traffic = "";
 
-                String name = "", busNo = "";
-                if(type == "1"){
-                    name = lane.getJSONObject(0).getString("name");
+                for(int j = 0; j < sublength; j++){
+                    JSONObject path = subpath.getJSONObject(j);
+                    //trafficTyep 1 : 지하철 / 2 : 버스 /  3 : 도보
+                    int traffictype = path.getInt("trafficType");
+                    if(traffictype == 3){
+                        //sectionTime = path.getString("sectionTime");
+                    }
+                    else {
+                        JSONObject lane = path.getJSONArray("lane").getJSONObject(0);
+                        if (traffictype == 1) {
+                            String name = lane.getString("name");
+                            traffic = traffic + name + " - ";
+                        } else if (traffictype == 2) {
+                            String busNo = lane.getString("busNo");
+                            traffic = traffic + busNo + "번 - ";
+                        }
+
+                        String startName = path.getString("startName");
+                        String endName = path.getString("endName");
+                        pathName = pathName + startName + " - " + endName + " / ";
+                    }
                 }
-                else if(type == "2"){
-                    busNo = lane.getJSONObject(0).getString("busNo");
+
+                int lengt = traffic.length();
+                int lengp = pathName.length();
+                if(lengt != 0){
+                    traffic = traffic.substring(0, lengt-3);
                 }
-                else if(type == "3"){
-                    name = lane.getJSONObject(0).getString("name");
-                    busNo = lane.getJSONObject(0).getString("busNo");
+                if(lengp != 0){
+                    pathName = pathName.substring(0, lengp-3);
                 }
 
-                System.out.println("pathType : " + type + " / 시간 : " + time + " / 지하철 : " + name + " / 버스 : " + busNo);
-                */
-
-                String stoplist = jb.getString("passStopList");
-                JSONArray stations = new JSONObject(stoplist).getJSONArray("stations");
-
-                int size2 = stations.length();
-                for(int j = 0; j < size2; j++){
-                    System.out.println("경로 " + i + "의 "+j+"번째 : " + stations.getJSONObject(j));
-                }
-                System.out.println("\n");
-
+                TransPath tp = new TransPath(pathName, traffic, time);
+                path.add(tp);
+                System.out.println("총 소요 시간 : " + time + " / 대중교통 : " + traffic);
+                System.out.println("출도착 정류장역 : " + pathName);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -247,7 +260,15 @@ public class SearchClass {
         odsay.setConnectionTimeout(5000);
     }
 
-    public ArrayList<String[]> getPathResult(){
+    public ArrayList<TransPath> getPathResult(){
         return path;
     }
+
+    public void printPathTest(){
+        System.out.println("경로 프린트");
+        for(int i = 0; i < path.size(); i++){
+            System.out.println(path.get(i).getPath());
+        }
+    }
+
 }

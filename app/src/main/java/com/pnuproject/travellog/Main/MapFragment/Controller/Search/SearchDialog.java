@@ -16,9 +16,17 @@ import com.pnuproject.travellog.R;
 public class SearchDialog extends DialogFragment {
     TextView place, address, weather;
     Button btn_find, btn_close;
-    SearchClass searchClass;
-
     private Fragment fragment;
+
+    private dialogListener dl;
+
+    public interface dialogListener{
+        public void callBack(int toSearch);
+    }
+
+    public void setDL(dialogListener dl){
+        this.dl = dl;
+    }
 
     public SearchDialog(){
     }
@@ -32,8 +40,6 @@ public class SearchDialog extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String xfrom, yfrom, xto, yto;
-
         place = (TextView) getView().findViewById(R.id.place);
         address = (TextView) getView().findViewById(R.id.address);
         weather = (TextView) getView().findViewById(R.id.weather);
@@ -41,11 +47,11 @@ public class SearchDialog extends DialogFragment {
         btn_close = (Button) getView().findViewById(R.id.btn_close);
 
         Bundle arguments = getArguments();
-        final String[] user = arguments.getStringArray("user");
+        //final String[] user = arguments.getStringArray("user");
         final String[] info = arguments.getStringArray("search");
 
-        System.out.println("user : " + user[0] + " " + user[1]);
-        System.out.println("search : " + info[0] + " " + info[1] + " " + info[2] + " " + info[3] + " " + info[4]);
+        //System.out.println("user : " + user[0] + " " + user[1]);
+        //System.out.println("search : " + info[0] + " " + info[1] + " " + info[2] + " " + info[3] + " " + info[4]);
 
         place.setText(info[0]);
         address.setText(info[1]);
@@ -58,6 +64,7 @@ public class SearchDialog extends DialogFragment {
             public void onClick(View v) {
                 if(fragment != null){
                     Toast.makeText(getContext(), "닫기", Toast.LENGTH_SHORT).show();
+                    dl.callBack(0);
                     DialogFragment dialogFragment = (DialogFragment) fragment;
                     dialogFragment.dismiss();
                 }
@@ -67,17 +74,18 @@ public class SearchDialog extends DialogFragment {
         btn_find.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String[] p = new String[4];
+/*                final String[] p = new String[4];
                 p[0] = user[0];
                 p[1] = user[1];
                 p[2] = info[3];
-                p[3] = info[4];
+                p[3] = info[4];*/
                 //길찾기 시작
                 if(fragment != null){
                     Toast.makeText(getContext(), "길찾기를 시작합니다", Toast.LENGTH_SHORT).show();
+                    /*SearchClass searchClass = new SearchClass();
+                    searchClass.findPath(p, getContext());*/
+                    dl.callBack(1);
                     DialogFragment dialogFragment = (DialogFragment) fragment;
-                    SearchClass searchClass = new SearchClass();
-                    searchClass.findPath(p, getContext());
                     dialogFragment.dismiss();
                 }
             }

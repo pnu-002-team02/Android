@@ -5,10 +5,14 @@ package com.pnuproject.travellog.Main.MapFragment.Controller;
  */
 
 import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -32,6 +36,7 @@ import android.widget.Toast;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.ListViewAdapter;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.SearchClass;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.SearchDialog;
+import com.pnuproject.travellog.Main.MapFragment.Controller.Search.TransPath;
 import com.pnuproject.travellog.R;
 import com.pnuproject.travellog.etc.GpsTracker;
 
@@ -43,6 +48,7 @@ import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class MapFragment extends Fragment
         implements MapView.OpenAPIKeyAuthenticationResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener{
@@ -57,6 +63,7 @@ public class MapFragment extends Fragment
     private EditText edit_search;
     private ImageButton btn_search;
     private ImageButton btn_gps;
+    private Button btn_close;
 
     private TextView gps;
     private GpsTracker gpsTracker;
@@ -68,6 +75,7 @@ public class MapFragment extends Fragment
 
     private ListViewAdapter adapter;
     private ListView listView;
+    public SearchDialog dialog;
 
     public MapFragment() {
     }
@@ -102,6 +110,7 @@ public class MapFragment extends Fragment
         edit_search = (EditText) view.findViewById(R.id.edit_search);
         btn_search = (ImageButton) view.findViewById(R.id.btn_search);
         btn_gps = (ImageButton) view.findViewById(R.id.gps_tracker);
+        btn_close = (Button) view.findViewById(R.id.btn_close);
 
         listView = (ListView) getView().findViewById(R.id.search_list);
         gps = (TextView) getView().findViewById(R.id.gpsvalue);
@@ -164,6 +173,7 @@ public class MapFragment extends Fragment
             result = searchClass.getPlaceResult();
             int arrsize = result.size();
 
+            btn_close.setVisibility(View.VISIBLE);
             listView.setVisibility(View.VISIBLE);
             adapter = new ListViewAdapter();
 
@@ -171,26 +181,55 @@ public class MapFragment extends Fragment
                 adapter.addItem(result.get(i)[0], result.get(i)[1], "weather" + i, result.get(i)[3], result.get(i)[4] );
             }
 
+            btn_close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    btn_close.setVisibility(View.INVISIBLE);
+                    listView.setVisibility(View.INVISIBLE);
+                }
+            });
+
             listView.setAdapter(adapter);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
                     //리스트뷰 아이템 클릭했을 때
                     edit_search.setText(null);
+                    btn_close.setVisibility(View.INVISIBLE);
                     listView.setVisibility(View.INVISIBLE);
 
                     Bundle bundle = new Bundle();
                     bundle.putStringArray("user", user);
                     bundle.putStringArray("search", adapter.getItemInfo(i));
 
-                    SearchDialog dialog = new SearchDialog();
-
+                    dialog = new SearchDialog();
                     dialog.setArguments(bundle);
+
+                    dialog.setDL(new SearchDialog.dialogListener() {
+                        @Override
+                        public void callBack(int toSearch) {
+                            if(toSearch == 1){
+                                String[] p = new String[4];
+                                p[0] = user[0];
+                                p[1] = user[1];
+                                p[2] = adapter.getItemInfo(i)[3];
+                                p[3] = adapter.getItemInfo(i)[4];
+
+                                System.out.println("길 찾아");
+                                SearchClass searchClass = new SearchClass();
+                                searchClass.findPath(p, getContext());
+                            }
+                            else{
+                                System.out.println("길 안 찾아");
+                            }
+                        }
+                    });
                     dialog.show(getActivity().getSupportFragmentManager(), "tag");
                 }
             });
         }
     }
+
     // CalloutBalloonAdapter 인터페이스 구현
     class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
         private final View mCalloutBalloon;
