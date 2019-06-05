@@ -24,7 +24,14 @@
                 android:hint="명소를 입력해주세요."
                 android:background="@null"
                 android:textSize="15dp"
-                android:layout_toLeftOf="@+id/btn_search"/>
+                android:layout_toLeftOf="@+id/btn_x"/>
+
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="X"
+                android:id="@+id/btn_x"
+                android:layout_toLeftOf="@+id/btn_search" />
 
             <ImageButton
                 android:src="@drawable/icon_search"

@@ -3,9 +3,9 @@ package com.pnuproject.travellog.Main.MapFragment.Controller.Search;
 public class SearchResultListItem {
     //커스텀리스트뷰
     //대중교통 경로 검색 결과
-    private String place;
-    private String text2;
-    private String weather;
+    private String place;   //장소명, 경로
+    private String text2;   //상세주소
+    private String time; //소요 시간
     private String x;
     private String y;
 
@@ -17,8 +17,8 @@ public class SearchResultListItem {
         return text2;
     }
 
-    public String getWeather(){
-        return weather;
+    public String getTime(){
+        return time;
     }
 
     public String getX(){
@@ -37,8 +37,8 @@ public class SearchResultListItem {
         this.text2 = t;
     }
 
-    public void setWeather(String t){
-        this.weather = t;
+    public void setTime(String t){
+        this.time = t;
     }
 
     public void setX(String t){

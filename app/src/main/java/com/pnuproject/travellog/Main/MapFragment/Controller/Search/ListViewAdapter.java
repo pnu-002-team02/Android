@@ -48,7 +48,7 @@ public class ListViewAdapter extends BaseAdapter{
 
         place.setText(searchResultListItem.getPlace());
         text2.setText(searchResultListItem.getText2());
-        weather.setText(searchResultListItem.getWeather());
+        weather.setText(searchResultListItem.getTime());
 
         return view;
     }
@@ -57,9 +57,18 @@ public class ListViewAdapter extends BaseAdapter{
         SearchResultListItem item = new SearchResultListItem();
         item.setPlace(t1);
         item.setText2(t2);
-        item.setWeather(t3);
+        item.setTime(t3);
         item.setX(t4);
         item.setY(t5);
+
+        searchResultListItemsList.add(item);
+    }
+
+    public void addItem(String t1, String t2, String t3){
+        SearchResultListItem item = new SearchResultListItem();
+        item.setPlace(t1);
+        item.setText2(t2);
+        item.setTime(t3);
 
         searchResultListItemsList.add(item);
     }
@@ -74,7 +83,7 @@ public class ListViewAdapter extends BaseAdapter{
 
         info[0] = searchResultListItemsList.get(i).getPlace();
         info[1] = searchResultListItemsList.get(i).getText2();
-        info[2] = searchResultListItemsList.get(i).getWeather();
+        info[2] = searchResultListItemsList.get(i).getTime();
         info[3] = searchResultListItemsList.get(i).getX();
         info[4] = searchResultListItemsList.get(i).getY();
 

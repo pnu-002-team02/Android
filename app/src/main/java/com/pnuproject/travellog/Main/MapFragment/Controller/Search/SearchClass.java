@@ -38,7 +38,7 @@ public class SearchClass {
     private ArrayList<TransPath> path;
     private String s;
     private int arrsize;
-    private boolean isnormal;
+    private boolean isnormal,f=false;
     private String json;
 
     private ODsayService odsay;
@@ -159,6 +159,11 @@ public class SearchClass {
      * 길찾기 버튼 클릭시 동작
      * SearchDialog
      */
+
+    public boolean getf(){
+        return f;
+    }
+
     public void findPath(String[] s, Context context){
         final String x1 = s[0];
         final String y1 = s[1];
@@ -167,6 +172,7 @@ public class SearchClass {
 
         path = new ArrayList<TransPath>();
         path.clear();
+        f = false;
 
         initODsay(context);
 
@@ -177,7 +183,6 @@ public class SearchClass {
                     Log.i(TAG, "길찾기 api 호출 성공");
                     json = oDsayData.getJson().toString();
                     parsePath(json);
-                    //printPathTest();
                 }
             }
 
@@ -217,7 +222,6 @@ public class SearchClass {
                     //trafficTyep 1 : 지하철 / 2 : 버스 /  3 : 도보
                     int traffictype = path.getInt("trafficType");
                     if(traffictype == 3){
-                        //sectionTime = path.getString("sectionTime");
                     }
                     else {
                         JSONObject lane = path.getJSONArray("lane").getJSONObject(0);
@@ -246,9 +250,8 @@ public class SearchClass {
 
                 TransPath tp = new TransPath(pathName, traffic, time);
                 path.add(tp);
-                System.out.println("총 소요 시간 : " + time + " / 대중교통 : " + traffic);
-                System.out.println("출도착 정류장역 : " + pathName);
             }
+            f=true;
         } catch (JSONException e) {
             e.printStackTrace();
         }

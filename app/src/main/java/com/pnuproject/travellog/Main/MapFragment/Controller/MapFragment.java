@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -48,7 +47,6 @@ import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 public class MapFragment extends Fragment
         implements MapView.OpenAPIKeyAuthenticationResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener{
@@ -63,7 +61,7 @@ public class MapFragment extends Fragment
     private EditText edit_search;
     private ImageButton btn_search;
     private ImageButton btn_gps;
-    private Button btn_close;
+    private Button btn_x, btn_close;
 
     private TextView gps;
     private GpsTracker gpsTracker;
@@ -74,8 +72,10 @@ public class MapFragment extends Fragment
     double longitude;
 
     private ListViewAdapter adapter;
-    private ListView listView;
+    private ListView listViewPlace, listVIewPath;
     public SearchDialog dialog;
+    public ProgressDialog pdialog;
+    public Handler handler = new Handler();
 
     public MapFragment() {
     }
@@ -110,9 +110,11 @@ public class MapFragment extends Fragment
         edit_search = (EditText) view.findViewById(R.id.edit_search);
         btn_search = (ImageButton) view.findViewById(R.id.btn_search);
         btn_gps = (ImageButton) view.findViewById(R.id.gps_tracker);
+        btn_x = (Button) view.findViewById(R.id.btn_x);
         btn_close = (Button) view.findViewById(R.id.btn_close);
 
-        listView = (ListView) getView().findViewById(R.id.search_list);
+        listViewPlace = (ListView) getView().findViewById(R.id.search_list);
+        listVIewPath = (ListView) getView().findViewById(R.id.search_list);
         gps = (TextView) getView().findViewById(R.id.gpsvalue);
         gpsTracker = new GpsTracker(getContext());
 
@@ -129,10 +131,16 @@ public class MapFragment extends Fragment
                     case EditorInfo.IME_ACTION_SEARCH:
                         searchEvent();
                         return true;
-
                     default:
                         return false;
                 }
+            }
+        });
+
+        btn_x.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edit_search.setText(null);
             }
         });
 
@@ -149,12 +157,21 @@ public class MapFragment extends Fragment
                 mMapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude,longitude), 2,true);
             }
         });
+
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btn_close.setVisibility(View.INVISIBLE);
+                listVIewPath.setVisibility(View.INVISIBLE);
+                listViewPlace.setVisibility(View.INVISIBLE);
+                edit_search.setText(null);
+            }
+        });
     }
 
     public void searchEvent(){
         String str = edit_search.getText().toString();
         SearchClass searchClass = new SearchClass();
-        String[][] tmp;
         ArrayList<String[]> result;
 
         if(str == null || str.length() == 0){
@@ -174,29 +191,20 @@ public class MapFragment extends Fragment
             int arrsize = result.size();
 
             btn_close.setVisibility(View.VISIBLE);
-            listView.setVisibility(View.VISIBLE);
+            listViewPlace.setVisibility(View.VISIBLE);
             adapter = new ListViewAdapter();
 
             for(int i = 0; i < arrsize; i++){
-                adapter.addItem(result.get(i)[0], result.get(i)[1], "weather" + i, result.get(i)[3], result.get(i)[4] );
+                adapter.addItem(result.get(i)[0], result.get(i)[1], "", result.get(i)[3], result.get(i)[4] );
             }
 
-            btn_close.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    btn_close.setVisibility(View.INVISIBLE);
-                    listView.setVisibility(View.INVISIBLE);
-                }
-            });
-
-            listView.setAdapter(adapter);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            listViewPlace.setAdapter(adapter);
+            listViewPlace.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
                     //리스트뷰 아이템 클릭했을 때
-                    edit_search.setText(null);
                     btn_close.setVisibility(View.INVISIBLE);
-                    listView.setVisibility(View.INVISIBLE);
+                    listViewPlace.setVisibility(View.INVISIBLE);
 
                     Bundle bundle = new Bundle();
                     bundle.putStringArray("user", user);
@@ -215,12 +223,13 @@ public class MapFragment extends Fragment
                                 p[2] = adapter.getItemInfo(i)[3];
                                 p[3] = adapter.getItemInfo(i)[4];
 
-                                System.out.println("길 찾아");
                                 SearchClass searchClass = new SearchClass();
                                 searchClass.findPath(p, getContext());
+
+                                progressDialog(searchClass, i);
                             }
                             else{
-                                System.out.println("길 안 찾아");
+                                Toast.makeText(getContext(), "경로 찾기에 실패했습니다", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -228,6 +237,50 @@ public class MapFragment extends Fragment
                 }
             });
         }
+    }
+
+    public void progressDialog(final SearchClass s, final int i){
+        pdialog = new ProgressDialog(getContext());
+        pdialog.setMessage("검색 중");
+        pdialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        pdialog.show();
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(s.getf() == true){
+                    s.printPathTest();
+                    showPathlist(adapter.getItemInfo(i)[0], s);
+                    pdialog.dismiss();
+                }
+            }
+        },3000);
+    }
+
+    public void showPathlist(String s, SearchClass sc){
+        System.out.println("리스트뷰");
+        edit_search.setText("현재위치 -> "+ s);
+        ListViewAdapter adapter = new ListViewAdapter();
+        btn_close.setVisibility(View.VISIBLE);
+        listVIewPath.setVisibility(View.VISIBLE);
+
+        ArrayList<TransPath> path = sc.getPathResult();
+        int size = path.size();
+
+        for(int i = 0; i < size; i++){
+            adapter.addItem(path.get(i).getPath(), path.get(i).getTraffic(), path.get(i).getTime());
+        }
+
+        listVIewPath.setAdapter(adapter);
+        listViewPlace.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                //리스트뷰 아이템 클릭했을 때
+                btn_close.setVisibility(View.INVISIBLE);
+                listViewPlace.setVisibility(View.INVISIBLE);
+                edit_search.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     // CalloutBalloonAdapter 인터페이스 구현
