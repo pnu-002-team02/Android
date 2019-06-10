@@ -2,14 +2,8 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="장소명"
-        android:id="@+id/place"
-        android:textSize="24dp" />
+    android:orientation="vertical"
+    android:padding="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,9 +13,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="대기시간/주소"
-            android:id="@+id/text2"
-            android:layout_gravity="left"/>
+            android:text="장소명/대중교통"
+            android:id="@+id/text1"
+            android:layout_gravity="left"
+            android:textColor="#000"
+            android:textSize="20dp"/>
 
         <View
             android:layout_width="0dp"
@@ -31,10 +27,25 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="날씨"
-            android:id="@+id/weather"
-            android:layout_gravity="right"/>
+            android:text="소요시간"
+            android:id="@+id/time"
+            android:layout_gravity="end|center"
+            android:textSize="15dp"/>
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="주소/경로"
+        android:id="@+id/text2"
+        android:textSize="17dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp" />
 
 </LinearLayout>

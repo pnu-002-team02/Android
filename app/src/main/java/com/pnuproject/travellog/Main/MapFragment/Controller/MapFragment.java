@@ -59,9 +59,9 @@ public class MapFragment extends Fragment
     private static final MapPoint DEFAULT_MARKER_POINT1 = MapPoint.mapPointWithGeoCoord(35.2336123,129.078816);
 
     private EditText edit_search;
-    private ImageButton btn_search;
+    private ImageButton btn_x, btn_search;
     private ImageButton btn_gps;
-    private Button btn_x, btn_close;
+    private Button btn_close;
 
     private TextView gps;
     private GpsTracker gpsTracker;
@@ -110,19 +110,19 @@ public class MapFragment extends Fragment
         edit_search = (EditText) view.findViewById(R.id.edit_search);
         btn_search = (ImageButton) view.findViewById(R.id.btn_search);
         btn_gps = (ImageButton) view.findViewById(R.id.gps_tracker);
-        btn_x = (Button) view.findViewById(R.id.btn_x);
+        btn_x = (ImageButton) view.findViewById(R.id.btn_x);
         btn_close = (Button) view.findViewById(R.id.btn_close);
 
         listViewPlace = (ListView) getView().findViewById(R.id.search_list);
         listVIewPath = (ListView) getView().findViewById(R.id.search_list);
-        gps = (TextView) getView().findViewById(R.id.gpsvalue);
+        //gps = (TextView) getView().findViewById(R.id.gpsvalue);
         gpsTracker = new GpsTracker(getContext());
 
         //longitude : 위도(y / 0 ~ 180), latitude : 경도(x / 0 ~ 90)
         longitude = gpsTracker.getLongitude();
         latitude = gpsTracker.getLatitude();
 
-        gps.setText("위도 : " + longitude + " 경도 : " + latitude);
+        //gps.setText("위도 : " + longitude + " 경도 : " + latitude);
 
         edit_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -140,7 +140,7 @@ public class MapFragment extends Fragment
         btn_x.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                edit_search.setText(null);
+                edit_search.setText("");
             }
         });
 
@@ -164,7 +164,7 @@ public class MapFragment extends Fragment
                 btn_close.setVisibility(View.INVISIBLE);
                 listVIewPath.setVisibility(View.INVISIBLE);
                 listViewPlace.setVisibility(View.INVISIBLE);
-                edit_search.setText(null);
+                edit_search.setText("");
             }
         });
     }
@@ -195,7 +195,12 @@ public class MapFragment extends Fragment
             adapter = new ListViewAdapter();
 
             for(int i = 0; i < arrsize; i++){
-                adapter.addItem(result.get(i)[0], result.get(i)[1], "", result.get(i)[3], result.get(i)[4] );
+                if(result.get(i)[2].length() != 0){
+                    adapter.addItem(result.get(i)[0], result.get(i)[2], "", result.get(i)[3], result.get(i)[4]);
+                }
+                else{
+                    adapter.addItem(result.get(i)[0], result.get(i)[1], "", result.get(i)[3], result.get(i)[4]);
+                }
             }
 
             listViewPlace.setAdapter(adapter);
@@ -268,7 +273,7 @@ public class MapFragment extends Fragment
         int size = path.size();
 
         for(int i = 0; i < size; i++){
-            adapter.addItem(path.get(i).getPath(), path.get(i).getTraffic(), path.get(i).getTime());
+            adapter.addItem(path.get(i).getTraffic(), path.get(i).getPath(), path.get(i).getTime());
         }
 
         listVIewPath.setAdapter(adapter);
@@ -278,7 +283,7 @@ public class MapFragment extends Fragment
                 //리스트뷰 아이템 클릭했을 때
                 btn_close.setVisibility(View.INVISIBLE);
                 listViewPlace.setVisibility(View.INVISIBLE);
-                edit_search.setVisibility(View.INVISIBLE);
+                edit_search.setText("");
             }
         });
     }

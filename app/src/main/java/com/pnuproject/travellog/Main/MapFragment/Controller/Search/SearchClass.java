@@ -190,6 +190,7 @@ public class SearchClass {
             public void onError(int i, String s, API api) {
                 if(api == API.SEARCH_PUB_TRANS_PATH){
                     Log.e(TAG, "길찾기 api 호출 실패");
+                    return;
                 }
             }
         };
@@ -227,15 +228,15 @@ public class SearchClass {
                         JSONObject lane = path.getJSONArray("lane").getJSONObject(0);
                         if (traffictype == 1) {
                             String name = lane.getString("name");
-                            traffic = traffic + name + " - ";
+                            traffic = traffic + "(지하철) " + name + " - ";
                         } else if (traffictype == 2) {
                             String busNo = lane.getString("busNo");
-                            traffic = traffic + busNo + "번 - ";
+                            traffic = traffic + "(버스) " + busNo + "번 - ";
                         }
 
                         String startName = path.getString("startName");
                         String endName = path.getString("endName");
-                        pathName = pathName + startName + " - " + endName + " / ";
+                        pathName = pathName + startName + " → " + endName + " ▶ ";
                     }
                 }
 

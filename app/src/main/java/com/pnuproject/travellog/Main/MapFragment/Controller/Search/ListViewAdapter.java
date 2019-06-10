@@ -40,15 +40,15 @@ public class ListViewAdapter extends BaseAdapter{
             view = inflater.inflate(R.layout.search_result_listitem, viewGroup, false);
         }
 
-        TextView place = (TextView) view.findViewById(R.id.place);
+        TextView text1 = (TextView) view.findViewById(R.id.text1);
         TextView text2 = (TextView) view.findViewById(R.id.text2);
-        TextView weather = (TextView) view.findViewById(R.id.weather);
+        TextView time = (TextView) view.findViewById(R.id.time);
 
         SearchResultListItem searchResultListItem = searchResultListItemsList.get(position);
 
-        place.setText(searchResultListItem.getPlace());
+        text1.setText(searchResultListItem.getPlace());
         text2.setText(searchResultListItem.getText2());
-        weather.setText(searchResultListItem.getTime());
+        time.setText(searchResultListItem.getTime());
 
         return view;
     }

@@ -26,11 +26,14 @@
                 android:textSize="15dp"
                 android:layout_toLeftOf="@+id/btn_x"/>
 
-            <Button
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="X"
+            <ImageButton
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
                 android:id="@+id/btn_x"
+                android:src="@drawable/btn_x"
+                android:background="@null"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
                 android:layout_toLeftOf="@+id/btn_search" />
 
             <ImageButton
@@ -51,11 +54,11 @@
     </LinearLayout>
 
     <!--GPS값 확인용, 추후 삭제 예정-->
-    <TextView
+<!--    <TextView
         android:layout_marginTop="5dp"
         android:id="@+id/gpsvalue"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" />-->
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -66,6 +69,30 @@
             android:layout_height="match_parent"
             android:id="@+id/map_view"
             android:visibility="visible"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="vertical">
+                <ImageButton
+                    android:id="@+id/gps_tracker"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:scaleType="fitCenter"
+                    android:layout_gravity="end"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/gps_tracker"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginRight="20dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -88,24 +115,6 @@
                 android:background="#ffffff"
                 android:visibility="invisible" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/gps_tracker"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:scaleType="fitCenter"
-                android:layout_gravity="right"
-                android:background="@android:color/transparent"
-                android:src="@drawable/gps_tracker"
-                android:layout_marginBottom="20dp"
-                android:layout_marginRight="20dp"/>
         </LinearLayout>
 
     </FrameLayout>
