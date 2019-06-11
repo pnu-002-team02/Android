@@ -21,7 +21,7 @@
     <string name="errmsg_retrofitbefore_ownernetwork">인터넷 연결상태를 확인해주세요.</string>
     <string name="errmsg_retrofitbefore_servernetwork">서버에서 응답이 없습니다.</string>
     <string name="errmsg_retrofit_unknown">알 수 없는 통신에러</string>
-    <string name="server_address">http://59.22.33.241</string>
+    <string name="server_address">http://59.22.33.241:7777</string>
 
 
 </resources>

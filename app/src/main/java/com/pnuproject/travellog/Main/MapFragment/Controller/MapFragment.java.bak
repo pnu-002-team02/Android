@@ -5,9 +5,12 @@ package com.pnuproject.travellog.Main.MapFragment.Controller;
  */
 
 import android.Manifest;
+<<<<<<< HEAD
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+=======
+>>>>>>> master
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,13 +22,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+<<<<<<< HEAD
 import android.view.KeyEvent;
+=======
+>>>>>>> master
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -36,8 +41,11 @@ import com.pnuproject.travellog.Main.MainActivity.Controller.MainActivity;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.ListViewAdapter;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.SearchClass;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.SearchDialog;
+<<<<<<< HEAD
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.TransPath;
+=======
 import com.pnuproject.travellog.Main.MypageFragment.Controller.MypageFragment;
+>>>>>>> master
 import com.pnuproject.travellog.R;
 import com.pnuproject.travellog.etc.GpsTracker;
 
@@ -98,7 +106,7 @@ public class MapFragment extends Fragment
         mMapView.setMapType(MapView.MapType.Standard);
         mMapView.setPOIItemEventListener(this);
         mMapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter());
-
+//
         createVisitedMarker(mMapView, "임시 방문 명소", DEFAULT_MARKER_POINT);
         createUnvisitedMarker(mMapView, "임시 미방문 명소", DEFAULT_MARKER_POINT1);
 
@@ -106,18 +114,23 @@ public class MapFragment extends Fragment
         btn_search = (ImageButton) view.findViewById(R.id.btn_search);
         btn_gps = (ImageButton) view.findViewById(R.id.gps_tracker);
         btn_x = (ImageButton) view.findViewById(R.id.btn_x);
-        btn_close = (Button) view.findViewById(R.id.btnclose_map);
+        btn_close = (Button) view.findViewById(R.id.btn_close);
 
+<<<<<<< HEAD
         listViewPlace = (ListView) getView().findViewById(R.id.search_list);
         listVIewPath = (ListView) getView().findViewById(R.id.search_list);
-        //listView = (ListView) view.findViewById(R.id.search_list);
-        //gps = (TextView) view.findViewById(R.id.gpsvalue);
+        //gps = (TextView) getView().findViewById(R.id.gpsvalue);
+=======
+        listView = (ListView) view.findViewById(R.id.search_list);
+        gps = (TextView) view.findViewById(R.id.gpsvalue);
 
+>>>>>>> master
         gpsTracker = new GpsTracker(getContext());
 
         //longitude : 위도(y / 0 ~ 180), latitude : 경도(x / 0 ~ 90)
         longitude = gpsTracker.getLongitude();
         latitude = gpsTracker.getLatitude();
+
         //gps.setText("위도 : " + longitude + " 경도 : " + latitude);
 
         edit_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -255,8 +268,13 @@ public class MapFragment extends Fragment
                     pdialog.dismiss();
                 }
             }
+<<<<<<< HEAD
         },3000);
-     
+=======
+        });
+
+
+>>>>>>> master
     }
 
     public void showPathlist(String s, SearchClass sc){
