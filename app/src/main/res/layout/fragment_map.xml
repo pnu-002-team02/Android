@@ -1,42 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:id="@+id/map_main_fragment"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Main.MapFragment.Controller.MapFragment">
+    >
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="vertical">
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
-
+            android:layout_height="match_parent">
             <EditText
                 android:paddingLeft="15dp"
                 android:id="@+id/edit_search"
-                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:maxLines="1"
                 android:hint="명소를 입력해주세요."
                 android:background="@null"
-                android:textSize="15dp"
-                android:layout_toLeftOf="@+id/btn_search"/>
+                android:textSize="15dp"/>
 
             <ImageButton
-                android:src="@drawable/icon_search"
-                android:scaleType="fitXY"
-                android:id="@+id/btn_search"
                 android:layout_width="50dp"
-                android:padding="10dp"
                 android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
+                android:src="@drawable/icon_search"
+                android:scaleType="fitCenter"
+                android:id="@+id/btn_search"
+                android:padding="10dp"
                 android:background="@null"
                 android:text="검색"/>
-        </RelativeLayout>
+        </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -44,9 +47,10 @@
     </LinearLayout>
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="11">
 
-        <RelativeLayout
+        <net.daum.mf.map.api.MapView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/map_view"
@@ -76,7 +80,6 @@
                 android:layout_marginBottom="20dp"
                 android:layout_marginRight="20dp"/>
         </LinearLayout>
-
 
         <!--GPS값 확인용, 추후 삭제 예정-->
         <TextView

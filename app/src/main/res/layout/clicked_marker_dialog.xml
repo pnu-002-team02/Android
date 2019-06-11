@@ -3,8 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="#eeeeee"
     android:orientation="vertical"
-    android:layout_width="300dp"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="50dp"
+    android:layout_marginLeft="25dp"
+    android:layout_marginRight="25dp"
+    android:layout_marginBottom="50dp"
+    >
 
     <!-- 타이틀바 -->
     <LinearLayout
@@ -38,7 +43,12 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true" />
 
-
+        <Button
+            android:id="@+id/btnBlogArticle_markerdlg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="블로그"
+            />
         <TextView
             android:id="@+id/placeName"
             android:layout_width="match_parent"
@@ -89,6 +99,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
+            android:id="@+id/btnClose_markerdg"
             android:text="닫기"
             android:textSize="15sp"
             android:textColor="#483D8B"
@@ -96,8 +107,7 @@
             android:gravity="center"
             android:background="#00000000"
             android:layout_width="match_parent"
-            android:layout_height="47dp"
-            android:onClick="mOnClose"/>
+            android:layout_height="47dp"/>
     </LinearLayout>
     <!--// 닫기 버튼 -->
 

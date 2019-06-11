@@ -5,7 +5,6 @@ package com.pnuproject.travellog.Main.MapFragment.Controller;
  */
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,22 +12,24 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pnuproject.travellog.Main.MainActivity.Controller.MainActivity;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.ListViewAdapter;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.SearchClass;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.SearchDialog;
+import com.pnuproject.travellog.Main.MypageFragment.Controller.MypageFragment;
 import com.pnuproject.travellog.R;
 import com.pnuproject.travellog.etc.GpsTracker;
 
@@ -76,30 +77,23 @@ public class MapFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        MapLayout mapLayout = new MapLayout(getActivity());
-        mMapView = mapLayout.getMapView();
+        mMapView = view.findViewById(R.id.map_view);
         mMapView.setDaumMapApiKey(getString(R.string.kakao_map_key));
         mMapView.setOpenAPIKeyAuthenticationResultListener(this);
         mMapView.setMapViewEventListener(this);
         mMapView.setMapType(MapView.MapType.Standard);
         mMapView.setPOIItemEventListener(this);
-
-        ViewGroup mapViewContainer = (ViewGroup) getView().findViewById(R.id.map_view);
-        mapViewContainer.addView(mapLayout);
-
         mMapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter());
+//
         createVisitedMarker(mMapView, "임시 방문 명소", DEFAULT_MARKER_POINT);
         createUnvisitedMarker(mMapView, "임시 미방문 명소", DEFAULT_MARKER_POINT1);
-        //createCustomMarker(mMapView);
-        //createCustomBitmapMarker(mMapView);
-        //showAll();
 
         edit_search = (EditText) view.findViewById(R.id.edit_search);
         btn_search = (ImageButton) view.findViewById(R.id.btn_search);
         btn_gps = (ImageButton) view.findViewById(R.id.gps_tracker);
 
-        listView = (ListView) getView().findViewById(R.id.search_list);
-        gps = (TextView) getView().findViewById(R.id.gpsvalue);
+        listView = (ListView) view.findViewById(R.id.search_list);
+        gps = (TextView) view.findViewById(R.id.gpsvalue);
 
         gpsTracker = new GpsTracker(getContext());
         latitude = gpsTracker.getLatitude();
@@ -167,6 +161,8 @@ public class MapFragment extends Fragment
                 mMapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude,longitude), 2,true);
             }
         });
+
+
     }
 
     public String findGPS(){
@@ -327,10 +323,8 @@ public class MapFragment extends Fragment
 
     @Override
     public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem) {
-        Intent intent = new Intent(getContext(), ClickedMarkerDialog.class);
-        intent.putExtra("name",mapPOIItem.getItemName());
-        intent.putExtra("visited", mapPOIItem.getTag());
-        getContext().startActivity(intent);
+        ClickedMarkerDialog dlg = new ClickedMarkerDialog((MainActivity)this.getActivity(),mapPOIItem.getItemName(),mapPOIItem.getTag());
+        dlg.show();
     }
 
     @Override
