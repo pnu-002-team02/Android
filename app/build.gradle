@@ -49,4 +49,6 @@ dependencies {
     //kakao 로그인
     api group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
     implementation project(path: ':ODsayAndroidSDK')
+
+
 }

@@ -14,23 +14,28 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pnuproject.travellog.Login.Controller.LoginActivity;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.ListViewAdapter;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.SearchClass;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.SearchDialog;
+import com.pnuproject.travellog.Main.MapFragment.Model.MapMarkerRetrofitInterface;
+import com.pnuproject.travellog.Main.MapFragment.Model.RequestDataMarker;
+import com.pnuproject.travellog.Main.MapFragment.Model.ResponseDataMarker;
 import com.pnuproject.travellog.R;
 import com.pnuproject.travellog.etc.GpsTracker;
+import com.pnuproject.travellog.etc.RetrofitTask;
+import com.pnuproject.travellog.etc.TLApp;
 
 import net.daum.mf.map.api.CalloutBalloonAdapter;
 import net.daum.mf.map.api.MapCircle;
@@ -39,15 +44,32 @@ import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
+import java.net.ConnectException;
+import java.net.UnknownHostException;
+import java.util.StringTokenizer;
+
+import retrofit2.Retrofit;
+
+
 public class MapFragment extends Fragment
-        implements MapView.OpenAPIKeyAuthenticationResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener{
+        implements MapView.OpenAPIKeyAuthenticationResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener, RetrofitTask.RetrofitExecutionHandler{
 
     private MapView mMapView;
 
     private MapPOIItem mVisitedMarker;
     private MapPOIItem mUnvisitedMarker;
-    private static final MapPoint DEFAULT_MARKER_POINT = MapPoint.mapPointWithGeoCoord(35.2295239,129.0881219);
-    private static final MapPoint DEFAULT_MARKER_POINT1 = MapPoint.mapPointWithGeoCoord(35.2336123,129.078816);
+    //private static final MapPoint DEFAULT_MARKER_POINT = MapPoint.mapPointWithGeoCoord(35.2295239,129.0881219);
+    //private static final MapPoint DEFAULT_MARKER_POINT1 = MapPoint.mapPointWithGeoCoord(35.2336123,129.078816);
+
+    String name;
+    double latitude, longitude;
+    String markerName;
+    double markerLatitude, markerLongitude;
+
+    private RetrofitTask retrofitTask;
+
+    private final int RETROFIT_TASK_ERROR = 0x00;
+    private final int RETROFIT_TASK_GET_MARKER = 0x01;
 
     private EditText edit_search;
     private ImageButton btn_search;
@@ -58,8 +80,6 @@ public class MapFragment extends Fragment
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-    double latitude;
-    double longitude;
 
     private ListViewAdapter adapter;
     private ListView listView;
@@ -75,6 +95,7 @@ public class MapFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        retrofitTask = new RetrofitTask(this, getResources().getString(R.string.server_address));
 
         MapLayout mapLayout = new MapLayout(getActivity());
         mMapView = mapLayout.getMapView();
@@ -87,17 +108,28 @@ public class MapFragment extends Fragment
         ViewGroup mapViewContainer = (ViewGroup) getView().findViewById(R.id.map_view);
         mapViewContainer.addView(mapLayout);
 
+
+
+        RequestDataMarker dataMarker = new RequestDataMarker();
+        RetrofitTask.RetrofitRequestParam requestParam = new RetrofitTask.RetrofitRequestParam(RETROFIT_TASK_GET_MARKER, dataMarker);
+        //RetrofitTask.RetrofitRequestParam requestParam = new RetrofitTask.RetrofitRequestParam(RETROFIT_TASK_GET_MARKER, "");
+        retrofitTask.execute(requestParam);
+
         mMapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter());
-        createVisitedMarker(mMapView, "임시 방문 명소", DEFAULT_MARKER_POINT);
-        createUnvisitedMarker(mMapView, "임시 미방문 명소", DEFAULT_MARKER_POINT1);
-//        for(int i=0 ; i<5; i++) {
-//            double tempLon = 129.078816 + (i*0.1);
-//            createUnvisitedMarker(mMapView, "임시 미방문 명소", MapPoint.mapPointWithGeoCoord(35.2336123,tempLon));
+        //createVisitedMarker(mMapView, "임시 방문 명소", DEFAULT_MARKER_POINT);
+//        createUnvisitedMarker(mMapView, "임시 미방문 명소", DEFAULT_MARKER_POINT1);
+
+//        for(int i=0 ; i<20; i++) {
+//            double tempLon = 128.078816 + (i*0.1);
+//            createUnvisitedMarker(mMapView, "임시 미방문 명소", MapPoint.mapPointWithGeoCoord(35.2036123+(i*0.01),tempLon));
 //        }
 
         //createCustomMarker(mMapView);
         //createCustomBitmapMarker(mMapView);
         //showAll();
+
+
+        LoginActivity login = (LoginActivity)getActivity().getApplicationContext();
 
         edit_search = (EditText) view.findViewById(R.id.edit_search);
         btn_search = (ImageButton) view.findViewById(R.id.btn_search);
@@ -170,6 +202,89 @@ public class MapFragment extends Fragment
         });
     }
 
+
+    @Override
+    public void onAfterAyncExcute(RetrofitTask.RetrofitResponseParam response) {
+        if (response == null || response.getResponse() == null) {
+            Toast.makeText(getContext(), getResources().getString(R.string.errmsg_retrofit_unknown), Toast.LENGTH_SHORT).show();
+            //System.out.println("!!!!응답없음");
+            return;
+
+        } else if( response.getTaskNum() == RETROFIT_TASK_ERROR) {
+            final String errMsg = (String)response.getResponse();
+            Toast.makeText(getContext(), errMsg, Toast.LENGTH_SHORT).show();
+            System.out.println("!!!!에러   " + response.getTaskNum() + "   " + errMsg);
+            return;
+        }
+
+        int taskNum = response.getTaskNum();
+        Object responseData = response.getResponse();
+
+        switch (taskNum) {
+            case RETROFIT_TASK_GET_MARKER: {
+                final ResponseDataMarker res = (ResponseDataMarker) responseData;
+                if (res.getSuccess() != 0) {
+                    Toast.makeText(getContext(), res.getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    System.out.println("****전체 확인 : " + res.getProducts().toString());
+                    String fullMarkerInfo = res.getProducts().toString();
+                    StringTokenizer st = new StringTokenizer(fullMarkerInfo, "[$,]");
+                    int i = 0;
+                    while(st.hasMoreTokens()) {
+                        String temp = st.nextToken();
+                        //System.out.println(i + "번째 마커 확인 " + temp);
+                        if (i % 3 == 0) {
+                            markerName = temp.trim();
+                        } else if (i % 3 == 1) {
+                            markerLatitude = Double.parseDouble(temp);
+                        } else if (i % 3 == 2) {
+                            markerLongitude = Double.parseDouble(temp);
+                            System.out.println("마커 확인 : " + markerName + " " + markerLatitude + " " + markerLongitude);
+                            createUnvisitedMarker(mMapView, markerName, MapPoint.mapPointWithGeoCoord(markerLatitude, markerLongitude));
+                        }
+                        i++;
+                    }
+                }
+            }
+            break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public Object onBeforeAyncExcute(Retrofit retrofit, RetrofitTask.RetrofitRequestParam paramRequest) {
+        Object response = null;
+        int taskNum = paramRequest.getTaskNum();
+        Object requestParam = paramRequest.getParamRequest();
+        MapMarkerRetrofitInterface markerRetrofit = retrofit.create(MapMarkerRetrofitInterface.class);
+
+        try {
+            switch (taskNum) {
+                case RETROFIT_TASK_GET_MARKER:
+                    //response = markerRetrofit.getMarker((RequestDataMarker) requestParam).execute().body();
+                    response = markerRetrofit.getMarker().execute().body();
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch (UnknownHostException ex) {
+            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            response = new String(getResources().getString(R.string.errmsg_retrofitbefore_ownernetwork));
+        }
+        catch (ConnectException ex) {
+            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            response = new String(getResources().getString(R.string.errmsg_retrofitbefore_servernetwork));
+        }
+        catch (Exception ex) {
+            System.out.println("에러 확인 함 : " + ex.toString());
+            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            response = new String(getResources().getString(R.string.errmsg_retrofit_unknown));
+        }
+        return response;
+    }
+
     public String findGPS(){
         String result = "";
 
@@ -192,14 +307,13 @@ public class MapFragment extends Fragment
 
         @Override
         public View getCalloutBalloon(MapPOIItem poiItem) {
-            //((ImageView) mCalloutBalloon.findViewById(R.id.badge)).setImageResource(R.mipmap.ic_launcher);
-            ((TextView) mCalloutBalloon.findViewById(R.id.title)).setText(poiItem.getItemName());
-            if(poiItem.getTag()==1) {
-                ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("이전에 방문한 명소입니다.");
-            } else {
-                ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("방문하지 않은 명소입니다.");
+                    //((ImageView) mCalloutBalloon.findViewById(R.id.badge)).setImageResource(R.mipmap.ic_launcher);
+                    ((TextView) mCalloutBalloon.findViewById(R.id.title)).setText(poiItem.getItemName());
+                    if(poiItem.getTag()==1) {
+                        ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("이전에 방문한 명소입니다.");
+                    } else {
+                        ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("방문하지 않은 명소입니다.");
             }
-
             return mCalloutBalloon;
         }
 
@@ -235,14 +349,6 @@ public class MapFragment extends Fragment
         mapView.deselectPOIItem(mUnvisitedMarker);
     }
 
-//    private void showAll() {
-//        int padding = 20;
-//        float minZoomLevel = 7;
-//        float maxZoomLevel = 10;
-//        MapPointBounds bounds = new MapPointBounds(CUSTOM_MARKER_POINT, DEFAULT_MARKER_POINT);
-//        mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(bounds, padding, minZoomLevel, maxZoomLevel));
-//    }
-
     private void addCurrentLocationCircle(double latitude, double longitude) {
         MapCircle circle1 = new MapCircle(
                 MapPoint.mapPointWithGeoCoord(latitude, longitude), // center
@@ -267,12 +373,15 @@ public class MapFragment extends Fragment
 
     @Override
     public void onMapViewZoomLevelChanged(MapView mapView, int i) {
-        if(i > 8) {
-            mapView.removeAllPOIItems();
-        } else {
-            createVisitedMarker(mMapView, "임시 방문 명소", DEFAULT_MARKER_POINT);
-            createUnvisitedMarker(mMapView, "임시 미방문 명소", DEFAULT_MARKER_POINT1);
-        }
+//        if(i > 8) {
+//            mapView.removeAllPOIItems();
+//
+//            System.out.println("zoom level changed : " + i);
+//        } else {
+//            createVisitedMarker(mMapView, "임시 방문 명소", DEFAULT_MARKER_POINT);
+//            createUnvisitedMarker(mMapView, "임시 미방문 명소", DEFAULT_MARKER_POINT1);
+//            System.out.println("zoom level changed : " + i);
+//        }
     }
 
     @Override

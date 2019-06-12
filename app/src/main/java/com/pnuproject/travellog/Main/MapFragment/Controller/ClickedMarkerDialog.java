@@ -6,8 +6,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.text.method.ScrollingMovementMethod;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -17,21 +20,91 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pnuproject.travellog.Login.Controller.LoginActivity;
+import com.pnuproject.travellog.Login.Model.LoginRetrofitInterface;
+import com.pnuproject.travellog.Login.Model.RequestDataLogin;
+import com.pnuproject.travellog.Login.Model.ResponseDataLogin;
+import com.pnuproject.travellog.Main.MainActivity.Controller.MainActivity;
+import com.pnuproject.travellog.Main.MapFragment.Model.MapClickedMarkerRetrofitInterface;
+import com.pnuproject.travellog.Main.MapFragment.Model.RequestDataClickedMarker;
+import com.pnuproject.travellog.Main.MapFragment.Model.ResponseDataClickedMarker;
 import com.pnuproject.travellog.R;
+import com.pnuproject.travellog.etc.RetrofitTask;
+import com.pnuproject.travellog.etc.TLApp;
 
-public class ClickedMarkerDialog extends Activity {
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.ConnectException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.util.StringTokenizer;
+
+import retrofit2.Retrofit;
+
+public class ClickedMarkerDialog extends Activity implements RetrofitTask.RetrofitExecutionHandler{
 
     String name;
+    String productName;
+    String info;
+    String gps;
+    String productImage;
+
+    private Bitmap bitmap;
+    Thread mThread;
+
+    private RetrofitTask retrofitTask;
+
+    private final int RETROFIT_TASK_ERROR = 0x00;
+    private final int RETROFIT_TASK_MARKER = 0x01;
+
+    TextView placeLocation;
+    ImageView placePicture;
 
     protected void onCreate(Bundle savedInsanceState) {
         super.onCreate(savedInsanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        retrofitTask = new RetrofitTask(this, getResources().getString(R.string.server_address));
         setContentView(R.layout.clicked_marker_dialog);
 
-        final TextView placeName = (TextView)findViewById(R.id.placeName);
-        final TextView placeLocation = (TextView)findViewById(R.id.placeLocation);
-        final ImageView placePicture = (ImageView)findViewById(R.id.viewPicture);
-        final Button btn_photo = (Button)findViewById(R.id.photo);
+        TextView placeName = (TextView)findViewById(R.id.placeName);
+        placeLocation = (TextView)findViewById(R.id.placeLocation);
+        placePicture = (ImageView)findViewById(R.id.viewPicture);
+        Button btn_photo = (Button)findViewById(R.id.photo);
+
+        name = getIntent().getStringExtra("name");
+        placeName.setText(name);
+
+        RequestDataClickedMarker dataClickedMarker = new RequestDataClickedMarker(name);
+        RetrofitTask.RetrofitRequestParam requestParam = new RetrofitTask.RetrofitRequestParam(RETROFIT_TASK_MARKER, dataClickedMarker);
+        retrofitTask.execute(requestParam);
+
+        mThread = new Thread() {
+            @Override
+            public void run() {
+                try{
+                    System.out.println("링크확인 " + productImage);
+                    URL url = new URL(productImage);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setDoInput(true);
+                    conn.connect();
+
+                    InputStream is = conn.getInputStream();
+                    System.out.println("input stream : " + is);
+                    BufferedInputStream bis = new BufferedInputStream(is);
+                    bitmap = BitmapFactory.decodeStream(bis);
+                    System.out.println("bitmap1 : " + bitmap);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+
 
         //System.out.println("방문 여부 확인 : " + getIntent().getIntExtra("visited", 1));
         //방문하지 않았을 때만 photo button 생성
@@ -64,9 +137,10 @@ public class ClickedMarkerDialog extends Activity {
             });
         }
 
-        name = getIntent().getStringExtra("name");
-        placeName.setText(name);
-        placeLocation.setText("임시 주소");
+
+
+        //placeLocation.setMovementMethod(new ScrollingMovementMethod());
+        //placeLocation.setText("임시 주소");
         //placePicture.setImageBitmap();
     }
 
@@ -105,4 +179,100 @@ public class ClickedMarkerDialog extends Activity {
         builder.show();
     }
 
+    @Override
+    public void onAfterAyncExcute(RetrofitTask.RetrofitResponseParam response) {
+        if (response == null || response.getResponse() == null) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.errmsg_retrofit_unknown), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            return;
+        } else if( response.getTaskNum() == RETROFIT_TASK_ERROR) {
+            final String errMsg = (String)response.getResponse();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getBaseContext(), errMsg, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            return;
+        }
+
+        int taskNum = response.getTaskNum();
+        Object responseData = response.getResponse();
+
+        switch (taskNum) {
+            case RETROFIT_TASK_MARKER: {
+                final ResponseDataClickedMarker res = (ResponseDataClickedMarker) responseData;
+                if (res.getSuccess() != 0) {
+                    Toast.makeText(getBaseContext(), res.getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                        System.out.println("****전체 확인 : " + res.getOneProduct());
+                        String fullMarkerInfo = res.getOneProduct().toString();
+                        StringTokenizer st = new StringTokenizer(fullMarkerInfo, "$");
+
+                        productName = st.nextToken();
+
+                        info = st.nextToken().trim();
+                        System.out.println("****info : " + info);
+                        placeLocation.setText(info);
+                        placeLocation.setMovementMethod(new ScrollingMovementMethod());
+
+                        gps = st.nextToken();
+
+                        productImage = st.nextToken();
+                        System.out.println("productImage 주소 " + productImage);
+                        mThread.start();
+
+                        try{
+                            mThread.join();
+                            placePicture.setImageBitmap(bitmap);
+                            System.out.println("bitmap2 : " + bitmap);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                }
+            }
+            break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public Object onBeforeAyncExcute(Retrofit retrofit, RetrofitTask.RetrofitRequestParam paramRequest) {
+        Object response = null;
+        int taskNum = paramRequest.getTaskNum();
+        Object requestParam = paramRequest.getParamRequest();
+        MapClickedMarkerRetrofitInterface clickedMarkerRetrofit = retrofit.create(MapClickedMarkerRetrofitInterface.class);
+
+        try {
+            switch (taskNum) {
+                case RETROFIT_TASK_MARKER:
+                    response = clickedMarkerRetrofit.getClickedMarker((RequestDataClickedMarker) requestParam).execute().body();
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch (UnknownHostException ex) {
+            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            response = new String(getResources().getString(R.string.errmsg_retrofitbefore_ownernetwork));
+        }
+        catch (ConnectException ex) {
+            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            response = new String(getResources().getString(R.string.errmsg_retrofitbefore_servernetwork));
+        }
+        catch (Exception ex) {
+            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            response = new String(getResources().getString(R.string.errmsg_retrofit_unknown));
+            System.out.println("에러에러 " + ex.toString());
+        }
+
+        return response;
+    }
 }
