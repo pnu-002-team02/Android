@@ -7,18 +7,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <ImageButton
+                android:id="@+id/btnclose_map"
+                android:visibility="gone"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_backbtn"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:padding="5dp"
+                android:layout_marginLeft="5dp"
+                />
             <EditText
-                android:paddingLeft="15dp"
                 android:id="@+id/edit_search"
                 android:layout_weight="1"
                 android:layout_width="0dp"
@@ -26,8 +31,9 @@
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:maxLines="1"
+                android:layout_marginLeft="15dp"
                 android:hint="명소를 입력해주세요."
-                android:textSize="15dp"
+                android:textSize="18dp"
                 android:background="@null"/>
 
             <ImageButton
@@ -53,9 +59,8 @@
         </LinearLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#008577"/>
-    </LinearLayout>
+            android:layout_height="3dp"
+            android:background="#efefef"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -93,22 +98,14 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             >
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:text="목록 닫기  "
-                android:background="#ffffff"
-                android:textAlignment="textEnd"
-                android:id="@+id/btnclose_map"
-                android:visibility="invisible"/>
             <ListView
                 android:id="@+id/search_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="#ffffff"
                 android:visibility="invisible" />
 

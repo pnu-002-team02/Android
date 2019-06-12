@@ -63,7 +63,7 @@ public class MapFragment extends Fragment
     private EditText edit_search;
     private ImageButton btn_x, btn_search;
     private ImageButton btn_gps;
-    private Button btn_close;
+    private ImageButton btn_close;
 
     private TextView gps;
     private GpsTracker gpsTracker;
@@ -106,7 +106,7 @@ public class MapFragment extends Fragment
         btn_search = (ImageButton) view.findViewById(R.id.btn_search);
         btn_gps = (ImageButton) view.findViewById(R.id.gps_tracker);
         btn_x = (ImageButton) view.findViewById(R.id.btn_x);
-        btn_close = (Button) view.findViewById(R.id.btnclose_map);
+        btn_close = (ImageButton) view.findViewById(R.id.btnclose_map);
 
         listViewPlace = (ListView) getView().findViewById(R.id.search_list);
         listVIewPath = (ListView) getView().findViewById(R.id.search_list);
@@ -157,7 +157,7 @@ public class MapFragment extends Fragment
         btn_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_close.setVisibility(View.INVISIBLE);
+                btn_close.setVisibility(View.GONE);
                 listVIewPath.setVisibility(View.INVISIBLE);
                 listViewPlace.setVisibility(View.INVISIBLE);
                 edit_search.setText("");
