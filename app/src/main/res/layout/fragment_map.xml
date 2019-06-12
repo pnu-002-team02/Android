@@ -7,18 +7,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <ImageButton
+                android:id="@+id/btnclose_map"
+                android:visibility="gone"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_backbtn"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:padding="5dp"
+                android:layout_marginLeft="5dp"
+                />
             <EditText
-                android:paddingLeft="15dp"
                 android:id="@+id/edit_search"
                 android:layout_weight="1"
                 android:layout_width="0dp"
@@ -26,8 +31,20 @@
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:maxLines="1"
+                android:layout_marginLeft="15dp"
                 android:hint="명소를 입력해주세요."
+                android:textSize="18dp"
+                android:background="@null"/>
+
+            <ImageButton
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:id="@+id/btn_x"
+                android:src="@drawable/btn_x"
                 android:background="@null"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:layout_toLeftOf="@+id/btn_search"
                 android:textSize="15dp"/>
 
             <ImageButton
@@ -42,9 +59,8 @@
         </LinearLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#008577"/>
-    </LinearLayout>
+            android:layout_height="3dp"
+            android:background="#efefef"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -56,37 +72,43 @@
             android:id="@+id/map_view"
             android:visibility="visible"/>
 
-      <ListView
-            android:id="@+id/search_list"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#ffffff"
-            android:visibility="invisible" />
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="vertical">
+                <ImageButton
+                    android:id="@+id/gps_tracker"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:scaleType="fitCenter"
+                    android:layout_gravity="end"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/gps_tracker"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginRight="20dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
-            <ImageButton
-                android:id="@+id/gps_tracker"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:scaleType="fitCenter"
-                android:layout_gravity="right"
-                android:background="@android:color/transparent"
-                android:src="@drawable/gps_tracker"
-                android:layout_marginBottom="20dp"
-                android:layout_marginRight="20dp"/>
+            <ListView
+                android:id="@+id/search_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:visibility="invisible" />
+
         </LinearLayout>
-
-        <!--GPS값 확인용, 추후 삭제 예정-->
-        <TextView
-            android:layout_marginTop="5dp"
-            android:id="@+id/gpsvalue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
     </FrameLayout>
-
 </LinearLayout>

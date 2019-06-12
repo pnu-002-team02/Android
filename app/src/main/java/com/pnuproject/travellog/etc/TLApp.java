@@ -86,13 +86,17 @@ public class TLApp  extends Application {
 
     public static class UserInfo {
         private String name;
-        public UserInfo(String name) {
+        private String userID;
+        public UserInfo(String name, String userID) {
             this.name = name;
-
+            this.userID = userID;
         }
 
         public String getName() {
             return name;
+        }
+        public String getUserID() {
+            return userID;
         }
     }
 }
