@@ -14,12 +14,19 @@ import android.widget.Toast;
 import com.pnuproject.travellog.R;
 
 public class SearchDialog extends DialogFragment {
-
-    TextView place, address, weather;
+    TextView place, address;
     Button btn_find, btn_close;
-    SearchClass searchClass;
-
     private Fragment fragment;
+
+    private dialogListener dl;
+
+    public interface dialogListener{
+        public void callBack(int toSearch);
+    }
+
+    public void setDL(dialogListener dl){
+        this.dl = dl;
+    }
 
     public SearchDialog(){
     }
@@ -35,16 +42,14 @@ public class SearchDialog extends DialogFragment {
 
         place = (TextView) getView().findViewById(R.id.place);
         address = (TextView) getView().findViewById(R.id.address);
-        weather = (TextView) getView().findViewById(R.id.weather);
         btn_find = (Button) getView().findViewById(R.id.btn_find);
         btn_close = (Button) getView().findViewById(R.id.btn_close);
 
         Bundle arguments = getArguments();
-        String[] info = arguments.getStringArray("info");
+        final String[] info = arguments.getStringArray("search");
 
         place.setText(info[0]);
         address.setText(info[1]);
-        weather.setText(info[2]);
 
         fragment = getActivity().getSupportFragmentManager().findFragmentByTag("tag");
 
@@ -53,6 +58,7 @@ public class SearchDialog extends DialogFragment {
             public void onClick(View v) {
                 if(fragment != null){
                     Toast.makeText(getContext(), "닫기", Toast.LENGTH_SHORT).show();
+                    dl.callBack(0);
                     DialogFragment dialogFragment = (DialogFragment) fragment;
                     dialogFragment.dismiss();
                 }
@@ -64,7 +70,7 @@ public class SearchDialog extends DialogFragment {
             public void onClick(View v) {
                 //길찾기 시작
                 if(fragment != null){
-                    Toast.makeText(getContext(), "길찾기를 시작합니다", Toast.LENGTH_SHORT).show();
+                    dl.callBack(1);
                     DialogFragment dialogFragment = (DialogFragment) fragment;
                     dialogFragment.dismiss();
                 }

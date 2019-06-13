@@ -5,19 +5,22 @@ package com.pnuproject.travellog.Main.MapFragment.Controller;
  */
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -25,13 +28,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pnuproject.travellog.Login.Controller.LoginActivity;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.ListViewAdapter;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.SearchClass;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.SearchDialog;
+import com.pnuproject.travellog.Main.MapFragment.Controller.Search.TransPath;
 import com.pnuproject.travellog.Main.MapFragment.Model.MapMarkerRetrofitInterface;
 import com.pnuproject.travellog.Main.MapFragment.Model.RequestDataMarker;
 import com.pnuproject.travellog.Main.MapFragment.Model.ResponseDataMarker;
+import com.pnuproject.travellog.Main.MapFragment.Model.ResponseDataVisitedList;
 import com.pnuproject.travellog.R;
 import com.pnuproject.travellog.etc.GpsTracker;
 import com.pnuproject.travellog.etc.RetrofitTask;
@@ -39,13 +43,13 @@ import com.pnuproject.travellog.etc.TLApp;
 
 import net.daum.mf.map.api.CalloutBalloonAdapter;
 import net.daum.mf.map.api.MapCircle;
-import net.daum.mf.map.api.MapLayout;
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
 import java.net.ConnectException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import retrofit2.Retrofit;
@@ -58,22 +62,23 @@ public class MapFragment extends Fragment
 
     private MapPOIItem mVisitedMarker;
     private MapPOIItem mUnvisitedMarker;
-    //private static final MapPoint DEFAULT_MARKER_POINT = MapPoint.mapPointWithGeoCoord(35.2295239,129.0881219);
-    //private static final MapPoint DEFAULT_MARKER_POINT1 = MapPoint.mapPointWithGeoCoord(35.2336123,129.078816);
 
-    String name;
     double latitude, longitude;
     String markerName;
     double markerLatitude, markerLongitude;
+    String[] visitedList;
 
     private RetrofitTask retrofitTask;
 
     private final int RETROFIT_TASK_ERROR = 0x00;
     private final int RETROFIT_TASK_GET_MARKER = 0x01;
+    private final int RETROFIT_TASK_GET_VISITED_LIST = 0x02;
 
     private EditText edit_search;
-    private ImageButton btn_search;
+    private ImageButton btn_x, btn_search;
     private ImageButton btn_gps;
+    private ImageButton btn_refresh;
+    private ImageButton btn_close;
 
     private TextView gps;
     private GpsTracker gpsTracker;
@@ -82,7 +87,10 @@ public class MapFragment extends Fragment
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
     private ListViewAdapter adapter;
-    private ListView listView;
+    private ListView listViewPlace, listVIewPath;
+    public SearchDialog dialog;
+    public ProgressDialog pdialog;
+    public Handler handler = new Handler();
 
     public MapFragment() {
     }
@@ -97,123 +105,240 @@ public class MapFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
         retrofitTask = new RetrofitTask(this, getResources().getString(R.string.server_address));
 
-        MapLayout mapLayout = new MapLayout(getActivity());
-        mMapView = mapLayout.getMapView();
+        mMapView = view.findViewById(R.id.map_view);
         mMapView.setDaumMapApiKey(getString(R.string.kakao_map_key));
         mMapView.setOpenAPIKeyAuthenticationResultListener(this);
         mMapView.setMapViewEventListener(this);
         mMapView.setMapType(MapView.MapType.Standard);
         mMapView.setPOIItemEventListener(this);
+        mMapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter());
 
         ViewGroup mapViewContainer = (ViewGroup) getView().findViewById(R.id.map_view);
-        mapViewContainer.addView(mapLayout);
 
-
+        TLApp.UserInfo userinfo = TLApp.getUserInfo();
+        if(userinfo == null) {
+            //로그인 안 되어있는 경우 방문 목록 받아올 수 없음
+        } else{
+            String userID = userinfo.getUserID();
+            RetrofitTask.RetrofitRequestParam requestParam = new RetrofitTask.RetrofitRequestParam(RETROFIT_TASK_GET_VISITED_LIST, userID);
+            retrofitTask.execute(requestParam);
+        }
 
         RequestDataMarker dataMarker = new RequestDataMarker();
         RetrofitTask.RetrofitRequestParam requestParam = new RetrofitTask.RetrofitRequestParam(RETROFIT_TASK_GET_MARKER, dataMarker);
-        //RetrofitTask.RetrofitRequestParam requestParam = new RetrofitTask.RetrofitRequestParam(RETROFIT_TASK_GET_MARKER, "");
         retrofitTask.execute(requestParam);
-
-        mMapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter());
-        //createVisitedMarker(mMapView, "임시 방문 명소", DEFAULT_MARKER_POINT);
-//        createUnvisitedMarker(mMapView, "임시 미방문 명소", DEFAULT_MARKER_POINT1);
-
-//        for(int i=0 ; i<20; i++) {
-//            double tempLon = 128.078816 + (i*0.1);
-//            createUnvisitedMarker(mMapView, "임시 미방문 명소", MapPoint.mapPointWithGeoCoord(35.2036123+(i*0.01),tempLon));
-//        }
-
-        //createCustomMarker(mMapView);
-        //createCustomBitmapMarker(mMapView);
-        //showAll();
-
-
-        LoginActivity login = (LoginActivity)getActivity().getApplicationContext();
 
         edit_search = (EditText) view.findViewById(R.id.edit_search);
         btn_search = (ImageButton) view.findViewById(R.id.btn_search);
         btn_gps = (ImageButton) view.findViewById(R.id.gps_tracker);
+        btn_x = (ImageButton) view.findViewById(R.id.btn_x);
+        btn_close = (ImageButton) view.findViewById(R.id.btnclose_map);
+        btn_refresh =(ImageButton) view.findViewById(R.id.marker_refresh);
 
-        listView = (ListView) getView().findViewById(R.id.search_list);
-        gps = (TextView) getView().findViewById(R.id.gpsvalue);
+        listViewPlace = (ListView) getView().findViewById(R.id.search_list);
+        listVIewPath = (ListView) getView().findViewById(R.id.search_list);
+        //listView = (ListView) view.findViewById(R.id.search_list);
+        //gps = (TextView) view.findViewById(R.id.gpsvalue);
 
         gpsTracker = new GpsTracker(getContext());
+
+        //longitude : 위도(y / 0 ~ 180), latitude : 경도(x / 0 ~ 90)
         latitude = gpsTracker.getLatitude();
         longitude = gpsTracker.getLongitude();
         mMapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude,longitude), 2, true);
 
-        gps.setText(latitude + " " + longitude);
-        final SearchClass searchClass = new SearchClass();
+        edit_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                switch (actionId){
+                    case EditorInfo.IME_ACTION_SEARCH:
+                        searchEvent();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
 
-        /*
-        * GPS로 받아온 위도, 경도 값을 실제 주소로 변환하는 작업 필요
-        * geocoding 사용
-        */
+        btn_x.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edit_search.setText("");
+            }
+        });
+
 
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String str = edit_search.getText().toString();
-
-                if(str == null || str.length() == 0){
-                    Toast.makeText(getContext(), "장소를 입력하세요.", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
-                    searchClass.findPlace(str);
-                    listView.setVisibility(View.VISIBLE);
-                    adapter = new ListViewAdapter();
-
-                    adapter.addItem("place1", "time/address1", "weather1");
-                    adapter.addItem("place2", "time/address2", "weather2");
-                    adapter.addItem("place3", "time/address3", "weather3");
-
-                    listView.setAdapter(adapter);
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            //리스트뷰 아이템 클릭했을 때
-                            Toast.makeText(getContext(), adapter.getItemPlace(i) + " 터치", Toast.LENGTH_SHORT).show();
-                            edit_search.setText(null);
-                            listView.setVisibility(View.INVISIBLE);
-                            /*
-                             * Dialog 형태로 띄워줌
-                             */
-
-                            Bundle bundle = new Bundle();
-                            bundle.putStringArray("info", adapter.getItemInfo(i));
-
-                            SearchDialog dialog = new SearchDialog();
-
-                            dialog.setArguments(bundle);
-                            dialog.show(getActivity().getSupportFragmentManager(), "tag");
-                        }
-                    });
-                }
+                searchEvent();
             }
         });
-        
+
         btn_gps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mMapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude,longitude), 2,true);
             }
         });
+
+        btn_refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TLApp.UserInfo userinfo = TLApp.getUserInfo();
+                if(userinfo == null) {
+                    visitedList = null;
+                } else{
+                    String userID = userinfo.getUserID();
+                    RetrofitTask.RetrofitRequestParam requestParam = new RetrofitTask.RetrofitRequestParam(RETROFIT_TASK_GET_VISITED_LIST, userID);
+                    retrofitTask.execute(requestParam);
+                }
+                RequestDataMarker dataMarker = new RequestDataMarker();
+                RetrofitTask.RetrofitRequestParam requestParam = new RetrofitTask.RetrofitRequestParam(RETROFIT_TASK_GET_MARKER, dataMarker);
+                retrofitTask.execute(requestParam);
+            }
+        });
+
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btn_close.setVisibility(View.GONE);
+                listVIewPath.setVisibility(View.INVISIBLE);
+                listViewPlace.setVisibility(View.INVISIBLE);
+                edit_search.setText("");
+            }
+        });
     }
 
+    public void searchEvent(){
+        String str = edit_search.getText().toString();
+        SearchClass searchClass = new SearchClass();
+        ArrayList<String[]> result;
+
+        if(str == null || str.length() == 0){
+            Toast.makeText(getContext(), "장소를 입력하세요.", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            final String[] user = new String[2];
+            user[0] = Double.toString(longitude);
+            user[1] = Double.toString(latitude);
+
+            searchClass.findPlace(str);
+            if(searchClass.getIsnormal() == false){
+                Toast.makeText(getContext(), "장소를 다시 입력해 주세요", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            result = searchClass.getPlaceResult();
+            int arrsize = result.size();
+
+            btn_close.setVisibility(View.VISIBLE);
+            listViewPlace.setVisibility(View.VISIBLE);
+            adapter = new ListViewAdapter();
+
+            for(int i = 0; i < arrsize; i++){
+                if(result.get(i)[2].length() != 0){
+                    adapter.addItem(result.get(i)[0], result.get(i)[2], "", result.get(i)[3], result.get(i)[4]);
+                }
+                else{
+                    adapter.addItem(result.get(i)[0], result.get(i)[1], "", result.get(i)[3], result.get(i)[4]);
+                }
+            }
+
+            listViewPlace.setAdapter(adapter);
+            listViewPlace.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                    //리스트뷰 아이템 클릭했을 때
+                    btn_close.setVisibility(View.INVISIBLE);
+                    listViewPlace.setVisibility(View.INVISIBLE);
+
+                    Bundle bundle = new Bundle();
+                    bundle.putStringArray("user", user);
+                    bundle.putStringArray("search", adapter.getItemInfo(i));
+
+                    dialog = new SearchDialog();
+                    dialog.setArguments(bundle);
+
+                    dialog.setDL(new SearchDialog.dialogListener() {
+                        @Override
+                        public void callBack(int toSearch) {
+                            if(toSearch == 1){
+                                String[] p = new String[4];
+                                p[0] = user[0];
+                                p[1] = user[1];
+                                p[2] = adapter.getItemInfo(i)[3];
+                                p[3] = adapter.getItemInfo(i)[4];
+
+                                SearchClass searchClass = new SearchClass();
+                                searchClass.findPath(p, getContext());
+
+                                progressDialog(searchClass, i);
+                            }
+                            else{
+                                Toast.makeText(getContext(), "경로 찾기에 실패했습니다", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                    dialog.show(getActivity().getSupportFragmentManager(), "tag");
+                }
+            });
+        }
+    }
+
+    public void progressDialog(final SearchClass s, final int i){
+        pdialog = new ProgressDialog(getContext());
+        pdialog.setMessage("검색 중");
+        pdialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        pdialog.show();
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(s.getf() == true){
+                    s.printPathTest();
+                    showPathlist(adapter.getItemInfo(i)[0], s);
+                    pdialog.dismiss();
+                }
+            }
+        },3000);
+    }
+
+    public void showPathlist (String s, SearchClass sc){
+        System.out.println("리스트뷰");
+        edit_search.setText("현재위치 -> " + s);
+        ListViewAdapter adapter = new ListViewAdapter();
+        btn_close.setVisibility(View.VISIBLE);
+        listVIewPath.setVisibility(View.VISIBLE);
+
+
+        ArrayList<TransPath> path = sc.getPathResult();
+        int size = path.size();
+
+        for (int i = 0; i < size; i++) {
+            adapter.addItem(path.get(i).getTraffic(), path.get(i).getPath(), path.get(i).getTime());
+        }
+
+        listVIewPath.setAdapter(adapter);
+        listViewPlace.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                //리스트뷰 아이템 클릭했을 때
+                btn_close.setVisibility(View.INVISIBLE);
+                listViewPlace.setVisibility(View.INVISIBLE);
+                edit_search.setText("");
+            }
+        });
+    }
 
     @Override
     public void onAfterAyncExcute(RetrofitTask.RetrofitResponseParam response) {
         if (response == null || response.getResponse() == null) {
             Toast.makeText(getContext(), getResources().getString(R.string.errmsg_retrofit_unknown), Toast.LENGTH_SHORT).show();
-            //System.out.println("!!!!응답없음");
             return;
 
         } else if( response.getTaskNum() == RETROFIT_TASK_ERROR) {
             final String errMsg = (String)response.getResponse();
             Toast.makeText(getContext(), errMsg, Toast.LENGTH_SHORT).show();
-            System.out.println("!!!!에러   " + response.getTaskNum() + "   " + errMsg);
             return;
         }
 
@@ -226,12 +351,13 @@ public class MapFragment extends Fragment
                 if (res.getSuccess() != 0) {
                     Toast.makeText(getContext(), res.getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
-                    System.out.println("****전체 확인 : " + res.getProducts().toString());
+                    //System.out.println("****전체 확인 : " + res.getProducts().toString());
                     String fullMarkerInfo = res.getProducts().toString();
                     StringTokenizer st = new StringTokenizer(fullMarkerInfo, "[$,]");
                     int i = 0;
                     while(st.hasMoreTokens()) {
                         String temp = st.nextToken();
+                        boolean isVisited=false;
                         //System.out.println(i + "번째 마커 확인 " + temp);
                         if (i % 3 == 0) {
                             markerName = temp.trim();
@@ -239,14 +365,51 @@ public class MapFragment extends Fragment
                             markerLatitude = Double.parseDouble(temp);
                         } else if (i % 3 == 2) {
                             markerLongitude = Double.parseDouble(temp);
-                            System.out.println("마커 확인 : " + markerName + " " + markerLatitude + " " + markerLongitude);
-                            createUnvisitedMarker(mMapView, markerName, MapPoint.mapPointWithGeoCoord(markerLatitude, markerLongitude));
+                            //System.out.println("마커 확인 : " + markerName + " " + markerLatitude + " " + markerLongitude);
+
+                            if(visitedList != null && visitedList.length>0) {
+                                //System.out.println("visited list length " + visitedList.length);
+                                for(int j=0; j<visitedList.length; j++) {
+                                    if(markerName.equals(visitedList[j])) {
+                                        //방문목록에 현재 생성할 마커 존재
+                                        //System.out.println("마커 방문여부 y: " + visitedList[j] + " " + markerName);
+                                        createVisitedMarker(mMapView, markerName, MapPoint.mapPointWithGeoCoord(markerLatitude, markerLongitude));
+                                        isVisited = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(isVisited == false) {
+                                //System.out.println("마커 방문여부 n: " + markerName);
+                                createUnvisitedMarker(mMapView, markerName, MapPoint.mapPointWithGeoCoord(markerLatitude, markerLongitude));
+                            }
                         }
                         i++;
                     }
                 }
             }
-            break;
+                break;
+            case RETROFIT_TASK_GET_VISITED_LIST: {
+                final ResponseDataVisitedList res = (ResponseDataVisitedList) responseData;
+                if (res.getSuccess() != 0) {
+                    Toast.makeText(getContext(), "에러", Toast.LENGTH_SHORT).show();
+                } else {
+                    //System.out.println("방문목록 확인 " + res.getVisitlist().toString());
+                    String fullVisitedList = res.getVisitlist().toString();
+                    //방문목록이 존재한다면
+                    if(!fullVisitedList.equals("[]")) {
+                        StringTokenizer st = new StringTokenizer(fullVisitedList, "[,]");
+                        int cntList = st.countTokens();
+                        visitedList = new String[cntList];
+                        int i = 0;
+                        while (st.hasMoreTokens()) {
+                            visitedList[i] = st.nextToken();
+                            i++;
+                        }
+                    }
+                }
+            }
+                break;
             default:
                 break;
         }
@@ -264,6 +427,9 @@ public class MapFragment extends Fragment
                 case RETROFIT_TASK_GET_MARKER:
                     //response = markerRetrofit.getMarker((RequestDataMarker) requestParam).execute().body();
                     response = markerRetrofit.getMarker().execute().body();
+                    break;
+                case RETROFIT_TASK_GET_VISITED_LIST:
+                    response = markerRetrofit.getVisitedList((String) requestParam).execute().body();
                     break;
                 default:
                     break;
@@ -285,17 +451,6 @@ public class MapFragment extends Fragment
         return response;
     }
 
-    public String findGPS(){
-        String result = "";
-
-        return result;
-    }
-    /*
-     검색 버튼 클릭 시 다음 REST API 로컬 검색을 이용해 장소 검색
-     */
-    public void searchPlace(String str){
-
-    }
 
     // CalloutBalloonAdapter 인터페이스 구현
     class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
@@ -307,12 +462,12 @@ public class MapFragment extends Fragment
 
         @Override
         public View getCalloutBalloon(MapPOIItem poiItem) {
-                    //((ImageView) mCalloutBalloon.findViewById(R.id.badge)).setImageResource(R.mipmap.ic_launcher);
-                    ((TextView) mCalloutBalloon.findViewById(R.id.title)).setText(poiItem.getItemName());
-                    if(poiItem.getTag()==1) {
-                        ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("이전에 방문한 명소입니다.");
-                    } else {
-                        ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("방문하지 않은 명소입니다.");
+            //((ImageView) mCalloutBalloon.findViewById(R.id.badge)).setImageResource(R.mipmap.ic_launcher);
+            ((TextView) mCalloutBalloon.findViewById(R.id.title)).setText(poiItem.getItemName());
+            if(poiItem.getTag()==1) {
+                ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("이전에 방문한 명소입니다.");
+            } else {
+                ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("방문하지 않은 명소입니다.");
             }
             return mCalloutBalloon;
         }
@@ -426,10 +581,7 @@ public class MapFragment extends Fragment
 
     @Override
     public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem) {
-//        Intent intent = new Intent(getContext(), ClickedMarkerDialog.class);
-//        intent.putExtra("name",mapPOIItem.getItemName());
-//        intent.putExtra("visited", mapPOIItem.getTag());
-//        getContext().startActivity(intent);
+
     }
 
     @Override

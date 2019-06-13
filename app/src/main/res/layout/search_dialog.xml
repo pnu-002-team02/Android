@@ -15,6 +15,8 @@
         android:layout_height="wrap_content"
         android:text="장소 이름"
         android:textAlignment="center"
+        android:textSize="20dp"
+        android:padding="10dp"
         android:id="@+id/place"/>
 
     <TextView
@@ -22,25 +24,26 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:text="주소"
+        android:textSize="15dp"
+        android:padding="10dp"
         android:id="@+id/address"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:id="@+id/weather"
-        android:text="날씨" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btn_find"
             android:text="길찾기" />
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            android:layout_weight="0"/>
 
         <Button
             android:layout_width="wrap_content"

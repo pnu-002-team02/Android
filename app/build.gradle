@@ -43,6 +43,9 @@ dependencies {
     //for use TableLayout, tablayout
     implementation files('src/libs/libDaumMapAndroid.jar')
 
+    //이미지 캐싱
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
     //network 통신
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
