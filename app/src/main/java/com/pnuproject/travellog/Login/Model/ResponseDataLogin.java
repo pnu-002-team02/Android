@@ -12,6 +12,8 @@ public class ResponseDataLogin {
     @SerializedName("username")
     private String username;
 
+    @SerializedName("userid")
+    private String userID;
 
     @SerializedName("visitlist")
     private String[] visit_list;
@@ -20,7 +22,9 @@ public class ResponseDataLogin {
     public String getUsername() {
         return username;
     }
-
+    public String getUserID() {
+        return userID;
+    }
     public String[] getVisitList() {
         return visit_list;
     }

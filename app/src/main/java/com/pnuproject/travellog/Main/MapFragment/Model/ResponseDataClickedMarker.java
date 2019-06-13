@@ -30,14 +30,6 @@ public class ResponseDataClickedMarker {
         return this;
     }
 
-//    public List<Products> getProducts() {
-//        return products;
-//    }
-//
-//    public void setProducts(List<Products> products) {
-//        this.products = products;
-//    }
-
     public int getSuccess() {
         return retcode;
     }

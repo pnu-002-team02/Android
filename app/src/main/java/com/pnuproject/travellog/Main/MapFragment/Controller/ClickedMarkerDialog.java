@@ -85,17 +85,14 @@ public class ClickedMarkerDialog extends Activity implements RetrofitTask.Retrof
             @Override
             public void run() {
                 try{
-                    System.out.println("링크확인 " + productImage);
                     URL url = new URL(productImage);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setDoInput(true);
                     conn.connect();
 
                     InputStream is = conn.getInputStream();
-                    System.out.println("input stream : " + is);
                     BufferedInputStream bis = new BufferedInputStream(is);
                     bitmap = BitmapFactory.decodeStream(bis);
-                    System.out.println("bitmap1 : " + bitmap);
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -137,11 +134,6 @@ public class ClickedMarkerDialog extends Activity implements RetrofitTask.Retrof
             });
         }
 
-
-
-        //placeLocation.setMovementMethod(new ScrollingMovementMethod());
-        //placeLocation.setText("임시 주소");
-        //placePicture.setImageBitmap();
     }
 
     //확인 버튼 클릭
@@ -270,7 +262,6 @@ public class ClickedMarkerDialog extends Activity implements RetrofitTask.Retrof
         catch (Exception ex) {
             paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofit_unknown));
-            System.out.println("에러에러 " + ex.toString());
         }
 
         return response;

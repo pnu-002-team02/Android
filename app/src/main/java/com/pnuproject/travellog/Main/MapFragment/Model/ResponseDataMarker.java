@@ -7,17 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResponseDataMarker {
-//    @SerializedName("name")
-//    private String productName;
-//
-//    @SerializedName("info")
-//    private String info;
-//
-//    @SerializedName("gps")
-//    private String gps;
-//
-//    @SerializedName("productImage")
-//    private String productImage;
 
     @SerializedName("products")
     private List<Products> products = null;
@@ -27,19 +16,6 @@ public class ResponseDataMarker {
 
     @SerializedName("msg")
     private String msg;
-
-//    public String getProductName() {
-//        return productName;
-//    }
-//    public String getInfo() {
-//        return info;
-//    }
-//    public String getGps() {
-//        return gps;
-//    }
-//    public String getProductImage() {
-//        return productImage;
-//    }
 
     public List<Products> getProducts() {
         return products;

@@ -25,13 +25,6 @@ public class OneProduct {
     @Expose
     private String productImage;
 
-//
-//    public OneProduct(String productName, String info, String gps, String productImage) {
-//        this.productName = productName;
-//        this.info = info;
-//        this.gps = gps;
-//        this.productImage = productImage;
-//    }
 
     @Override
     public String toString() {

@@ -129,10 +129,8 @@ public class LoginActivity extends Activity implements RetrofitTask.RetrofitExec
 
                 } else {
                     Toast.makeText(getBaseContext(), res.getUsername() + "님 반갑습니다", Toast.LENGTH_SHORT).show();
+                    TLApp.setUserInfo(new TLApp.UserInfo(res.getUsername(),res.getUserID()));
 
-                    System.out.println("방문목록 : " + res.getVisitList().toString());
-                    String[] temp = res.getVisitList();
-                    System.out.println("확인 : " + temp[0]);
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
