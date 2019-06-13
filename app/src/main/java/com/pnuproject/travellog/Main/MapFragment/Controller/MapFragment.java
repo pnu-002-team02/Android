@@ -351,28 +351,24 @@ public class MapFragment extends Fragment
                 if (res.getSuccess() != 0) {
                     Toast.makeText(getContext(), res.getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
-                    //System.out.println("****전체 확인 : " + res.getProducts().toString());
                     String fullMarkerInfo = res.getProducts().toString();
                     StringTokenizer st = new StringTokenizer(fullMarkerInfo, "[$,]");
                     int i = 0;
                     while(st.hasMoreTokens()) {
                         String temp = st.nextToken();
                         boolean isVisited=false;
-                        //System.out.println(i + "번째 마커 확인 " + temp);
+
                         if (i % 3 == 0) {
                             markerName = temp.trim();
                         } else if (i % 3 == 1) {
                             markerLatitude = Double.parseDouble(temp);
                         } else if (i % 3 == 2) {
                             markerLongitude = Double.parseDouble(temp);
-                            //System.out.println("마커 확인 : " + markerName + " " + markerLatitude + " " + markerLongitude);
 
                             if(visitedList != null && visitedList.length>0) {
-                                //System.out.println("visited list length " + visitedList.length);
                                 for(int j=0; j<visitedList.length; j++) {
                                     if(markerName.equals(visitedList[j])) {
                                         //방문목록에 현재 생성할 마커 존재
-                                        //System.out.println("마커 방문여부 y: " + visitedList[j] + " " + markerName);
                                         createVisitedMarker(mMapView, markerName, MapPoint.mapPointWithGeoCoord(markerLatitude, markerLongitude));
                                         isVisited = true;
                                         break;
@@ -380,7 +376,6 @@ public class MapFragment extends Fragment
                                 }
                             }
                             if(isVisited == false) {
-                                //System.out.println("마커 방문여부 n: " + markerName);
                                 createUnvisitedMarker(mMapView, markerName, MapPoint.mapPointWithGeoCoord(markerLatitude, markerLongitude));
                             }
                         }
@@ -394,7 +389,6 @@ public class MapFragment extends Fragment
                 if (res.getSuccess() != 0) {
                     Toast.makeText(getContext(), "에러", Toast.LENGTH_SHORT).show();
                 } else {
-                    //System.out.println("방문목록 확인 " + res.getVisitlist().toString());
                     String fullVisitedList = res.getVisitlist().toString();
                     //방문목록이 존재한다면
                     if(!fullVisitedList.equals("[]")) {
@@ -403,7 +397,7 @@ public class MapFragment extends Fragment
                         visitedList = new String[cntList];
                         int i = 0;
                         while (st.hasMoreTokens()) {
-                            visitedList[i] = st.nextToken();
+                            visitedList[i] = st.nextToken().trim();
                             i++;
                         }
                     }
@@ -444,7 +438,7 @@ public class MapFragment extends Fragment
             response = new String(getResources().getString(R.string.errmsg_retrofitbefore_servernetwork));
         }
         catch (Exception ex) {
-            System.out.println("에러 확인 함 : " + ex.toString());
+            //System.out.println("에러 확인 함 : " + ex.toString());
             paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofit_unknown));
         }
@@ -462,7 +456,6 @@ public class MapFragment extends Fragment
 
         @Override
         public View getCalloutBalloon(MapPOIItem poiItem) {
-            //((ImageView) mCalloutBalloon.findViewById(R.id.badge)).setImageResource(R.mipmap.ic_launcher);
             ((TextView) mCalloutBalloon.findViewById(R.id.title)).setText(poiItem.getItemName());
             if(poiItem.getTag()==1) {
                 ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("이전에 방문한 명소입니다.");

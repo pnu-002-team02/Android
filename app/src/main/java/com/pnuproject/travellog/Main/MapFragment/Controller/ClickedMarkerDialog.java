@@ -20,11 +20,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pnuproject.travellog.Login.Controller.LoginActivity;
-import com.pnuproject.travellog.Login.Model.LoginRetrofitInterface;
-import com.pnuproject.travellog.Login.Model.RequestDataLogin;
-import com.pnuproject.travellog.Login.Model.ResponseDataLogin;
-import com.pnuproject.travellog.Main.MainActivity.Controller.MainActivity;
 import com.pnuproject.travellog.Main.MapFragment.Model.MapClickedMarkerRetrofitInterface;
 import com.pnuproject.travellog.Main.MapFragment.Model.RequestDataClickedMarker;
 import com.pnuproject.travellog.Main.MapFragment.Model.ResponseDataClickedMarker;
@@ -100,8 +95,6 @@ public class ClickedMarkerDialog extends Activity implements RetrofitTask.Retrof
                 }
             }
         };
-
-
 
         //System.out.println("방문 여부 확인 : " + getIntent().getIntExtra("visited", 1));
         //방문하지 않았을 때만 photo button 생성
@@ -203,27 +196,25 @@ public class ClickedMarkerDialog extends Activity implements RetrofitTask.Retrof
                 if (res.getSuccess() != 0) {
                     Toast.makeText(getBaseContext(), res.getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
-                        System.out.println("****전체 확인 : " + res.getOneProduct());
                         String fullMarkerInfo = res.getOneProduct().toString();
                         StringTokenizer st = new StringTokenizer(fullMarkerInfo, "$");
 
                         productName = st.nextToken();
 
                         info = st.nextToken().trim();
-                        System.out.println("****info : " + info);
+
                         placeLocation.setText(info);
                         placeLocation.setMovementMethod(new ScrollingMovementMethod());
 
+                        //gps : '37.22222, 129.3333' 형식(string)
                         gps = st.nextToken();
 
                         productImage = st.nextToken();
-                        System.out.println("productImage 주소 " + productImage);
                         mThread.start();
 
                         try{
                             mThread.join();
                             placePicture.setImageBitmap(bitmap);
-                            System.out.println("bitmap2 : " + bitmap);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
