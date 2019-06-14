@@ -22,6 +22,9 @@ public class ResponseDataLogin {
     public String getUsername() {
         return username;
     }
+    public String getUserID() {
+        return userID;
+    }
     public String[] getVisitList() {
         return visit_list;
     }
@@ -30,9 +33,5 @@ public class ResponseDataLogin {
     }
     public int getSuccess() {
         return retcode;
-    }
-
-    public String getUserID() {
-        return userID;
     }
 }

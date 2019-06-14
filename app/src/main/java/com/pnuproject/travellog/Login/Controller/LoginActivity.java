@@ -1,7 +1,7 @@
 package com.pnuproject.travellog.Login.Controller;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -37,7 +37,7 @@ import retrofit2.Retrofit;
 
 import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
 
-public class LoginActivity extends Activity  implements RetrofitTask.RetrofitExecutionHandler{
+public class LoginActivity extends Activity implements RetrofitTask.RetrofitExecutionHandler{
     private ISessionCallback callback;
     private RetrofitTask retrofitTask;
 
@@ -71,6 +71,7 @@ public class LoginActivity extends Activity  implements RetrofitTask.RetrofitExe
                 final String usrID = inputID.getText().toString();
                 final String usrPW = inputPW.getText().toString();
                 RequestDataLogin dataSignup = new RequestDataLogin(usrID, usrPW);
+
                 RetrofitTask.RetrofitRequestParam requestParam = new RetrofitTask.RetrofitRequestParam(RETROFIT_TASK_LOGIN, dataSignup);
                 retrofitTask.execute(requestParam);
             }
@@ -125,6 +126,7 @@ public class LoginActivity extends Activity  implements RetrofitTask.RetrofitExe
                 final ResponseDataLogin res = (ResponseDataLogin) responseData;
                 if (res.getSuccess() != 0) {
                     Toast.makeText(getBaseContext(), res.getMessage(), Toast.LENGTH_SHORT).show();
+
                 } else {
                     Toast.makeText(getBaseContext(), res.getUsername() + "님 반갑습니다", Toast.LENGTH_SHORT).show();
                     TLApp.setUserInfo(new TLApp.UserInfo(res.getUsername(),res.getUserID()));
