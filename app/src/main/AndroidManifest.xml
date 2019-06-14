@@ -18,7 +18,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true">
         <activity
             android:name=".Login.Controller.LoginActivity">
             <intent-filter>
@@ -45,6 +47,10 @@
         </activity>
         <activity android:name=".Main.MapFragment.Controller.AuthenticationDialog"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Main.MapFragment.Controller.ClickedMarkerDialog"
+            android:theme="@android:style/Theme.Dialog"
+            />
 
         <activity android:name=".Main.MapFragment.Controller.CameraFunction"
             android:screenOrientation="portrait"/>

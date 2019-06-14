@@ -66,11 +66,13 @@
         android:layout_height="0dp"
         android:layout_weight="11">
 
+
         <net.daum.mf.map.api.MapView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/map_view"
             android:visibility="visible"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,15 +85,26 @@
                 android:layout_gravity="bottom"
                 android:orientation="vertical">
                 <ImageButton
-                    android:id="@+id/gps_tracker"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:id="@+id/marker_refresh"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:scaleType="fitCenter"
                     android:layout_gravity="end"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/gps_tracker"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginRight="20dp"/>
+                    android:src="@drawable/marker_refresh"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginRight="15dp"/>
+
+                <ImageButton
+                    android:id="@+id/gps_tracker"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:scaleType="fitCenter"
+                    android:layout_gravity="end"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/gps_tracker1"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginRight="15dp"/>
             </LinearLayout>
 
         </LinearLayout>
