@@ -29,7 +29,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
 public class MypageFragment extends Fragment implements View.OnClickListener, RetrofitTask.RetrofitExecutionHandler {
     private TextView tvBtnSignup;
     private TextView tvBtn_modifyUserInfo;
-    private TextView tvName,tvVisitPer,tvVisitNum;
+    private TextView tvName,tvVisitPer,tvVisitNum,tvHealingDay;
     private TextView tvBtn_logout;
     private LinearLayout layout_userinfo;
     private RetrofitTask retrofitTask;
@@ -53,6 +53,7 @@ public class MypageFragment extends Fragment implements View.OnClickListener, Re
         tvBtn_logout = view.findViewById(R.id.tvBtn_logout_mypage);
         tvVisitNum = view.findViewById(R.id.tvVisitNum_mypage);
         tvVisitPer = view.findViewById(R.id.tvVisitPer_mypage);
+        tvHealingDay = view.findViewById(R.id.tvHealingDay_mypage);
         tvBtn_logout.setOnClickListener(this);
 
         return view;
@@ -142,6 +143,7 @@ public class MypageFragment extends Fragment implements View.OnClickListener, Re
                     int visitPer = (int)(((double)visitNum)/allItemNum * 100);
                     tvVisitNum.setText(String.format("%d개",visitNum));
                     tvVisitPer.setText(String.format("%d%%",visitPer));
+                    tvHealingDay.setText("0 일째");
 
 
                     break;

@@ -89,7 +89,7 @@
                     android:textColor="#000000"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="0개"
+                    android:text="개"
                     android:textAlignment="center"/>
             </LinearLayout>
 
@@ -120,7 +120,7 @@
                     android:textColor="#000000"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="0%"
+                    android:text="%"
                     android:textAlignment="center"/>
             </LinearLayout>
             <View
@@ -145,11 +145,12 @@
                     android:textColor="#3f3f3f"
                     android:layout_gravity="center"/>
                 <TextView
+                    android:id="@+id/tvHealingDay_mypage"
                     android:textSize="20dp"
                     android:textColor="#000000"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="0 일째"
+                    android:text=" 일째"
                     android:textAlignment="center"/>
             </LinearLayout>
 

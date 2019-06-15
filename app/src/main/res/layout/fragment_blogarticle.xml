@@ -28,7 +28,7 @@
             android:paddingTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="블로그 관련 글"
+            android:text="명소 관련 리뷰"
             android:textColor="#000000"
             android:textSize="15dp"
             android:gravity="center_vertical"
