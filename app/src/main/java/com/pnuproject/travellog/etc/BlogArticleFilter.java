@@ -9,15 +9,15 @@ public class BlogArticleFilter {
     int blockWordSize;
     public BlogArticleFilter() {
         vBlockWord = new Vector<String>();
-        vBlockWord.add("부동산");
-        vBlockWord.add("카페");
         vBlockWord.add("맛");
-        vBlockWord.add("갈비");
-        vBlockWord.add("아파트");
         vBlockWord.add("술");
         vBlockWord.add("커피");
-        vBlockWord.add("물회");
+        vBlockWord.add("카페");
         vBlockWord.add("수익");
+        vBlockWord.add("부동산");
+        vBlockWord.add("갈비");
+        vBlockWord.add("아파트");
+        vBlockWord.add("물회");
 
         blockWordSize = vBlockWord.size();
     }
@@ -63,6 +63,7 @@ public class BlogArticleFilter {
         article = article.replaceAll("&gt;","");
         article = article.replaceAll("&#34;","");
         article = article.replaceAll("&#39;","");
+        article = article.replaceAll("&amp; ","");
         return article;
     }
 }

@@ -25,10 +25,10 @@ public class RequestDataSignup implements Serializable {
     }
 
     public String getPassword2() {
-        return password;
+        return password2;
     }
     public String getPassword() {
-        return password2;
+        return password;
     }
     public String getEmail() {
         return email;
