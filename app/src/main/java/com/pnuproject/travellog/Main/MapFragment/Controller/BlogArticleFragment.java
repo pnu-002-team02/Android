@@ -27,8 +27,7 @@ import com.pnuproject.travellog.etc.RetrofitTask;
 
 import java.net.ConnectException;
 import java.net.UnknownHostException;
-import java.util.Vector;
-
+import java.util.ArrayList;
 import retrofit2.Retrofit;
 
 @SuppressLint("ValidFragment")
@@ -76,8 +75,8 @@ public class BlogArticleFragment extends Fragment implements AdapterView.OnItemC
     }
 
     @Override
-    public void onAfterAyncExcute(RetrofitTask.RetrofitResponseParam response) {
-        if (response == null || response.getResponse() == null) {
+    public void onAfterAyncExcute(RetrofitTask.RetrofitResponseParam response3) {
+        if (response3 == null || response3.getResponse() == null) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -86,8 +85,8 @@ public class BlogArticleFragment extends Fragment implements AdapterView.OnItemC
             });
 
             return;
-        } else if( response.getTaskNum() == RETROFIT_TASK_ERROR) {
-            final String errMsg = (String)response.getResponse();
+        } else if( response3.getTaskNum() == RETROFIT_TASK_ERROR) {
+            final String errMsg = (String)response3.getResponse();
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -98,14 +97,14 @@ public class BlogArticleFragment extends Fragment implements AdapterView.OnItemC
             return;
         }
 
-        int taskNum = response.getTaskNum();
-        Object responseData = response.getResponse();
+        int taskNum = response3.getTaskNum();
+        Object responseData = response3.getResponse();
 
         switch (taskNum) {
             case RETROFIT_TASK_GETARTICLE:
                 {
                 final ResponseDataBlog res = (ResponseDataBlog) responseData;
-                Vector<ResponseDataBlog.BlogDocuments> vBlogData = res.getDocuments();
+                ArrayList<ResponseDataBlog.BlogDocuments> vBlogData = res.getDocuments();
                 int blogDataSize = vBlogData.size();
                 if(blogDataSize>0) {
                     BlogArticleFilter articleFilter = new BlogArticleFilter();
@@ -124,7 +123,7 @@ public class BlogArticleFragment extends Fragment implements AdapterView.OnItemC
             case RETROFIT_TASK_GETARTICLE2:
             {
                 final ResponseDataBlog res = (ResponseDataBlog) responseData;
-                Vector<ResponseDataBlog.BlogDocuments> vBlogData = res.getDocuments();
+                ArrayList<ResponseDataBlog.BlogDocuments> vBlogData = res.getDocuments();
                 if(vBlogData.size()>0) {
                     BlogArticleFilter articleFilter = new BlogArticleFilter();
                     if( articleFilter.applyFilter(vBlogData) > 0 ) {
@@ -184,18 +183,18 @@ public class BlogArticleFragment extends Fragment implements AdapterView.OnItemC
     }
 }
 class BlogArticleLVAdapter extends BaseAdapter {
-    Vector<ResponseDataBlog.BlogDocuments> m_listItem;
+    ArrayList<ResponseDataBlog.BlogDocuments> m_listItem;
     public BlogArticleLVAdapter() {
-        m_listItem = new Vector<ResponseDataBlog.BlogDocuments>();
+        m_listItem = new ArrayList<ResponseDataBlog.BlogDocuments>();
     }
-    public BlogArticleLVAdapter(Vector<ResponseDataBlog.BlogDocuments> listItem) {
+    public BlogArticleLVAdapter(ArrayList<ResponseDataBlog.BlogDocuments> listItem) {
         this.m_listItem = listItem;
     }
-    public void addListItem(Vector<ResponseDataBlog.BlogDocuments> listItem) {
+    public void addListItem(ArrayList<ResponseDataBlog.BlogDocuments> listItem) {
         this.m_listItem.addAll(listItem);
     }
 
-    public void setListItem(Vector<ResponseDataBlog.BlogDocuments> listItem) {
+    public void setListItem(ArrayList<ResponseDataBlog.BlogDocuments> listItem) {
         this.m_listItem = listItem;
     }
     @Override

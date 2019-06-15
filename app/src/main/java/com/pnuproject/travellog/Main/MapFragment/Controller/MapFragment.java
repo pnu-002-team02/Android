@@ -320,19 +320,19 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
     }
 
     @Override
-    public void onAfterAyncExcute(RetrofitTask.RetrofitResponseParam response) {
-        if (response == null || response.getResponse() == null) {
+    public void onAfterAyncExcute(RetrofitTask.RetrofitResponseParam response6) {
+        if (response6 == null || response6.getResponse() == null) {
             Toast.makeText(getContext(), getResources().getString(R.string.errmsg_retrofit_unknown), Toast.LENGTH_SHORT).show();
             return;
 
-        } else if( response.getTaskNum() == RETROFIT_TASK_ERROR) {
-            final String errMsg = (String)response.getResponse();
+        } else if( response6.getTaskNum() == RETROFIT_TASK_ERROR) {
+            final String errMsg = (String)response6.getResponse();
             Toast.makeText(getContext(), errMsg, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        int taskNum = response.getTaskNum();
-        Object responseData = response.getResponse();
+        int taskNum = response6.getTaskNum();
+        Object responseData = response6.getResponse();
 
         switch (taskNum) {
             case RETROFIT_TASK_GET_MARKER: {

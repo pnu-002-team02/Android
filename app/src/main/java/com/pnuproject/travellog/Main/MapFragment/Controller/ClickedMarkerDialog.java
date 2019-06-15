@@ -198,8 +198,8 @@ public class ClickedMarkerDialog extends AppCompatDialog implements RetrofitTask
     }
 
     @Override
-    public void onAfterAyncExcute(RetrofitTask.RetrofitResponseParam response) {
-        if (response == null || response.getResponse() == null) {
+    public void onAfterAyncExcute(RetrofitTask.RetrofitResponseParam response4) {
+        if (response4 == null || response4.getResponse() == null) {
             parentActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -208,8 +208,8 @@ public class ClickedMarkerDialog extends AppCompatDialog implements RetrofitTask
             });
 
             return;
-        } else if( response.getTaskNum() == RETROFIT_TASK_ERROR) {
-            final String errMsg = (String)response.getResponse();
+        } else if( response4.getTaskNum() == RETROFIT_TASK_ERROR) {
+            final String errMsg = (String)response4.getResponse();
             parentActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -220,8 +220,8 @@ public class ClickedMarkerDialog extends AppCompatDialog implements RetrofitTask
             return;
         }
 
-        int taskNum = response.getTaskNum();
-        Object responseData = response.getResponse();
+        int taskNum = response4.getTaskNum();
+        Object responseData = response4.getResponse();
 
         switch (taskNum) {
             case RETROFIT_TASK_MARKER: {

@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.pnuproject.travellog.R;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class BriefReviewFragment extends Fragment implements AdapterView.OnItemClickListener {
     private ListView lvBriefReview;
@@ -38,17 +38,17 @@ public class BriefReviewFragment extends Fragment implements AdapterView.OnItemC
 }
 
 class BriefReviewLVAdapter extends BaseAdapter {
-    Vector<String> listItemStr;
+    ArrayList<String> listItemStr;
 
     public BriefReviewLVAdapter() {
-        listItemStr = new Vector<String>();
+        listItemStr = new ArrayList<String>();
     }
 
     public void addItem(String str) {
         //listItemStr.add(str);
     }
 
-    public void setItem(Vector<String> listItem) {
+    public void setItem(ArrayList<String> listItem) {
         //listItemStr = listItem;
     }
 

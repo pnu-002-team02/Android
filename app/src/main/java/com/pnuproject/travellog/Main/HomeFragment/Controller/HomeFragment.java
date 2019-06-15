@@ -120,19 +120,19 @@ public class HomeFragment extends Fragment implements RetrofitTask.RetrofitExecu
 
 
     @Override
-    public void onAfterAyncExcute(RetrofitTask.RetrofitResponseParam response) {
-        if (response == null || response.getResponse() == null) {
+    public void onAfterAyncExcute(RetrofitTask.RetrofitResponseParam response2) {
+        if (response2 == null || response2.getResponse() == null) {
             Toast.makeText(getContext(), getResources().getString(R.string.errmsg_retrofit_unknown), Toast.LENGTH_SHORT).show();
             return;
 
-        } else if (response.getTaskNum() == RETROFIT_TASK_ERROR) {
-            final String errMsg = (String) response.getResponse();
+        } else if (response2.getTaskNum() == RETROFIT_TASK_ERROR) {
+            final String errMsg = (String) response2.getResponse();
             Toast.makeText(getContext(), errMsg, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        int taskNum = response.getTaskNum();
-        Object responseData = response.getResponse();
+        int taskNum = response2.getTaskNum();
+        Object responseData = response2.getResponse();
 
         switch (taskNum) {
             case RETROFIT_TASK_GETITEMNUM:

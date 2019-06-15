@@ -84,8 +84,8 @@ public class LoginActivity extends Activity implements RetrofitTask.RetrofitExec
     }
 
     @Override
-    public void onAfterAyncExcute(RetrofitTask.RetrofitResponseParam response) {
-        if (response == null || response.getResponse() == null) {
+    public void onAfterAyncExcute(RetrofitTask.RetrofitResponseParam response7) {
+        if (response7 == null || response7.getResponse() == null) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -94,8 +94,8 @@ public class LoginActivity extends Activity implements RetrofitTask.RetrofitExec
             });
 
             return;
-        } else if( response.getTaskNum() == RETROFIT_TASK_ERROR) {
-            final String errMsg = (String)response.getResponse();
+        } else if( response7.getTaskNum() == RETROFIT_TASK_ERROR) {
+            final String errMsg = (String)response7.getResponse();
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -106,8 +106,8 @@ public class LoginActivity extends Activity implements RetrofitTask.RetrofitExec
             return;
         }
 
-        int taskNum = response.getTaskNum();
-        Object responseData = response.getResponse();
+        int taskNum = response7.getTaskNum();
+        Object responseData = response7.getResponse();
 
         switch (taskNum) {
             case RETROFIT_TASK_LOGIN: {

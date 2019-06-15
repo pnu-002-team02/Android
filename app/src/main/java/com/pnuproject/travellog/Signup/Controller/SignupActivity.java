@@ -112,8 +112,8 @@ public class SignupActivity extends AppCompatActivity implements RetrofitTask.Re
         btn_signup_cancle.setOnClickListener(this);
     }
     @Override
-    public void onAfterAyncExcute(RetrofitTask.RetrofitResponseParam response) {
-        if (response == null || response.getResponse() == null) {
+    public void onAfterAyncExcute(RetrofitTask.RetrofitResponseParam response1) {
+        if (response1 == null || response1.getResponse() == null) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -122,8 +122,8 @@ public class SignupActivity extends AppCompatActivity implements RetrofitTask.Re
             });
 
             return;
-        } else if( response.getTaskNum() == RETROFIT_TASK_ERROR) {
-            final String errMsg = (String)response.getResponse();
+        } else if( response1.getTaskNum() == RETROFIT_TASK_ERROR) {
+            final String errMsg = (String)response1.getResponse();
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -134,8 +134,8 @@ public class SignupActivity extends AppCompatActivity implements RetrofitTask.Re
             return;
         }
 
-        int taskNum = response.getTaskNum();
-        Object responseData = response.getResponse();
+        int taskNum = response1.getTaskNum();
+        Object responseData = response1.getResponse();
 
         switch (taskNum) {
             case RETROFIT_TASK_SIGNUP: {
@@ -236,7 +236,7 @@ public class SignupActivity extends AppCompatActivity implements RetrofitTask.Re
                             .setNegativeButton("확인", null)
                             .create()
                             .show();
-                    return;
+                    break;
                 }
                 if (!validate) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(SignupActivity.this);
@@ -244,7 +244,6 @@ public class SignupActivity extends AppCompatActivity implements RetrofitTask.Re
                             .setNegativeButton("확인", null)
                             .create()
                             .show();
-                    return;
                 }
                 break;
             case R.id.btn_signup_cancle:

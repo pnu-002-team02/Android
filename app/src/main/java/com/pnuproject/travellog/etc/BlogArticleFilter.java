@@ -2,13 +2,14 @@ package com.pnuproject.travellog.etc;
 
 import com.pnuproject.travellog.Main.MapFragment.Model.ResponseDataBlog;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.ArrayList;
 
 public class BlogArticleFilter {
-    Vector<String> vBlockWord;
+    ArrayList<String> vBlockWord;
     int blockWordSize;
     public BlogArticleFilter() {
-        vBlockWord = new Vector<String>();
+        vBlockWord = new ArrayList<String>();
         vBlockWord.add("맛");
         vBlockWord.add("술");
         vBlockWord.add("커피");
@@ -21,7 +22,7 @@ public class BlogArticleFilter {
 
         blockWordSize = vBlockWord.size();
     }
-    public int applyFilter(Vector<ResponseDataBlog.BlogDocuments> vArticle) {
+    public int applyFilter(ArrayList<ResponseDataBlog.BlogDocuments> vArticle) {
         int i = 0 ;
         while( i < vArticle.size() ) {
             ResponseDataBlog.BlogDocuments blogDocument = vArticle.get(i);
@@ -63,7 +64,7 @@ public class BlogArticleFilter {
         article = article.replaceAll("&gt;","");
         article = article.replaceAll("&#34;","");
         article = article.replaceAll("&#39;","");
-        article = article.replaceAll("&amp; ","");
+        article = article.replaceAll("&amp;","");
         return article;
     }
 }

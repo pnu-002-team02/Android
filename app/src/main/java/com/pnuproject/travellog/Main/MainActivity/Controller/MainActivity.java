@@ -31,11 +31,11 @@ import com.pnuproject.travellog.etc.TLApp;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     final public int MAX_TAB_PAGES = 3;
-    Vector<Fragment> vFragments;
+    ArrayList<Fragment> vFragments;
 
     private BackPressCloseHandler backPressCloseHandler;
 
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        vFragments = new Vector<Fragment>();
+        vFragments = new ArrayList<Fragment>();
 
         final SwipeViewPager vpFrag = findViewById(R.id.vpFrag_main);
 

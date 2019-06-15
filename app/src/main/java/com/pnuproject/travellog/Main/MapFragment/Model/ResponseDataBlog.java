@@ -2,13 +2,14 @@ package com.pnuproject.travellog.Main.MapFragment.Model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.ArrayList;
 
 public class ResponseDataBlog {
     @SerializedName("documents")
-    private Vector<BlogDocuments> documents;
+    private ArrayList<BlogDocuments> documents;
 
-    public Vector<BlogDocuments> getDocuments() {
+    public ArrayList<BlogDocuments> getDocuments() {
         return documents;
     }
 

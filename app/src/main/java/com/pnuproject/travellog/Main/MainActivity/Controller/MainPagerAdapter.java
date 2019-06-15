@@ -5,17 +5,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class MainPagerAdapter extends FragmentPagerAdapter {
-    private Vector<Fragment> vFragments;
+    private ArrayList<Fragment> vFragments;
 
     @Override
     public CharSequence getPageTitle(int position) {
         return String.valueOf(position);
     }
 
-    public MainPagerAdapter(Vector<Fragment> vFragments, FragmentManager fm) {
+    public MainPagerAdapter(ArrayList<Fragment> vFragments, FragmentManager fm) {
         super(fm);
         this.vFragments = vFragments;
     }
