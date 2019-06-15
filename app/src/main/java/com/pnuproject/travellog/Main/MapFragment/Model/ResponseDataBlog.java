@@ -1,4 +1,4 @@
-package com.pnuproject.travellog.Main.MapFragment.Controller.Model;
+package com.pnuproject.travellog.Main.MapFragment.Model;
 
 import com.google.gson.annotations.SerializedName;
 

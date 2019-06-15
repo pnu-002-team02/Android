@@ -1,18 +1,17 @@
 package com.pnuproject.travellog.Main.MapFragment.Controller;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -20,12 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.pnuproject.travellog.Main.MapFragment.Controller.Model.BlogArticleRetrofitInterface;
-import com.pnuproject.travellog.Main.MapFragment.Controller.Model.ResponseDataBlog;
+import com.pnuproject.travellog.Main.MapFragment.Model.BlogArticleRetrofitInterface;
+import com.pnuproject.travellog.Main.MapFragment.Model.ResponseDataBlog;
 import com.pnuproject.travellog.R;
 import com.pnuproject.travellog.etc.BlogArticleFilter;
 import com.pnuproject.travellog.etc.RetrofitTask;
-import com.squareup.picasso.Picasso;
 
 import java.net.ConnectException;
 import java.net.UnknownHostException;
@@ -33,6 +31,7 @@ import java.util.Vector;
 
 import retrofit2.Retrofit;
 
+@SuppressLint("ValidFragment")
 public class BlogArticleFragment extends Fragment implements AdapterView.OnItemClickListener, RetrofitTask.RetrofitExecutionHandler, View.OnClickListener {
     ListView lvArticle;
     BlogArticleLVAdapter articleLVAdapter;
@@ -42,6 +41,11 @@ public class BlogArticleFragment extends Fragment implements AdapterView.OnItemC
     private final int RETROFIT_TASK_GETARTICLE = 0x01;
     private final int RETROFIT_TASK_GETARTICLE2 = 0x02;
     private RetrofitTask retrofitTask;
+
+    @SuppressLint("ValidFragment")
+    public BlogArticleFragment(String searchWord) {
+        this.searchWord=searchWord;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_blogarticle, container, false);
@@ -55,7 +59,6 @@ public class BlogArticleFragment extends Fragment implements AdapterView.OnItemC
         btnClose.setOnClickListener(this);
         lvArticle.setAdapter(articleLVAdapter);
 
-        searchWord = "용궁사 여행";
         RetrofitTask.RetrofitRequestParam requestParam = new RetrofitTask.RetrofitRequestParam(RETROFIT_TASK_GETARTICLE, searchWord);
         retrofitTask.execute(requestParam);
         return view;

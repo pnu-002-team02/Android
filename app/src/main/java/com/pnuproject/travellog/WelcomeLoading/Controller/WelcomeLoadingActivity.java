@@ -12,7 +12,7 @@ import java.util.TimerTask;
 
 
 public class WelcomeLoadingActivity extends AppCompatActivity {
-    final long WAIT_TIME_MILLISECOND = 2000; // 2 sec
+    final long WAIT_TIME_MILLISECOND = 1500; // 1.5 sec
 
     private TimerTask timerTask;
     private Timer timer;

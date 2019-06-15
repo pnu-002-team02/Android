@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,8 +56,7 @@ import java.util.StringTokenizer;
 import retrofit2.Retrofit;
 
 
-public class MapFragment extends Fragment
-        implements MapView.OpenAPIKeyAuthenticationResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener, RetrofitTask.RetrofitExecutionHandler{
+public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthenticationResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener, RetrofitTask.RetrofitExecutionHandler{
 
     private MapView mMapView;
 
@@ -579,10 +579,8 @@ public class MapFragment extends Fragment
 
     @Override
     public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem, MapPOIItem.CalloutBalloonButtonType calloutBalloonButtonType) {
-        Intent intent = new Intent(getContext(), ClickedMarkerDialog.class);
-        intent.putExtra("name",mapPOIItem.getItemName());
-        intent.putExtra("visited", mapPOIItem.getTag());
-        getContext().startActivity(intent);
+        ClickedMarkerDialog dlg = new ClickedMarkerDialog((AppCompatActivity)this.getActivity(),mapPOIItem.getItemName(),mapPOIItem.getTag());
+        dlg.show();
     }
 
     @Override

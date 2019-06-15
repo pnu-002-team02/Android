@@ -1,6 +1,6 @@
 package com.pnuproject.travellog.etc;
 
-import com.pnuproject.travellog.Main.MapFragment.Controller.Model.ResponseDataBlog;
+import com.pnuproject.travellog.Main.MapFragment.Model.ResponseDataBlog;
 
 import java.util.Vector;
 

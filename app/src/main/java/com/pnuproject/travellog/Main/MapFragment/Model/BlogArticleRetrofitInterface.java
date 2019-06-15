@@ -1,8 +1,4 @@
-package com.pnuproject.travellog.Main.MapFragment.Controller.Model;
-
-import com.pnuproject.travellog.Signup.Model.RequestDataSignup;
-import com.pnuproject.travellog.Signup.Model.ResponseDataCheckID;
-import com.pnuproject.travellog.Signup.Model.ResponseDataSignup;
+package com.pnuproject.travellog.Main.MapFragment.Model;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

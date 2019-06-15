@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#eeeeee"
     android:orientation="vertical"
-    android:layout_width="330dp"
-    android:layout_height="wrap_content">
+    android:layout_width="350dp"
+    android:layout_height="match_parent"
+    >
 
     <!-- 타이틀바 -->
     <LinearLayout
@@ -23,17 +24,17 @@
     </LinearLayout>
     <!--  타이틀바 -->
 
-    <!-- Notice -->
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="15dp">
 
         <ImageView
+            android:src="@drawable/ic_noimage"
             android:id="@+id/viewPicture"
-            android:layout_width="170dp"
-            android:layout_height="170dp"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
             android:scaleType="fitXY"
             android:layout_gravity = "center_vertical"
             android:layout_alignParentLeft="true"
@@ -41,52 +42,65 @@
             android:layout_alignParentTop="true" />
 
         <TextView
+            android:layout_marginTop="10dp"
             android:id="@+id/placeName"
-            android:layout_width="80dp"
+            android:layout_width="match_parent"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:layout_height="wrap_content"
-            android:alpha="0.87"
-            android:gravity="center"
             android:textColor="#000"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/viewPicture"
-            android:layout_toRightOf="@+id/viewPicture"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:text="placeName"/>
 
         <TextView
+            android:text="Loading..."
             android:id="@+id/placeLocation"
-            android:layout_width="80dp"
+            android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:alpha="0.87"
-            android:gravity="center"
             android:textColor="#000"
             android:textSize="17sp"
-            android:layout_below="@+id/placeName"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
             android:layout_marginTop="17dp"
             android:scrollbars="vertical"
-            android:layout_toRightOf="@+id/viewPicture"
-            android:layout_toEndOf="@+id/viewPicture"
             android:layout_marginLeft="10dp"/>
-
-        <Button
-            android:layout_width="120dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity = "center_horizontal"
-            android:id="@+id/photo"
-            android:text="명소 사진 촬영"
-            android:textSize="17sp"
-            android:layout_marginTop="17dp"
-            android:layout_below="@+id/placeLocation"
-            android:layout_toRightOf="@+id/viewPicture"
-            android:layout_toEndOf="@+id/viewPicture"
-            android:layout_marginLeft="10dp"/>
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
 
-    </RelativeLayout>
+            <Button
+                android:id="@+id/btnBlogArticle_markerdlg"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity = "center_horizontal"
+                android:text="명소 관련 후기검색"
+                android:textSize="15dp"
+                android:layout_marginTop="17dp"
+                android:layout_marginLeft="10dp"/>
+            <Button
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity = "center_horizontal"
+                android:id="@+id/photo"
+                android:text="명소 방문 인증"
+                android:textSize="15dp"
+                android:layout_marginTop="17dp"
+                android:layout_marginLeft="10dp"/>
+
+        </LinearLayout>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity = "center_horizontal"
+                android:text="빠른 교통수단 안내"
+                android:textSize="17dp"
+                android:layout_marginTop="17dp"
+                android:layout_marginLeft="10dp"/>
+    </LinearLayout>
     <!-- Notice -->
 
 
