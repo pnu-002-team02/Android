@@ -1,6 +1,7 @@
 package com.pnuproject.travellog.Main.MapFragment.Controller.Search;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,7 @@ public class ListViewAdapter extends BaseAdapter{
         text2.setText(searchResultListItem.getText2());
         time.setText(searchResultListItem.getTime());
 
+        Log.e("LIST", searchResultListItem.getText2());
         return view;
     }
 

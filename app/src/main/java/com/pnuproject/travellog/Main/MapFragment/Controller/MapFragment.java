@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -268,7 +269,8 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
                                 p[1] = user[1];
                                 p[2] = adapter.getItemInfo(i)[3];
                                 p[3] = adapter.getItemInfo(i)[4];
-
+                                Log.e("User", p[2]);
+                                Log.e("Search" , p[3]);
                                 SearchClass searchClass = new SearchClass();
                                 searchClass.findPath(p, getContext());
 
@@ -313,7 +315,7 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
 
         ArrayList<TransPath> path = sc.getPathResult();
         int size = path.size();
-
+        Log.e("size" , Integer.toString(size));
         for (int i = 0; i < size; i++) {
             adapter.addItem(path.get(i).getTraffic(), path.get(i).getPath(), path.get(i).getTime());
         }
@@ -579,7 +581,9 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
 
     @Override
     public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem, MapPOIItem.CalloutBalloonButtonType calloutBalloonButtonType) {
-        ClickedMarkerDialog dlg = new ClickedMarkerDialog((AppCompatActivity)this.getActivity(),mapPOIItem.getItemName(),mapPOIItem.getTag());
+        Double pointLatitude = mapPOIItem.getMapPoint().getMapPointGeoCoord().latitude;
+        Double pointLongi= mapPOIItem.getMapPoint().getMapPointGeoCoord().longitude;
+        ClickedMarkerDialog dlg = new ClickedMarkerDialog((AppCompatActivity)this.getActivity(),mapPOIItem.getItemName(),mapPOIItem.getTag(),latitude,longitude,pointLatitude,pointLongi,this);
         dlg.show();
     }
 

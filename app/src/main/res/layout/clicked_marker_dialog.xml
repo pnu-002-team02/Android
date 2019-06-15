@@ -9,10 +9,12 @@
     >
 
     <!-- 타이틀바 -->
+
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
         <TextView
             android:text="명소 정보"
             android:textSize="20sp"
@@ -21,6 +23,18 @@
             android:background="#00b359"
             android:layout_width="match_parent"
             android:layout_height="53dp" />
+        <TextView
+            android:layout_marginTop="10dp"
+            android:id="@+id/placeName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textColor="#000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:text="placeName"/>
     </LinearLayout>
     <!--  타이틀바 -->
 
@@ -40,19 +54,13 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true" />
-
-        <TextView
-            android:layout_marginTop="10dp"
-            android:id="@+id/placeName"
+        <View
+            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:layout_height="wrap_content"
-            android:textColor="#000"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginLeft="10dp"
-            android:text="placeName"/>
+            android:layout_height="2dp"
+            android:background="#3f3f3f" />
+
+
 
         <TextView
             android:text="Loading..."
@@ -60,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:textColor="#000"
-            android:textSize="17sp"
+            android:textSize="14dp"
             android:layout_marginTop="17dp"
             android:scrollbars="vertical"
             android:layout_marginLeft="10dp"/>
@@ -93,12 +101,12 @@
 
         </LinearLayout>
             <Button
+                android:id="@+id/btnSearchTransport_markerdlg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity = "center_horizontal"
                 android:text="빠른 교통수단 안내"
                 android:textSize="17dp"
-                android:layout_marginTop="17dp"
                 android:layout_marginLeft="10dp"/>
     </LinearLayout>
     <!-- Notice -->
@@ -111,6 +119,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
+            android:id="@+id/btnClose_markerdlg"
             android:text="닫기"
             android:textSize="15sp"
             android:textColor="#483D8B"
@@ -118,8 +127,7 @@
             android:gravity="center"
             android:background="#00000000"
             android:layout_width="match_parent"
-            android:layout_height="47dp"
-            android:onClick="mOnClose"/>
+            android:layout_height="47dp"/>
     </LinearLayout>
     <!--// 닫기 버튼 -->
 
