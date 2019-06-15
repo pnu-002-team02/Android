@@ -34,9 +34,9 @@ public class MypageFragment extends Fragment implements View.OnClickListener, Re
     private LinearLayout layout_userinfo;
     private RetrofitTask retrofitTask;
 
-    private final int RETROFIT_TASK_ERROR = 0x00;
-    private final int RETROFIT_TASK_GETITEMNUM = 0x01;
-    private final int RETROFIT_TASK_GETMYITEMNUM = 0x02;
+    private final static int RETROFIT_TASK_ERROR = 0x00;
+    private final static int RETROFIT_TASK_GETITEMNUM = 0x01;
+    private final static int RETROFIT_TASK_GETMYITEMNUM = 0x02;
 
     private int allItemNum = 0;
     private int visitNum = 0;
@@ -72,24 +72,21 @@ public class MypageFragment extends Fragment implements View.OnClickListener, Re
                 refreshMenu();
                 Toast.makeText(getContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
                 break;
+            default:
+                break;
         }
     }
     @Override
     public void onResume() {
         super.onResume();
-        Log.e("Called:","res");
         if (getUserVisibleHint()) {
             refreshMenu();
-
-            Log.e("Called:","res2");
         }
     }
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        Log.e("Called:","setUserVisibleHint");
         if (isVisibleToUser) {
-            Log.e("Called:","setUserVisibleHint in");
             refreshMenu();
         }
     }
@@ -139,7 +136,6 @@ public class MypageFragment extends Fragment implements View.OnClickListener, Re
                 case RETROFIT_TASK_GETMYITEMNUM:
                     final ResponseDataVisitedList res2 = (ResponseDataVisitedList) responseData;
                     visitNum = res2.getVisitlist().size();
-                    Log.e("ES" , String.valueOf(allItemNum));
                     int visitPer = (int)(((double)visitNum)/allItemNum * 100);
                     tvVisitNum.setText(String.format("%d개",visitNum));
                     tvVisitPer.setText(String.format("%d%%",visitPer));
@@ -154,7 +150,6 @@ public class MypageFragment extends Fragment implements View.OnClickListener, Re
     public Object onBeforeAyncExcute(Retrofit retrofit, RetrofitTask.RetrofitRequestParam paramRequest) {
         Object response = null;
         int taskNum = paramRequest.getTaskNum();
-        Object requestParam = paramRequest.getParamRequest();
         MapMarkerRetrofitInterface markerRetrofit = retrofit.create(MapMarkerRetrofitInterface.class);
 
         try {
@@ -164,6 +159,7 @@ public class MypageFragment extends Fragment implements View.OnClickListener, Re
                     break;
                 case RETROFIT_TASK_GETMYITEMNUM:
                     response = markerRetrofit.getVisitedList(TLApp.getUserInfo().getUserID()).execute().body();
+                    break;
                 default:
                     break;
             }
@@ -177,7 +173,6 @@ public class MypageFragment extends Fragment implements View.OnClickListener, Re
             response = new String(getResources().getString(R.string.errmsg_retrofitbefore_servernetwork));
         }
         catch (Exception ex) {
-            //System.out.println("에러 확인 함 : " + ex.toString());
             paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofit_unknown));
         }

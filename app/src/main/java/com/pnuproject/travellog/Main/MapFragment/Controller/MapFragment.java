@@ -6,7 +6,6 @@ package com.pnuproject.travellog.Main.MapFragment.Controller;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +27,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.ListViewAdapter;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.SearchClass;
 import com.pnuproject.travellog.Main.MapFragment.Controller.Search.SearchDialog;
@@ -42,13 +39,11 @@ import com.pnuproject.travellog.R;
 import com.pnuproject.travellog.etc.GpsTracker;
 import com.pnuproject.travellog.etc.RetrofitTask;
 import com.pnuproject.travellog.etc.TLApp;
-
 import net.daum.mf.map.api.CalloutBalloonAdapter;
 import net.daum.mf.map.api.MapCircle;
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
-
 import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -64,19 +59,22 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
     private MapPOIItem mVisitedMarker;
     private MapPOIItem mUnvisitedMarker;
 
-    double latitude, longitude;
+    double latitude;
+    double longitude;
     String markerName;
-    double markerLatitude, markerLongitude;
+    double markerLatitude;
+    double markerLongitude;
     String[] visitedList;
 
     private RetrofitTask retrofitTask;
 
-    private final int RETROFIT_TASK_ERROR = 0x00;
-    private final int RETROFIT_TASK_GET_MARKER = 0x01;
-    private final int RETROFIT_TASK_GET_VISITED_LIST = 0x02;
+    private final static int RETROFIT_TASK_ERROR = 0x00;
+    private final static int RETROFIT_TASK_GET_MARKER = 0x01;
+    private final static int RETROFIT_TASK_GET_VISITED_LIST = 0x02;
 
     private EditText edit_search;
-    private ImageButton btn_x, btn_search;
+    private ImageButton btn_x;
+    private ImageButton btn_search;
     private ImageButton btn_gps;
     private ImageButton btn_refresh;
     private ImageButton btn_close;
@@ -92,9 +90,6 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
     public SearchDialog dialog;
     public ProgressDialog pdialog;
     public Handler handler = new Handler();
-
-    public MapFragment() {
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -113,8 +108,6 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
         mMapView.setMapType(MapView.MapType.Standard);
         mMapView.setPOIItemEventListener(this);
         mMapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter());
-
-        ViewGroup mapViewContainer = (ViewGroup) getView().findViewById(R.id.map_view);
 
         TLApp.UserInfo userinfo = TLApp.getUserInfo();
         if(userinfo == null) {
@@ -138,8 +131,6 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
 
         listViewPlace = (ListView) getView().findViewById(R.id.search_list);
         listVIewPath = (ListView) getView().findViewById(R.id.search_list);
-        //listView = (ListView) view.findViewById(R.id.search_list);
-        //gps = (TextView) view.findViewById(R.id.gpsvalue);
 
         gpsTracker = new GpsTracker(getContext());
 
@@ -269,8 +260,6 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
                                 p[1] = user[1];
                                 p[2] = adapter.getItemInfo(i)[3];
                                 p[3] = adapter.getItemInfo(i)[4];
-                                Log.e("User", p[2]);
-                                Log.e("Search" , p[3]);
                                 SearchClass searchClass = new SearchClass();
                                 searchClass.findPath(p, getContext());
 
@@ -306,7 +295,6 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
     }
 
     public void showPathlist (String s, SearchClass sc){
-        System.out.println("리스트뷰");
         edit_search.setText("현재위치 -> " + s);
         ListViewAdapter adapter = new ListViewAdapter();
         btn_close.setVisibility(View.VISIBLE);
@@ -315,7 +303,6 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
 
         ArrayList<TransPath> path = sc.getPathResult();
         int size = path.size();
-        Log.e("size" , Integer.toString(size));
         for (int i = 0; i < size; i++) {
             adapter.addItem(path.get(i).getTraffic(), path.get(i).getPath(), path.get(i).getTime());
         }
@@ -421,7 +408,6 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
         try {
             switch (taskNum) {
                 case RETROFIT_TASK_GET_MARKER:
-                    //response = markerRetrofit.getMarker((RequestDataMarker) requestParam).execute().body();
                     response = markerRetrofit.getMarker().execute().body();
                     break;
                 case RETROFIT_TASK_GET_VISITED_LIST:
@@ -440,7 +426,6 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
             response = new String(getResources().getString(R.string.errmsg_retrofitbefore_servernetwork));
         }
         catch (Exception ex) {
-            //System.out.println("에러 확인 함 : " + ex.toString());
             paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofit_unknown));
         }
@@ -473,12 +458,12 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
         }
     }
 
-    private void createVisitedMarker(MapView mapView, String placeName, MapPoint VISITED_MARKER_POINT) {
+    private void createVisitedMarker(MapView mapView, String placeName, MapPoint visitedMarkerPoint) {
         mVisitedMarker = new MapPOIItem();
         String name = placeName;
         mVisitedMarker.setItemName(name);
         mVisitedMarker.setTag(1);
-        mVisitedMarker.setMapPoint(VISITED_MARKER_POINT);
+        mVisitedMarker.setMapPoint(visitedMarkerPoint);
         mVisitedMarker.setMarkerType(MapPOIItem.MarkerType.BluePin);
         mVisitedMarker.setSelectedMarkerType(MapPOIItem.MarkerType.BluePin);
 
@@ -486,12 +471,12 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
         mapView.deselectPOIItem(mVisitedMarker);
     }
 
-    private void createUnvisitedMarker(MapView mapView, String placeName, MapPoint UNVISITED_MARKER_POINT) {
+    private void createUnvisitedMarker(MapView mapView, String placeName, MapPoint unvisitedMarkerPoint) {
         mUnvisitedMarker = new MapPOIItem();
         String name = placeName;
         mUnvisitedMarker.setItemName(name);
         mUnvisitedMarker.setTag(0);
-        mUnvisitedMarker.setMapPoint(UNVISITED_MARKER_POINT);
+        mUnvisitedMarker.setMapPoint(unvisitedMarkerPoint);
         mUnvisitedMarker.setMarkerType(MapPOIItem.MarkerType.RedPin);
         mUnvisitedMarker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin);
 

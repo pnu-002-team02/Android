@@ -2,7 +2,6 @@ package com.pnuproject.travellog.Main.HomeFragment.Controller;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +17,9 @@ import com.pnuproject.travellog.Main.MapFragment.Model.ResponseDataVisitedList;
 import com.pnuproject.travellog.R;
 import com.pnuproject.travellog.etc.RetrofitTask;
 import com.pnuproject.travellog.etc.TLApp;
-
 import org.json.JSONArray;
-
 import java.net.ConnectException;
 import java.net.UnknownHostException;
-
 import retrofit2.Retrofit;
 
 /**
@@ -31,10 +27,10 @@ import retrofit2.Retrofit;
  */
 public class HomeFragment extends Fragment implements RetrofitTask.RetrofitExecutionHandler {
 
-    public WebView mWebView;
-    private final int RETROFIT_TASK_ERROR = 0x00;
-    private final int RETROFIT_TASK_GETITEMNUM = 0x01;
-    private final int RETROFIT_TASK_GETMYITEMNUM = 0x02;
+    private WebView mWebView;
+    private final static int RETROFIT_TASK_ERROR = 0x00;
+    private final static int RETROFIT_TASK_GETITEMNUM = 0x01;
+    private final static int RETROFIT_TASK_GETMYITEMNUM = 0x02;
 
 
     private RetrofitTask retrofitTask;
@@ -76,7 +72,7 @@ public class HomeFragment extends Fragment implements RetrofitTask.RetrofitExecu
     }
 
     public void reloadData() {
-        mWebView.addJavascriptInterface(new passJsonArrayStr(), "android");
+        mWebView.addJavascriptInterface(new PassJsonArrayStr(), "android");
         mWebView.loadUrl("file:///android_asset/home.html");
     }
     @Override
@@ -100,16 +96,13 @@ public class HomeFragment extends Fragment implements RetrofitTask.RetrofitExecu
         return v;
     }
 
-    class passJsonArrayStr {
+    class PassJsonArrayStr {
         @JavascriptInterface
         public String passData(){
-            JSONArray jsonArray = new JSONArray();
-            //String strJA = jsonArray.toString();
             int visitPer = (int)(((double)visitNum)/allItemNum * 100);
-            //String strJA  = String.format("[{\"region_name\":\"부산광역시\",\"percentage\":%d}",visitPer);
             /**jsonarray를 string형식으로 넘겨 script에서 다시 jsonarray로 변환*/
 
-             String strJA = String.format("[{\"region_name\":\"서울특별시\",\"percentage\":0},"
+             return String.format("[{\"region_name\":\"서울특별시\",\"percentage\":0},"
              +"{\"region_name\":\"부산광역시\",\"percentage\":%d},"
              +"{\"region_name\":\"대구광역시\",\"percentage\":0},"
              +"{\"region_name\":\"인천광역시\",\"percentage\":0},"
@@ -121,8 +114,6 @@ public class HomeFragment extends Fragment implements RetrofitTask.RetrofitExecu
              +"{\"region_name\":\"경기도_성남시\",\"percentage\":0},"
              +"{\"region_name\":\"경기도_의정부시\",\"percentage\":0},"
              +"{\"region_name\":\"경기도_안양시\",\"percentage\":0}]",visitPer);
-
-            return strJA;
         }
     }
 
@@ -153,8 +144,9 @@ public class HomeFragment extends Fragment implements RetrofitTask.RetrofitExecu
             case RETROFIT_TASK_GETMYITEMNUM:
                 final ResponseDataVisitedList res2 = (ResponseDataVisitedList) responseData;
                 visitNum = res2.getVisitlist().size();
-
                 reloadData();
+                break;
+            default:
                 break;
         }
     }
@@ -163,7 +155,6 @@ public class HomeFragment extends Fragment implements RetrofitTask.RetrofitExecu
     public Object onBeforeAyncExcute(Retrofit retrofit, RetrofitTask.RetrofitRequestParam paramRequest) {
         Object response = null;
         int taskNum = paramRequest.getTaskNum();
-        Object requestParam = paramRequest.getParamRequest();
         MapMarkerRetrofitInterface markerRetrofit = retrofit.create(MapMarkerRetrofitInterface.class);
 
         try {
@@ -173,6 +164,7 @@ public class HomeFragment extends Fragment implements RetrofitTask.RetrofitExecu
                     break;
                 case RETROFIT_TASK_GETMYITEMNUM:
                     response = markerRetrofit.getVisitedList(TLApp.getUserInfo().getUserID()).execute().body();
+                    break;
                 default:
                     break;
             }
@@ -186,7 +178,6 @@ public class HomeFragment extends Fragment implements RetrofitTask.RetrofitExecu
             response = new String(getResources().getString(R.string.errmsg_retrofitbefore_servernetwork));
         }
         catch (Exception ex) {
-            //System.out.println("에러 확인 함 : " + ex.toString());
             paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofit_unknown));
         }

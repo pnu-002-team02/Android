@@ -1,7 +1,6 @@
 package com.pnuproject.travellog.Login.Controller;
 
 import android.app.Activity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,9 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.kakao.auth.ISessionCallback;
-import com.kakao.auth.KakaoSDK;
 import com.kakao.auth.Session;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
@@ -21,28 +18,19 @@ import com.pnuproject.travellog.Login.Model.ResponseDataLogin;
 import com.pnuproject.travellog.Main.MainActivity.Controller.MainActivity;
 import com.pnuproject.travellog.R;
 import com.pnuproject.travellog.Signup.Controller.SignupActivity;
-import com.pnuproject.travellog.Signup.Model.RequestDataSignup;
-import com.pnuproject.travellog.Signup.Model.ResponseDataCheckID;
-import com.pnuproject.travellog.Signup.Model.ResponseDataSignup;
-import com.pnuproject.travellog.Signup.Model.SignupRetrofitInterface;
 import com.pnuproject.travellog.etc.RetrofitTask;
 import com.pnuproject.travellog.etc.TLApp;
-
-import org.json.JSONObject;
-
 import java.net.ConnectException;
 import java.net.UnknownHostException;
-
 import retrofit2.Retrofit;
-
 import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
 
 public class LoginActivity extends Activity implements RetrofitTask.RetrofitExecutionHandler{
     private ISessionCallback callback;
     private RetrofitTask retrofitTask;
 
-    private final int RETROFIT_TASK_ERROR = 0x00;
-    private final int RETROFIT_TASK_LOGIN = 0x01;
+    private final static int RETROFIT_TASK_ERROR = 0x00;
+    private final static int RETROFIT_TASK_LOGIN = 0x01;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,8 +39,8 @@ public class LoginActivity extends Activity implements RetrofitTask.RetrofitExec
 
         final EditText inputID = (EditText) findViewById(R.id.login_te_ID);
         final EditText inputPW = (EditText) findViewById(R.id.login_te_PW);
-        final LinearLayout btn_signup = (LinearLayout) findViewById(R.id.btn_goto_signup);
-        final Button btn_login = (Button) findViewById(R.id.btn_login_ok);
+        LinearLayout btn_signup = (LinearLayout) findViewById(R.id.btn_goto_signup);
+        Button btn_login = (Button) findViewById(R.id.btn_login_ok);
 
         //회원가입 액티비티 이동
         btn_signup.setOnClickListener(new View.OnClickListener() {

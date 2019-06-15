@@ -104,22 +104,8 @@ public class CameraFunction extends Activity implements SurfaceHolder.Callback {
                 Cursor c = getContentResolver().query(Uri.parse(uriTarget.toString()), null, null, null, null);
                 c.moveToNext();
                 String absolutePath = c.getString(c.getColumnIndex(MediaStore.MediaColumns.DATA));
-                Log.e(TAG,"absolutePath = " + absolutePath);
 
                 imageFile = new File(absolutePath);
-
-//                if(imageFile.exists()){
-//                    Bitmap myBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                    myBitmap.compress(Bitmap.CompressFormat.PNG,20,stream);
-//                    byte[] imagebytes = stream.toByteArray();
-//
-//                    Intent cameraResult = new Intent(getApplicationContext(),CameraResult.class);
-//                    cameraResult.setAction("카메라 찍은 결과");
-//                    cameraResult.putExtra("img",imagebytes);
-//                    startActivity(cameraResult);
-//                    //myImage.setImageBitmap(myBitmap);
-//                }
                 if(imageFile.exists()){
                     Intent cameraReult = new Intent(getApplicationContext(),CameraResult.class);
                     cameraReult.setAction("카메라 찍은 결과");
@@ -127,11 +113,10 @@ public class CameraFunction extends Activity implements SurfaceHolder.Callback {
                     startActivity(cameraReult);
                 }
                 else{
-                    Log.e(TAG,"없다 !!");
+                    //없을경우
                 }
 
 
-                //Toast.makeText(CameraFunction.this,"Image Saved: "+ uriTarget.toString(),Toast.LENGTH_LONG).show();
 
             }catch (FileNotFoundException e){
                 e.printStackTrace();

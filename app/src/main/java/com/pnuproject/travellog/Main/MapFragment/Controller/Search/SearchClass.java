@@ -180,7 +180,6 @@ public class SearchClass {
             @Override
             public void onSuccess(ODsayData oDsayData, API api) {
                 if(api == API.SEARCH_PUB_TRANS_PATH) {
-                    Log.i(TAG, "길찾기 api 호출 성공");
                     json = oDsayData.getJson().toString();
                     parsePath(json);
                 }
@@ -189,7 +188,6 @@ public class SearchClass {
             @Override
             public void onError(int i, String s, API api) {
                 if(api == API.SEARCH_PUB_TRANS_PATH){
-                    Log.e(TAG, "길찾기 api 호출 실패");
                     return;
                 }
             }

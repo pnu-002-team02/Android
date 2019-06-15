@@ -64,8 +64,8 @@ public class ClickedMarkerDialog extends AppCompatDialog implements RetrofitTask
 
     private RetrofitTask retrofitTask;
 
-    private final int RETROFIT_TASK_ERROR = 0x00;
-    private final int RETROFIT_TASK_MARKER = 0x01;
+    private final static int RETROFIT_TASK_ERROR = 0x00;
+    private final static int RETROFIT_TASK_MARKER = 0x01;
 
     TextView placeLocation;
     ImageView placePicture;
@@ -104,8 +104,6 @@ public class ClickedMarkerDialog extends AppCompatDialog implements RetrofitTask
                 p[1] = new Double(user0).toString();
                 p[2] = new Double(target1).toString();
                 p[3] = new Double(target0).toString();
-                Log.e("User", p[2]);
-                Log.e("Search", p[3]);
                 final SearchClass searchClass = new SearchClass();
                 searchClass.findPath(p, parentActivity);
 

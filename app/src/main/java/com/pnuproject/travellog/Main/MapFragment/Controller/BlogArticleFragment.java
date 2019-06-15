@@ -37,9 +37,9 @@ public class BlogArticleFragment extends Fragment implements AdapterView.OnItemC
     BlogArticleLVAdapter articleLVAdapter;
 
     private String searchWord;
-    private final int RETROFIT_TASK_ERROR = 0x00;
-    private final int RETROFIT_TASK_GETARTICLE = 0x01;
-    private final int RETROFIT_TASK_GETARTICLE2 = 0x02;
+    private final static int RETROFIT_TASK_ERROR = 0x00;
+    private final static int RETROFIT_TASK_GETARTICLE = 0x01;
+    private final static int RETROFIT_TASK_GETARTICLE2 = 0x02;
     private RetrofitTask retrofitTask;
 
     @SuppressLint("ValidFragment")
@@ -177,6 +177,8 @@ public class BlogArticleFragment extends Fragment implements AdapterView.OnItemC
         switch (view.getId()) {
             case R.id.btnclose_blogarticle:
                 getActivity().getSupportFragmentManager().popBackStack();
+                break;
+            default:
                 break;
         }
     }

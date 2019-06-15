@@ -9,7 +9,6 @@ import com.kakao.auth.IApplicationConfig;
 import com.kakao.auth.ISessionConfig;
 import com.kakao.auth.KakaoAdapter;
 import com.kakao.auth.KakaoSDK;
-import com.pnuproject.travellog.Login.Controller.GlobalApplication;
 
 public class TLApp  extends Application {
     private static TLApp obj = null;

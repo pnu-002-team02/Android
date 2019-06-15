@@ -50,8 +50,6 @@ public class ListViewAdapter extends BaseAdapter{
         text1.setText(searchResultListItem.getPlace());
         text2.setText(searchResultListItem.getText2());
         time.setText(searchResultListItem.getTime());
-
-        Log.e("LIST", searchResultListItem.getText2());
         return view;
     }
 
