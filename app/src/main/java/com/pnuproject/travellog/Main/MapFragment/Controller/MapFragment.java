@@ -113,7 +113,7 @@ public class MapFragment extends Fragment
         mMapView.setPOIItemEventListener(this);
         mMapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter());
 
-        ViewGroup mapViewContainer = (ViewGroup) getView().findViewById(R.id.map_view);
+      //  ViewGroup mapViewContainer = (ViewGroup) getView().findViewById(R.id.map_view);
 
         TLApp.UserInfo userinfo = TLApp.getUserInfo();
         if(userinfo == null) {
@@ -582,6 +582,9 @@ public class MapFragment extends Fragment
         Intent intent = new Intent(getContext(), ClickedMarkerDialog.class);
         intent.putExtra("name",mapPOIItem.getItemName());
         intent.putExtra("visited", mapPOIItem.getTag());
+        intent.putExtra("latitude",mapPOIItem.getMapPoint().getMapPointGeoCoord().latitude);
+        intent.putExtra("longitude",mapPOIItem.getMapPoint().getMapPointGeoCoord().longitude);
+
         getContext().startActivity(intent);
     }
 

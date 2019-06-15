@@ -7,12 +7,12 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/cameraImage"
+        android:id="@+id/arImage"
         android:layout_width="500dp"
         android:layout_height="500dp"
         android:layout_gravity="center"
         android:layout_weight="0.8"
-        android:alpha="0.5"
+        android:alpha="0.35"
         android:src="@drawable/sea"/>
 
     <ImageButton

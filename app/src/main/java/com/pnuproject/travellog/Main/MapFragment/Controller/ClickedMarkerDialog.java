@@ -58,6 +58,8 @@ public class ClickedMarkerDialog extends Activity implements RetrofitTask.Retrof
     TextView placeLocation;
     ImageView placePicture;
 
+    double latitude, longitude;
+
     protected void onCreate(Bundle savedInsanceState) {
         super.onCreate(savedInsanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -71,6 +73,10 @@ public class ClickedMarkerDialog extends Activity implements RetrofitTask.Retrof
 
         name = getIntent().getStringExtra("name");
         placeName.setText(name);
+
+        latitude = getIntent().getDoubleExtra("latitude",0);
+        longitude= getIntent().getDoubleExtra("longitude",0);
+
 
         RequestDataClickedMarker dataClickedMarker = new RequestDataClickedMarker(name);
         RetrofitTask.RetrofitRequestParam requestParam = new RetrofitTask.RetrofitRequestParam(RETROFIT_TASK_MARKER, dataClickedMarker);
@@ -152,6 +158,12 @@ public class ClickedMarkerDialog extends Activity implements RetrofitTask.Retrof
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(getApplicationContext(),AuthenticationDialog.class);
+
+                intent.putExtra("productImage",productImage);
+                intent.putExtra("latitude",latitude);
+                intent.putExtra("longitude",longitude);
+                intent.putExtra("name",name);
+
                 startActivity(intent);
             }
         });

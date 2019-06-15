@@ -1,5 +1,6 @@
 package com.pnuproject.travellog.Main.MapFragment.Controller;
 
+
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -31,7 +32,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import static android.content.ContentValues.TAG;
 
@@ -43,13 +47,26 @@ public class CameraFunction extends Activity implements SurfaceHolder.Callback {
     SurfaceHolder surfaceHolder;
 
     boolean previewing = false;
-
     LayoutInflater controlInflater = null;
 
+
+    String product_image_URL;
+    String place_Name;
+    ImageView AR_Image;
+    Bitmap bitmap;
+
+    Double place_latitude,place_longitude;
     protected void onCreate(Bundle savedInstanceState){
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.camera_layout);
+
+        product_image_URL = getIntent().getStringExtra("productImage");
+        place_latitude = getIntent().getDoubleExtra("latitude",0);
+        place_longitude = getIntent().getDoubleExtra("longitude",0);
+        place_Name = getIntent().getStringExtra("name");
+
+        Toast.makeText(this,place_Name, Toast.LENGTH_SHORT).show();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         getWindow().setFormat(PixelFormat.UNKNOWN);
 
@@ -63,6 +80,33 @@ public class CameraFunction extends Activity implements SurfaceHolder.Callback {
         View viewControl = controlInflater.inflate(R.layout.cameradesign,null);
         ViewGroup.LayoutParams layoutparamsControl = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
         this.addContentView(viewControl,layoutparamsControl);
+
+        AR_Image = (ImageView)findViewById(R.id.arImage);
+        Thread mThread = new Thread(){
+            @Override
+            public void run(){
+                try{
+                    URL url = new URL(product_image_URL);
+
+                    HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                    conn.setDoInput(true);
+                    conn.connect();
+
+                    InputStream is = conn.getInputStream();
+                    bitmap = BitmapFactory.decodeStream(is);
+                }catch(IOException ex){
+
+                }
+            }
+        };
+        mThread.start();
+
+        try{
+            mThread.join();
+            AR_Image.setImageBitmap(bitmap);
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
 
         ImageButton buttonTakePicture = (ImageButton)findViewById(R.id.takepicture);
         buttonTakePicture.setOnClickListener(new ImageButton.OnClickListener(){
@@ -90,7 +134,7 @@ public class CameraFunction extends Activity implements SurfaceHolder.Callback {
     Camera.PictureCallback myPictureCallback_JPG = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] bytes, Camera camera) {
-// Bitmap bitmapPicture = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+
             Uri uriTarget = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,new ContentValues());
 
             OutputStream imageFileOS;
@@ -108,30 +152,24 @@ public class CameraFunction extends Activity implements SurfaceHolder.Callback {
 
                 imageFile = new File(absolutePath);
 
-//                if(imageFile.exists()){
-//                    Bitmap myBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                    myBitmap.compress(Bitmap.CompressFormat.PNG,20,stream);
-//                    byte[] imagebytes = stream.toByteArray();
-//
-//                    Intent cameraResult = new Intent(getApplicationContext(),CameraResult.class);
-//                    cameraResult.setAction("카메라 찍은 결과");
-//                    cameraResult.putExtra("img",imagebytes);
-//                    startActivity(cameraResult);
-//                    //myImage.setImageBitmap(myBitmap);
+
 //                }
                 if(imageFile.exists()){
-                    Intent cameraReult = new Intent(getApplicationContext(),CameraResult.class);
-                    cameraReult.setAction("카메라 찍은 결과");
-                    cameraReult.putExtra("Path",absolutePath);
-                    startActivity(cameraReult);
+                    Intent cameraResult = new Intent(getApplicationContext(),CameraResult.class);
+                    cameraResult.putExtra("productImage",product_image_URL);
+                    cameraResult.setAction("카메라 찍은 결과");
+                    cameraResult.putExtra("Path",absolutePath);
+
+                    cameraResult.putExtra("latitude",place_latitude);
+                    cameraResult.putExtra("longitude",place_longitude);
+                    cameraResult.putExtra("name",place_Name);
+
+                    startActivity(cameraResult);
                 }
                 else{
                     Log.e(TAG,"없다 !!");
                 }
 
-
-                //Toast.makeText(CameraFunction.this,"Image Saved: "+ uriTarget.toString(),Toast.LENGTH_LONG).show();
 
             }catch (FileNotFoundException e){
                 e.printStackTrace();

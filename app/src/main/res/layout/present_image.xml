@@ -24,6 +24,7 @@
         android:layout_height="30dp"
         android:text=" 아래의 버튼을 누르면 촬영이 시작됩니다."/>
     <ImageView
+        android:id="@+id/present_product_image"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_weight="0.56"
@@ -39,6 +40,10 @@
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:background="@android:color/transparent"/>
+    <TextView
+        android:id="@+id/test"
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
