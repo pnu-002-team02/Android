@@ -183,10 +183,10 @@ public class SignupActivity extends AppCompatActivity implements RetrofitTask.Re
     }
 
     @Override
-    public Object onBeforeAyncExcute(Retrofit retrofit, RetrofitTask.RetrofitRequestParam paramRequest) {
+    public Object onBeforeAyncExcute(Retrofit retrofit, RetrofitTask.RetrofitRequestParam paramRequest6) {
         Object response = null;
-        int taskNum = paramRequest.getTaskNum();
-        Object requestParam = paramRequest.getParamRequest();
+        int taskNum = paramRequest6.getTaskNum();
+        Object requestParam = paramRequest6.getParamRequest();
         SignupRetrofitInterface signupRetrofit = retrofit.create(SignupRetrofitInterface.class);
 
         try {
@@ -202,15 +202,15 @@ public class SignupActivity extends AppCompatActivity implements RetrofitTask.Re
             }
         }
         catch (UnknownHostException ex) {
-            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            paramRequest6.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofitbefore_ownernetwork));
         }
         catch (ConnectException ex) {
-            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            paramRequest6.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofitbefore_servernetwork));
         }
         catch (Exception ex) {
-            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            paramRequest6.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofit_unknown));
         }
 

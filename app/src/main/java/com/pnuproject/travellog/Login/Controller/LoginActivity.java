@@ -130,10 +130,10 @@ public class LoginActivity extends Activity implements RetrofitTask.RetrofitExec
     }
 
     @Override
-    public Object onBeforeAyncExcute(Retrofit retrofit, RetrofitTask.RetrofitRequestParam paramRequest) {
+    public Object onBeforeAyncExcute(Retrofit retrofit, RetrofitTask.RetrofitRequestParam paramRequest7) {
         Object response = null;
-        int taskNum = paramRequest.getTaskNum();
-        Object requestParam = paramRequest.getParamRequest();
+        int taskNum = paramRequest7.getTaskNum();
+        Object requestParam = paramRequest7.getParamRequest();
         LoginRetrofitInterface loginRetrofit = retrofit.create(LoginRetrofitInterface.class);
 
         try {
@@ -146,15 +146,15 @@ public class LoginActivity extends Activity implements RetrofitTask.RetrofitExec
             }
         }
         catch (UnknownHostException ex) {
-            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            paramRequest7.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofitbefore_ownernetwork));
         }
         catch (ConnectException ex) {
-            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            paramRequest7.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofitbefore_servernetwork));
         }
         catch (Exception ex) {
-            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            paramRequest7.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofit_unknown));
         }
 
