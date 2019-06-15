@@ -64,8 +64,8 @@ public class ClickedMarkerDialog extends AppCompatDialog implements RetrofitTask
 
     private RetrofitTask retrofitTask;
 
-    private final static int RETROFIT_TASK_ERROR = 0x00;
-    private final static int RETROFIT_TASK_MARKER = 0x01;
+    final static private int RETROFIT_TASK_ERROR = 0x00;
+    final static private int RETROFIT_TASK_MARKER = 0x01;
 
     TextView placeLocation;
     ImageView placePicture;

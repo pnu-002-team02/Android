@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class ListViewAdapter extends BaseAdapter{
 
-    public ArrayList<SearchResultListItem> searchResultListItemsList = new ArrayList<SearchResultListItem>();
+    private ArrayList<SearchResultListItem> searchResultListItemsList = new ArrayList<SearchResultListItem>();
 
     @Override
     public int getCount() {

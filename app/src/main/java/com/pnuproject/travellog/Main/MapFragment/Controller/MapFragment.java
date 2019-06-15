@@ -68,9 +68,9 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
 
     private RetrofitTask retrofitTask;
 
-    private final static int RETROFIT_TASK_ERROR = 0x00;
-    private final static int RETROFIT_TASK_GET_MARKER = 0x01;
-    private final static int RETROFIT_TASK_GET_VISITED_LIST = 0x02;
+    final static private int RETROFIT_TASK_ERROR = 0x00;
+    final static private int RETROFIT_TASK_GET_MARKER = 0x01;
+    final static private int RETROFIT_TASK_GET_VISITED_LIST = 0x02;
 
     private EditText edit_search;
     private ImageButton btn_x;
@@ -87,9 +87,9 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
 
     private ListViewAdapter adapter;
     private ListView listViewPlace, listVIewPath;
-    public SearchDialog dialog;
-    public ProgressDialog pdialog;
-    public Handler handler = new Handler();
+    private SearchDialog dialog;
+    private ProgressDialog pdialog;
+    private Handler handler = new Handler();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

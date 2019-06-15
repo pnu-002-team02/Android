@@ -34,9 +34,9 @@ public class MypageFragment extends Fragment implements View.OnClickListener, Re
     private LinearLayout layout_userinfo;
     private RetrofitTask retrofitTask;
 
-    private final static int RETROFIT_TASK_ERROR = 0x00;
-    private final static int RETROFIT_TASK_GETITEMNUM = 0x01;
-    private final static int RETROFIT_TASK_GETMYITEMNUM = 0x02;
+    final static private int RETROFIT_TASK_ERROR = 0x00;
+    final static private int RETROFIT_TASK_GETITEMNUM = 0x01;
+    final static private int RETROFIT_TASK_GETMYITEMNUM = 0x02;
 
     private int allItemNum = 0;
     private int visitNum = 0;

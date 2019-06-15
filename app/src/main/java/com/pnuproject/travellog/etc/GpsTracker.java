@@ -91,7 +91,6 @@ public class GpsTracker extends Service implements LocationListener {
         }
         catch (Exception e)
         {
-            Log.d("@@@", ""+e.toString());
         }
 
         return location;
@@ -125,7 +124,6 @@ public class GpsTracker extends Service implements LocationListener {
         try {
             addressList = geocoder.getFromLocation(latitude, longitude, 7);
         } catch (IOException e) {
-            e.printStackTrace();
             return "주소변환 불가";
         }
 

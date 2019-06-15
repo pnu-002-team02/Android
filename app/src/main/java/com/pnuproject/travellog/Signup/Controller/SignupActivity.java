@@ -36,9 +36,9 @@ public class SignupActivity extends AppCompatActivity implements RetrofitTask.Re
     AppCompatEditText editPW_check;
     AppCompatEditText editDOB;
 
-    private final static int RETROFIT_TASK_ERROR = 0x00;
-    private final static int RETROFIT_TASK_CHECKID = 0x01;
-    private final static int RETROFIT_TASK_SIGNUP = 0x02;
+    final static private int RETROFIT_TASK_ERROR = 0x00;
+    final static private int RETROFIT_TASK_CHECKID = 0x01;
+    final static private int RETROFIT_TASK_SIGNUP = 0x02;
     private boolean validate = false;
 
     private RetrofitTask retrofitTask;

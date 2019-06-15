@@ -36,9 +36,9 @@ public class BlogArticleFragment extends Fragment implements AdapterView.OnItemC
     BlogArticleLVAdapter articleLVAdapter;
 
     private String searchWord;
-    private final static int RETROFIT_TASK_ERROR = 0x00;
-    private final static int RETROFIT_TASK_GETARTICLE = 0x01;
-    private final static int RETROFIT_TASK_GETARTICLE2 = 0x02;
+    final static private int RETROFIT_TASK_ERROR = 0x00;
+    final static private int RETROFIT_TASK_GETARTICLE = 0x01;
+    final static private int RETROFIT_TASK_GETARTICLE2 = 0x02;
     private RetrofitTask retrofitTask;
 
     @SuppressLint("ValidFragment")

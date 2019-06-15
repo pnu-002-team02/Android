@@ -119,9 +119,7 @@ public class CameraFunction extends Activity implements SurfaceHolder.Callback {
 
 
             }catch (FileNotFoundException e){
-                e.printStackTrace();
             }catch (IOException e){
-                e.printStackTrace();
             }
 
             camera.startPreview();
@@ -142,7 +140,6 @@ public class CameraFunction extends Activity implements SurfaceHolder.Callback {
                 previewing = true;
             }
             catch (IOException e){
-                e.printStackTrace();
             }
         }
     }

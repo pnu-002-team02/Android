@@ -83,9 +83,7 @@ public class SearchClass {
                     br.close();
 
                 } catch (MalformedURLException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
-                    e.printStackTrace();
                 }
                 //Log.i(TAG, "결과 : " + sb.toString());
                 s = sb.toString();
@@ -137,7 +135,6 @@ public class SearchClass {
             isnormal = true;
         } catch (JSONException e) {
             isnormal = false;
-            e.printStackTrace();
         }
     }
 
@@ -252,7 +249,6 @@ public class SearchClass {
             }
             f=true;
         } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 

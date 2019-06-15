@@ -29,8 +29,8 @@ public class LoginActivity extends Activity implements RetrofitTask.RetrofitExec
     private ISessionCallback callback;
     private RetrofitTask retrofitTask;
 
-    private final static int RETROFIT_TASK_ERROR = 0x00;
-    private final static int RETROFIT_TASK_LOGIN = 0x01;
+    final static private int RETROFIT_TASK_ERROR = 0x00;
+    final static private int RETROFIT_TASK_LOGIN = 0x01;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
