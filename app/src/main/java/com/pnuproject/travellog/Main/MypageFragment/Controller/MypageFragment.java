@@ -147,9 +147,9 @@ public class MypageFragment extends Fragment implements View.OnClickListener, Re
     }
 
     @Override
-    public Object onBeforeAyncExcute(Retrofit retrofit, RetrofitTask.RetrofitRequestParam paramRequest) {
+    public Object onBeforeAyncExcute(Retrofit retrofit, RetrofitTask.RetrofitRequestParam paramRequest1) {
         Object response = null;
-        int taskNum = paramRequest.getTaskNum();
+        int taskNum = paramRequest1.getTaskNum();
         MapMarkerRetrofitInterface markerRetrofit = retrofit.create(MapMarkerRetrofitInterface.class);
 
         try {
@@ -165,15 +165,15 @@ public class MypageFragment extends Fragment implements View.OnClickListener, Re
             }
         }
         catch (UnknownHostException ex) {
-            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            paramRequest1.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofitbefore_ownernetwork));
         }
         catch (ConnectException ex) {
-            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            paramRequest1.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofitbefore_servernetwork));
         }
         catch (Exception ex) {
-            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            paramRequest1.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofit_unknown));
         }
         return response;

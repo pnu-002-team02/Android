@@ -399,10 +399,10 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
     }
 
     @Override
-    public Object onBeforeAyncExcute(Retrofit retrofit, RetrofitTask.RetrofitRequestParam paramRequest) {
+    public Object onBeforeAyncExcute(Retrofit retrofit, RetrofitTask.RetrofitRequestParam paramRequest2) {
         Object response = null;
-        int taskNum = paramRequest.getTaskNum();
-        Object requestParam = paramRequest.getParamRequest();
+        int taskNum = paramRequest2.getTaskNum();
+        Object requestParam = paramRequest2.getParamRequest();
         MapMarkerRetrofitInterface markerRetrofit = retrofit.create(MapMarkerRetrofitInterface.class);
 
         try {
@@ -418,15 +418,15 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
             }
         }
         catch (UnknownHostException ex) {
-            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            paramRequest2.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofitbefore_ownernetwork));
         }
         catch (ConnectException ex) {
-            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            paramRequest2.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofitbefore_servernetwork));
         }
         catch (Exception ex) {
-            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            paramRequest2.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofit_unknown));
         }
         return response;

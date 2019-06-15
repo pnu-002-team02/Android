@@ -251,10 +251,10 @@ public class ClickedMarkerDialog extends AppCompatDialog implements RetrofitTask
     }
 
     @Override
-    public Object onBeforeAyncExcute(Retrofit retrofit, RetrofitTask.RetrofitRequestParam paramRequest) {
+    public Object onBeforeAyncExcute(Retrofit retrofit, RetrofitTask.RetrofitRequestParam paramRequest3) {
         Object response = null;
-        int taskNum = paramRequest.getTaskNum();
-        Object requestParam = paramRequest.getParamRequest();
+        int taskNum = paramRequest3.getTaskNum();
+        Object requestParam = paramRequest3.getParamRequest();
         MapClickedMarkerRetrofitInterface clickedMarkerRetrofit = retrofit.create(MapClickedMarkerRetrofitInterface.class);
 
         try {
@@ -267,15 +267,15 @@ public class ClickedMarkerDialog extends AppCompatDialog implements RetrofitTask
             }
         }
         catch (UnknownHostException ex) {
-            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            paramRequest3.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(parentActivity.getResources().getString(R.string.errmsg_retrofitbefore_ownernetwork));
         }
         catch (ConnectException ex) {
-            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            paramRequest3.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(parentActivity.getResources().getString(R.string.errmsg_retrofitbefore_servernetwork));
         }
         catch (Exception ex) {
-            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            paramRequest3.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(parentActivity.getResources().getString(R.string.errmsg_retrofit_unknown));
         }
 

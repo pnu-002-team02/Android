@@ -138,10 +138,10 @@ public class BlogArticleFragment extends Fragment implements AdapterView.OnItemC
     }
 
     @Override
-    public Object onBeforeAyncExcute(Retrofit retrofit, RetrofitTask.RetrofitRequestParam paramRequest) {
+    public Object onBeforeAyncExcute(Retrofit retrofit, RetrofitTask.RetrofitRequestParam paramRequest4) {
         Object response = null;
-        int taskNum = paramRequest.getTaskNum();
-        Object requestParam = paramRequest.getParamRequest();
+        int taskNum = paramRequest4.getTaskNum();
+        Object requestParam = paramRequest4.getParamRequest();
         BlogArticleRetrofitInterface getBlogArticleRetrofit = retrofit.create(BlogArticleRetrofitInterface.class);
 
         try {
@@ -157,15 +157,15 @@ public class BlogArticleFragment extends Fragment implements AdapterView.OnItemC
             }
         }
         catch (UnknownHostException ex) {
-            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            paramRequest4.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofitbefore_ownernetwork));
         }
         catch (ConnectException ex) {
-            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            paramRequest4.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofitbefore_servernetwork));
         }
         catch (Exception ex) {
-            paramRequest.setTaskNum(RETROFIT_TASK_ERROR);
+            paramRequest4.setTaskNum(RETROFIT_TASK_ERROR);
             response = new String(getResources().getString(R.string.errmsg_retrofit_unknown));
         }
 
