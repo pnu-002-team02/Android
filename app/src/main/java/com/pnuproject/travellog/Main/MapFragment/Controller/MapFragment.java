@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,19 +91,26 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
     private SearchDialog dialog;
     private ProgressDialog pdialog;
     private Handler handler = new Handler();
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
 
+
+        if(mMapView != null && isVisibleToUser) {
+            Log.e("SS","SE");
+            mMapView.refreshMapTiles();
+            mMapView.postInvalidate();
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_map, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_map, container, false);
         retrofitTask = new RetrofitTask(this, getResources().getString(R.string.server_address));
-
-        mMapView = view.findViewById(R.id.map_view);
-        mMapView.setDaumMapApiKey(getString(R.string.kakao_map_key));
+        Log.e("Create : ", "EEEE");
+        mMapView = new MapView(getActivity());
+        ViewGroup mapViewContainer = (ViewGroup)view.findViewById(R.id.map_view);
+        mapViewContainer.addView(mMapView);
+        //mMapView.setDaumMapApiKey(getString(R.string.kakao_map_key));
         mMapView.setOpenAPIKeyAuthenticationResultListener(this);
         mMapView.setMapViewEventListener(this);
         mMapView.setMapType(MapView.MapType.Standard);
@@ -128,9 +136,8 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
         btn_x = (ImageButton) view.findViewById(R.id.btn_x);
         btn_close = (ImageButton) view.findViewById(R.id.btnclose_map);
         btn_refresh =(ImageButton) view.findViewById(R.id.marker_refresh);
-
-        listViewPlace = (ListView) getView().findViewById(R.id.search_list);
-        listVIewPath = (ListView) getView().findViewById(R.id.search_list);
+        listViewPlace = (ListView) view.findViewById(R.id.search_list);
+        listVIewPath = (ListView) view.findViewById(R.id.search_list);
 
         gpsTracker = new GpsTracker(getContext());
 
@@ -200,6 +207,8 @@ public class MapFragment extends Fragment implements MapView.OpenAPIKeyAuthentic
                 edit_search.setText("");
             }
         });
+
+        return view;
     }
 
     public void searchEvent(){

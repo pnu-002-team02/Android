@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,6 @@ import retrofit2.Retrofit;
 public class BlogArticleFragment extends Fragment implements AdapterView.OnItemClickListener, RetrofitTask.RetrofitExecutionHandler, View.OnClickListener {
     ListView lvArticle;
     BlogArticleLVAdapter articleLVAdapter;
-
     private String searchWord;
     final static private int RETROFIT_TASK_ERROR = 0x00;
     final static private int RETROFIT_TASK_GETARTICLE = 0x01;
@@ -43,7 +43,7 @@ public class BlogArticleFragment extends Fragment implements AdapterView.OnItemC
 
     @SuppressLint("ValidFragment")
     public BlogArticleFragment(String searchWord) {
-        this.searchWord=searchWord;
+        this.searchWord = searchWord;
     }
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -66,10 +66,18 @@ public class BlogArticleFragment extends Fragment implements AdapterView.OnItemC
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l_position) {
         if (adapterView.getAdapter() == articleLVAdapter) {
-            String URL = articleLVAdapter.getURL(position);
-            if(URL != null && !URL.isEmpty()) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(URL));
-                startActivity(browserIntent);
+            String url = articleLVAdapter.getURL(position);
+            if(url != null && !url.isEmpty()) {
+
+                ArticleViewFragment articleViewFragment = new ArticleViewFragment(url);
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.map_main_fragment, articleViewFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
+
+                //Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                //startActivity(browserIntent);
             }
         }
     }

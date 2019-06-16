@@ -67,11 +67,10 @@
         android:layout_weight="11">
 
 
-        <net.daum.mf.map.api.MapView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/map_view"
-            android:visibility="visible"/>
+            android:id="@+id/map_view"/>
 
 
         <LinearLayout

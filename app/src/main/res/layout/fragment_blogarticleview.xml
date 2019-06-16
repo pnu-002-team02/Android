@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#efefef"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#ffffff">
+        <ImageButton
+            android:id="@+id/btnclose_blogarticleview"
+            android:layout_width="45dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_backbtn"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:padding="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            />
+        <TextView
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="명소 관련 리뷰"
+            android:textColor="#000000"
+            android:textSize="15dp"
+            android:gravity="center_vertical"
+            />
+    </LinearLayout>
+    <WebView
+        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:id="@+id/webview_blogarticleview">
+    </WebView>
+</LinearLayout>
